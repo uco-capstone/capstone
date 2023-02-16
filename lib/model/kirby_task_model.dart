@@ -9,7 +9,7 @@ enum DocKeyKirbyTask {
 
 class KirbyTask {
   String? taskId;
-  User user;
+  KirbyUser user;
   String title;
   String? description;
   DateTime? dueDate;

@@ -1,23 +1,26 @@
-import 'package:capstone/view/home_screen.dart';
+
+import 'package:capstone/view/login/login_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  // WidgetsFlutterBinding.ensureInitialized();
   // await Firebase.initializeApp(
   //   options: DefaultFirebaseOptions.currentPlatform,
   // );
-  runApp(const PetPlanner());
+  runApp(const CapstoneApp());
 }
 
-class PetPlanner extends StatelessWidget {
-  const PetPlanner({Key? key}) : super(key: key);
+class CapstoneApp extends StatelessWidget {
+  const CapstoneApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Pet Planner',
-      initialRoute: HomeScreen.routeName,
+      // debugShowCheckedModeBanner: Constant.devMode,
+      initialRoute: LoginScreen.routeName,
       routes: {
+        LoginScreen.routeName: (context) => const LoginScreen(),
         HomeScreen.routeName: (context) => const HomeScreen(),
       },
       theme: ThemeData(
