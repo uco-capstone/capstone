@@ -7,6 +7,8 @@ enum DocKeyUser {
   birthday,
   weight,
   height,
+  averageSleep,
+  averageMealsEaten,
 }
 
 class User {
@@ -15,7 +17,9 @@ class User {
   String? lastName;
   String? birthday;
   String? weight; // pounds
-  Height? height;  
+  Height? height;
+  double? averageSleep; // hours
+  int? averageMealsEaten;
 
   User({
     this.userId,
@@ -24,6 +28,8 @@ class User {
     this.birthday,
     this.weight,
     this.height,
+    this.averageSleep,
+    this.averageMealsEaten,
   });
 
   Map<String, dynamic> toFirestoreDoc() {
@@ -33,6 +39,8 @@ class User {
       DocKeyUser.birthday.name: birthday,
       DocKeyUser.weight.name: weight,
       DocKeyUser.height.name: height,
+      DocKeyUser.averageSleep.name: averageSleep,
+      DocKeyUser.averageMealsEaten.name: averageMealsEaten,
     };
   }
 
@@ -47,6 +55,8 @@ class User {
       birthday: doc[DocKeyUser.birthday.name] ??= "",
       weight: doc[DocKeyUser.weight.name] ??= "",
       height: doc[DocKeyUser.height.name] ??= "",
+      averageSleep: doc[DocKeyUser.averageSleep.name] ??= "",
+      averageMealsEaten: doc[DocKeyUser.averageMealsEaten.name] ??= "",
     );
   }
 }
