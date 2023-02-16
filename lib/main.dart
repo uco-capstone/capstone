@@ -1,3 +1,4 @@
+
 import 'package:capstone/view/login/login_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -15,11 +16,16 @@ class CapstoneApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'Pet Planner',
       // debugShowCheckedModeBanner: Constant.devMode,
       initialRoute: LoginScreen.routeName,
       routes: {
         LoginScreen.routeName: (context) => const LoginScreen(),
+        HomeScreen.routeName: (context) => const HomeScreen(),
       },
+      theme: ThemeData(
+        primarySwatch: Colors.indigo,
+      ),
     );
   }
 }
