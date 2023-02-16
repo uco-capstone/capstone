@@ -63,11 +63,25 @@ class _StartState extends State<LoginScreen> {
                   onSaved: screenModel.saveEmail,
                 ),
                 TextFormField(
-                  decoration: const InputDecoration(hintText: "Password"),
+                  decoration: InputDecoration(
+                    hintText: "Password",
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        screenModel.passwordVisible ? Icons.visibility : Icons.visibility_off, //change icon based on boolean value
+                        color: Theme.of(context).primaryColorDark, 
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          screenModel.passwordVisible = !screenModel.passwordVisible; //change boolean value
+                        });
+                      },
+                    ),
+                  ),
                   autocorrect: false,
-                  obscureText: true,
+                  obscureText: !screenModel.passwordVisible,
                   validator: screenModel.validatePassword,
                   onSaved: screenModel.savePassword,
+                  
                 ),
                 ElevatedButton(
                   onPressed: con.signin,
@@ -89,6 +103,10 @@ class _StartState extends State<LoginScreen> {
           ),
         ),
       );
+  }
+
+  void passShowButton() {
+
   }
 }
 

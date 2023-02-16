@@ -2,6 +2,7 @@ class LoginScreenModel {
   String? email;
   String? password;
   bool isSignInUnderway = false;
+  bool passwordVisible = false;
 
   String? validateEmail(String? value) {
     if (value == null) {
