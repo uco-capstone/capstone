@@ -11,7 +11,7 @@ enum DocKeyUser {
   averageMealsEaten,
 }
 
-class User {
+class KirbyUser {
   String? userId;
   String firstName;
   String? lastName;
@@ -21,7 +21,7 @@ class User {
   double? averageSleep; // hours
   int? averageMealsEaten;
 
-  User({
+  KirbyUser({
     this.userId,
     required this.firstName,
     this.lastName,
@@ -44,11 +44,11 @@ class User {
     };
   }
 
-  factory User.fromFirestoreDoc({
+  factory KirbyUser.fromFirestoreDoc({
     required Map<String, dynamic> doc,
     required String userId,
   }) {
-    return User(
+    return KirbyUser(
       userId: userId,
       firstName: doc[DocKeyUser.firstName.name] ??= "",
       lastName: doc[DocKeyUser.lastName.name] ??= "",
