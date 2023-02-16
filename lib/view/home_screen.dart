@@ -27,7 +27,26 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: const Text('Kirby!'),
         actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              width: 75,
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.rectangle,
+                borderRadius: BorderRadius.all(Radius.circular(25))
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [ //Sample number of coins
+                  Text('0', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
+                  Icon(Icons.monetization_on, color: Colors.orangeAccent,),
+                ],
+              ),
+            ),
+          ),
           IconButton(onPressed: con.toDoListScreen, icon: const Icon(Icons.checklist_rounded)),
         ],
       ),
@@ -38,6 +57,11 @@ class _HomeScreenState extends State<HomeScreen> {
               currentAccountPicture: Icon(Icons.person, size: 70,),
               accountName: Text('No Profile'),
               accountEmail: Text('default@test.com'),
+            ),
+            ListTile(
+              leading: const Icon(Icons.store),
+              title: const Text('Shop'),
+              onTap: con.storeScreen,
             ),
             ListTile(
               leading: const Icon(Icons.settings),
@@ -51,6 +75,34 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
         ),
+      ),
+      body: Stack(
+        children: [
+          Container(    //Background is currently a sample image, to change background, change the asset image
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('images/sample-background.png'),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          Center(       //Pet is currently a sample image, to change pet, change the asset image
+            child: SizedBox(
+              height: 300,
+              child: Image.asset('images/sample-kirby.png'),
+            ),
+          ),
+          Positioned(   //Sample Hunger Gauge Area
+            top: 30,
+            left: 50,
+            child: Container(
+              color: Colors.white,
+              height: 40,
+              width: 300,
+              child: const Center(child: Text('Hunger Gauge')),
+            )
+          ),
+        ],
       ),
     );
   }
@@ -70,5 +122,9 @@ class _Controller {
 
   void settingsScreen() {
     //Navigate to the Settings Screen
+  }
+
+  void storeScreen() {
+    //Navigate to Store Screen
   }
 }
