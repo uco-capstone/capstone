@@ -1,35 +1,56 @@
+import 'package:capstone/model/todo_item.dart';
+import 'package:capstone/view/view/view_util.dart';
 import 'package:flutter/material.dart';
 
 class ToDoScreen extends StatelessWidget {
   static const routeName = '/todoScreen';
 
-  const ToDoScreen({Key? key}) : super(key: key); //constructor
+  const ToDoScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[400],
       appBar: AppBar(
         backgroundColor: Colors.purple[300],
-        title: Row(
-          children: const [
-            Icon(
-              Icons.menu,
-              color: Colors.black,
-            ),
-            Text(
-              'To Do List',
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
+        title: const Text('TO DO MENU'),
+        actions: [
+          IconButton(
+            onPressed: () =>
+                showSnackBar(context: context, message: 'Button Pressed'),
+            icon: const Icon(Icons.menu),
+          ),
+        ],
       ),
-      //body: const Text('List begins here'),
+      //body: const Text('To Do Items'),
       body: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 17),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
         child: Column(
           children: [
-            searchBox(),
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: const TextField(
+                decoration: InputDecoration(
+                  prefixIcon: Icon(
+                    Icons.search,
+                    size: 25,
+                    color: Colors.deepPurple,
+                  ),
+                  contentPadding: EdgeInsets.all(0),
+                  prefixIconConstraints: BoxConstraints(
+                    maxHeight: 10,
+                    minWidth: 25,
+                  ),
+                  border: InputBorder.none,
+                  hintText: 'Search Keywords',
+                  hintStyle: TextStyle(
+                    color: Colors.grey,
+                  ),
+                ),
+              ),
+            ),
             Expanded(
               child: ListView(
                 children: [
@@ -39,13 +60,14 @@ class ToDoScreen extends StatelessWidget {
                       bottom: 20,
                     ),
                     child: const Text(
-                      'My ToDos',
+                      'All ToDos',
                       style: TextStyle(
                         fontSize: 30,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
                   ),
+                  const ToDoItem(),
                 ],
               ),
             ),
@@ -54,29 +76,4 @@ class ToDoScreen extends StatelessWidget {
       ),
     );
   }
-}
-
-Widget searchBox() {
-  return Container(
-    decoration: BoxDecoration(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(20),
-    ),
-    child: const TextField(
-      decoration: InputDecoration(
-        contentPadding: EdgeInsets.all(0),
-        prefixIcon: Icon(
-          Icons.search_rounded,
-          color: Colors.black,
-          size: 25,
-        ),
-        prefixIconConstraints: BoxConstraints(
-          maxHeight: 20,
-          minWidth: 25,
-        ),
-        border: InputBorder.none,
-        hintText: ('Search Here'),
-      ),
-    ),
-  );
 }
