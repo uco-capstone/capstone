@@ -1,13 +1,13 @@
-
-import 'package:capstone/view/home_screen.dart';
-import 'package:capstone/view/login/login_screen.dart';
+import 'package:capstone/view/start_dispatcher.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'firebase_options.dart';
 
 void main() async {
-  // WidgetsFlutterBinding.ensureInitialized();
-  // await Firebase.initializeApp(
-  //   options: DefaultFirebaseOptions.currentPlatform,
-  // );
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const CapstoneApp());
 }
 
@@ -18,11 +18,9 @@ class CapstoneApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Pet Planner',
-      // debugShowCheckedModeBanner: Constant.devMode,
-      initialRoute: LoginScreen.routeName,
+      initialRoute: StartDispatcher.routeName,
       routes: {
-        LoginScreen.routeName: (context) => const LoginScreen(),
-        HomeScreen.routeName: (context) => const HomeScreen(),
+        StartDispatcher.routeName: (context) => const StartDispatcher(),
       },
       theme: ThemeData(
         primarySwatch: Colors.indigo,

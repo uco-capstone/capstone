@@ -1,19 +1,20 @@
+import 'package:capstone/controller/auth_controller.dart';
+import 'package:capstone/model/home_scree_model.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
-
   const HomeScreen({Key? key}) : super(key: key);
-   static const routeName = '/homeScreen';
+  static const routeName = '/homeScreen';
 
   @override
   State<StatefulWidget> createState() {
     return _HomeScreenState();
   }
-
 }
 
 class _HomeScreenState extends State<HomeScreen> {
   late _Controller con;
+  late HomeScreenModel screenModel;
 
   void render(fn) => setState(fn);
 
@@ -21,6 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     con = _Controller(this);
+    screenModel = HomeScreenModel(user: Auth.user!);
   }
 
   @override
@@ -34,27 +36,40 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Container(
               width: 75,
               decoration: const BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.rectangle,
-                borderRadius: BorderRadius.all(Radius.circular(25))
-              ),
+                  color: Colors.white,
+                  shape: BoxShape.rectangle,
+                  borderRadius: BorderRadius.all(Radius.circular(25))),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [ //Sample number of coins
-                  Text('0', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
-                  Icon(Icons.monetization_on, color: Colors.orangeAccent,),
+                children: const [
+                  //Sample number of coins
+                  Text(
+                    '0',
+                    style: TextStyle(
+                        color: Colors.black, fontWeight: FontWeight.bold),
+                  ),
+                  Icon(
+                    Icons.monetization_on,
+                    color: Colors.orangeAccent,
+                  ),
                 ],
               ),
             ),
           ),
-          IconButton(onPressed: con.toDoListScreen, icon: const Icon(Icons.checklist_rounded)),
+          IconButton(
+              onPressed: con.toDoListScreen,
+              icon: const Icon(Icons.checklist_rounded)),
         ],
       ),
       drawer: Drawer(
         child: ListView(
           children: [
-            const UserAccountsDrawerHeader( //Default Profile, will add in actual user profile info later
-              currentAccountPicture: Icon(Icons.person, size: 70,),
+            const UserAccountsDrawerHeader(
+              //Default Profile, will add in actual user profile info later
+              currentAccountPicture: Icon(
+                Icons.person,
+                size: 70,
+              ),
               accountName: Text('No Profile'),
               accountEmail: Text('default@test.com'),
             ),
@@ -78,7 +93,8 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: Stack(
         children: [
-          Container(    //Background is currently a sample image, to change background, change the asset image
+          Container(
+            //Background is currently a sample image, to change background, change the asset image
             decoration: const BoxDecoration(
               image: DecorationImage(
                 image: AssetImage('images/sample-background.png'),
@@ -86,22 +102,23 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          Center(       //Pet is currently a sample image, to change pet, change the asset image
+          Center(
+            //Pet is currently a sample image, to change pet, change the asset image
             child: SizedBox(
               height: 300,
               child: Image.asset('images/sample-kirby.png'),
             ),
           ),
-          Positioned(   //Sample Hunger Gauge Area
-            top: 30,
-            left: 50,
-            child: Container(
-              color: Colors.white,
-              height: 40,
-              width: 300,
-              child: const Center(child: Text('Hunger Gauge')),
-            )
-          ),
+          Positioned(
+              //Sample Hunger Gauge Area
+              top: 30,
+              left: 50,
+              child: Container(
+                color: Colors.white,
+                height: 40,
+                width: 300,
+                child: const Center(child: Text('Hunger Gauge')),
+              )),
         ],
       ),
     );
@@ -117,7 +134,7 @@ class _Controller {
   }
 
   void signOut() {
-    //add sign out functions
+    Auth.signOut();
   }
 
   void settingsScreen() {
