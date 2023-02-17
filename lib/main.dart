@@ -1,7 +1,6 @@
 import 'package:capstone/view/start_dispatcher.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
 import 'firebase_options.dart';
 
 void main() async {
@@ -10,12 +9,6 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(const CapstoneApp());
-=======
-import 'package:firebase_core/firebase_core.dart';
-
-void main() {
-  runApp(const MyApp());
->>>>>>> bdc1f11 (add controller dir)
 }
 
 class CapstoneApp extends StatelessWidget {
