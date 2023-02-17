@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:1050240643949:android:a3a9b7adcc2b48b50fa064",
         "android_client_info": {
-          "package_name": "com.example.capstone"
+          "package_name": "edu.uco.lsun1.capstone"
         }
       },
       "oauth_client": [
@@ -65,13 +65,6 @@
             {
               "client_id": "1050240643949-it98d3opps3kg6hn78uthj2f31un54fd.apps.googleusercontent.com",
               "client_type": 3
-            },
-            {
-              "client_id": "1050240643949-f41kev4mll83h7nf9ggaa9r056pje4jf.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "edu.uco.spring2023.capstone"
-              }
             }
           ]
         }
