@@ -40,18 +40,19 @@ class ToDoScreen extends StatelessWidget {
                     decoration: InputDecoration(
                       prefixIcon: Padding(
                         padding: EdgeInsets.symmetric(
-                            horizontal: 10, 
-                            vertical: 10,
-                          ),
+                          horizontal: 10,
+                          vertical: 10,
+                        ),
                         child: Icon(
                           Icons.search,
                           size: 30,
                           color: Colors.deepPurple,
                         ),
                       ),
-                      contentPadding: EdgeInsets.all(15), // padding needed
+                      contentPadding: EdgeInsets.all(25), // padding needed
                       prefixIconConstraints: BoxConstraints(
-                        maxHeight: 50,  // this value was too small -- must be bigger than image size
+                        maxHeight:
+                            50, // this value was too small -- must be bigger than image size
                         minWidth: 25,
                       ),
                       border: InputBorder.none,
@@ -136,7 +137,7 @@ class ToDoScreen extends StatelessWidget {
                     child: const Text(
                       '+',
                       style: TextStyle(
-                        fontSize: 42,
+                        fontSize: 32,
                       ),
                     ),
                   ),
