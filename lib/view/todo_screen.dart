@@ -38,14 +38,20 @@ class ToDoScreen extends StatelessWidget {
                   ),
                   child: const TextField(
                     decoration: InputDecoration(
-                      prefixIcon: Icon(
-                        Icons.search,
-                        size: 27,
-                        color: Colors.deepPurple,
+                      prefixIcon: Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 10, 
+                            vertical: 10,
+                          ),
+                        child: Icon(
+                          Icons.search,
+                          size: 30,
+                          color: Colors.deepPurple,
+                        ),
                       ),
-                      contentPadding: EdgeInsets.all(0),
+                      contentPadding: EdgeInsets.all(15), // padding needed
                       prefixIconConstraints: BoxConstraints(
-                        maxHeight: 10,
+                        maxHeight: 50,  // this value was too small -- must be bigger than image size
                         minWidth: 25,
                       ),
                       border: InputBorder.none,
