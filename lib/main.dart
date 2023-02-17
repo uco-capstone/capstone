@@ -2,6 +2,7 @@ import 'package:capstone/view/health_info_screen.dart';
 import 'package:capstone/view/start_dispatcher.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:capstone/view/create_account_screen.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -22,6 +23,7 @@ class CapstoneApp extends StatelessWidget {
       initialRoute: StartDispatcher.routeName,
       routes: {
         StartDispatcher.routeName: (context) => const StartDispatcher(),
+        CreateAccountScreen.routeName: (context) => const CreateAccountScreen(),
         HealthInfoScreen.routeName: (context) => const HealthInfoScreen(),
       },
       theme: ThemeData(
