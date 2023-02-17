@@ -2,6 +2,7 @@ import 'package:capstone/view/view_util.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:capstone/model/login_screen_model.dart';
+import 'package:capstone/view/create_account_screen.dart';
 
 import '../controller/auth_controller.dart';
 import '../model/constants.dart';
@@ -145,6 +146,6 @@ class _Controller {
     }
   }
   void createAccount() {
-    // Navigator.pushNamed(state.context, CreateAccountScreen.routeName);
+    Navigator.pushNamed(state.context, CreateAccountScreen.routeName);
   }
 }
