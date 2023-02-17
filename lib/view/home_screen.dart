@@ -57,8 +57,9 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           IconButton(
-              onPressed: con.toDoListScreen,
-              icon: const Icon(Icons.checklist_rounded)),
+            onPressed: con.toDoListScreen,
+            icon: const Icon(Icons.checklist_rounded),
+          ),
         ],
       ),
       drawer: Drawer(
@@ -110,15 +111,16 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           Positioned(
-              //Sample Hunger Gauge Area
-              top: 30,
-              left: 50,
-              child: Container(
-                color: Colors.white,
-                height: 40,
-                width: 300,
-                child: const Center(child: Text('Hunger Gauge')),
-              )),
+            //Sample Hunger Gauge Area
+            top: 30,
+            left: 50,
+            child: Container(
+              color: Colors.white,
+              height: 40,
+              width: 300,
+              child: const Center(child: Text('Hunger Gauge')),
+            ),
+          ),
         ],
       ),
     );
