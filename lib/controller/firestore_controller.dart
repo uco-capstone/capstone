@@ -1,4 +1,16 @@
-// import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:capstone/model/kirby_task_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+class FirestoreController {
+  static const taskCollection = 'task_collection';
+
+  static Future<String> addTask({required KirbyTask kirbyTask}) async {
+    DocumentReference ref = await FirebaseFirestore.instance
+        .collection(taskCollection)
+        .add(kirbyTask.toFirestoreDoc());
+    return ref.id;
+  }
+}
 
 // // example code for reference
 // class FirestoreController {
