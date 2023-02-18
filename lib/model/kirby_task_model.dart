@@ -24,7 +24,19 @@ class KirbyTask {
 
   Map<String, dynamic> toFirestoreDoc() {
     return {
-      DocKeyKirbyTask.user.name: user,
+      // DocKeyKirbyTask.user.name: user,
+
+      DocKeyKirbyTask.user.name: {
+        'userId': user.userId,
+        'firstName': user.firstName,
+        'lastName': user.lastName,
+        'birthday': user.birthday,
+        'weight': user.weight,
+        'height': user.height,
+        'averageSleep': user.averageSleep,
+        'averageMealsEaten': user.averageMealsEaten,
+      },
+
       DocKeyKirbyTask.title.name: title,
       DocKeyKirbyTask.description.name: description,
       DocKeyKirbyTask.dueDate.name: dueDate,

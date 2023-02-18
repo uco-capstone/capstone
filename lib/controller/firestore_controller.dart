@@ -1,4 +1,5 @@
 import 'package:capstone/model/kirby_task_model.dart';
+import 'package:capstone/model/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FirestoreController {
@@ -10,6 +11,20 @@ class FirestoreController {
         .add(kirbyTask.toFirestoreDoc());
     return ref.id;
   }
+
+  // TODO: delete; test fxn //////////////////////////////////////////////////////////////
+  Future<String> addTaskTest() async {
+    KirbyUser kirbyUser1 = KirbyUser(
+        firstName: "kirbyuser1", userId: "YNhIIiWfbveNu9rz4tORUfPKHXv2");
+    KirbyTask kirbyTaskTest =
+        KirbyTask(user: kirbyUser1, title: "kirbyuser1's title");
+    DocumentReference ref = await FirebaseFirestore.instance
+        .collection(taskCollection)
+        .add(kirbyTaskTest.toFirestoreDoc());
+    print("added TaskTest");
+    return ref.id;
+  }
+  ////////////////////////////////////////////////////////////////////////////////////////////
 }
 
 // // example code for reference
