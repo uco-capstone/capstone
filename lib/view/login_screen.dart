@@ -116,10 +116,6 @@ class _Controller {
   _StartState state;
   _Controller(this.state);
 
-  ///// TODO: Delete Test firestore /////////////////
-  late FirestoreController firestoreController = FirestoreController();
-  ///////////////////////////////////////////////////
-
   Future<void> signin() async {
     FormState? currentState = state.formKey.currentState;
     if (currentState == null) return;
@@ -149,9 +145,6 @@ class _Controller {
       createSnackBar(
           context: state.context, seconds: 20, message: "Sign In Error! $e");
     }
-    ///////////TODO: Delete test: add task to firestore ////////////////////////////////////////////
-    firestoreController.addTaskTest();
-    /////////////////////////////////////////////////////////////////////////
   }
 
   void createAccount() {

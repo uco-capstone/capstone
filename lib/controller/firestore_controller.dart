@@ -13,16 +13,16 @@ class FirestoreController {
   }
 
   // TODO: delete; test fxn //////////////////////////////////////////////////////////////
-  Future<String> addTaskTest() async {
-    KirbyUser kirbyUser1 = KirbyUser(
-        firstName: "kirbyuser1", userId: "YNhIIiWfbveNu9rz4tORUfPKHXv2");
-    KirbyTask kirbyTaskTest =
-        KirbyTask(user: kirbyUser1, title: "kirbyuser1's title");
-    DocumentReference ref = await FirebaseFirestore.instance
-        .collection(taskCollection)
-        .add(kirbyTaskTest.toFirestoreDoc());
-    print("added TaskTest");
-    return ref.id;
+  // Future<String> addTaskTest() async {
+  //   KirbyUser kirbyUser1 = KirbyUser(
+  //       firstName: "kirbyuser1", userId: "YNhIIiWfbveNu9rz4tORUfPKHXv2");
+  //   KirbyTask kirbyTaskTest =
+  //       KirbyTask(user: kirbyUser1, title: "kirbyuser1's title");
+  //   DocumentReference ref = await FirebaseFirestore.instance
+  //       .collection(taskCollection)
+  //       .add(kirbyTaskTest.toFirestoreDoc());
+  //   print("added TaskTest");
+  //   return ref.id;
   }
   ////////////////////////////////////////////////////////////////////////////////////////////
 }
