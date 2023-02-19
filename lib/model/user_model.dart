@@ -1,4 +1,5 @@
 import 'package:capstone/model/height_model.dart';
+import 'package:capstone/model/kirby_pet_model.dart';
 
 enum DocKeyUser {
   userId,
@@ -9,6 +10,7 @@ enum DocKeyUser {
   height,
   averageSleep,
   averageMealsEaten,
+  kirbyPet,
 }
 
 class KirbyUser {
@@ -20,6 +22,7 @@ class KirbyUser {
   Height? height;
   double? averageSleep; // hours
   int? averageMealsEaten;
+  KirbyPet? kirbyPet;
 
   KirbyUser({
     this.userId,
@@ -30,6 +33,7 @@ class KirbyUser {
     this.height,
     this.averageSleep,
     this.averageMealsEaten,
+    this.kirbyPet,
   });
 
   Map<String, dynamic> toFirestoreDoc() {
@@ -41,6 +45,7 @@ class KirbyUser {
       DocKeyUser.height.name: height,
       DocKeyUser.averageSleep.name: averageSleep,
       DocKeyUser.averageMealsEaten.name: averageMealsEaten,
+      DocKeyUser.kirbyPet.name: kirbyPet,
     };
   }
 
@@ -57,6 +62,7 @@ class KirbyUser {
       height: doc[DocKeyUser.height.name] ??= "",
       averageSleep: doc[DocKeyUser.averageSleep.name] ??= "",
       averageMealsEaten: doc[DocKeyUser.averageMealsEaten.name] ??= "",
+      kirbyPet: doc[DocKeyUser.kirbyPet.name] ??= "",
     );
   }
 }
