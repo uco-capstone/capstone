@@ -41,6 +41,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.1"
+  cloud_firestore:
+    dependency: "direct main"
+    description:
+      name: cloud_firestore
+      sha256: "9e775f9df26a165444bd5240f70bfee6f11b35c5e913e93ed4b06bf50b231325"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.3.2"
+  cloud_firestore_platform_interface:
+    dependency: transitive
+    description:
+      name: cloud_firestore_platform_interface
+      sha256: ab35c068896ff769ce7e8de8198228d512e7f056fc8f26b2ff53ea3f97c8545f
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.10.2"
+  cloud_firestore_web:
+    dependency: transitive
+    description:
+      name: cloud_firestore_web
+      sha256: b7b52c2ad50d1105f2e0585a34288da415cf9d1037470985c7c57cce7b06d95f
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.2.2"
   collection:
     dependency: transitive
     description:
@@ -113,6 +137,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.2.0"
+  firebase_storage:
+    dependency: "direct main"
+    description:
+      name: firebase_storage
+      sha256: "5b5ab9f34100d22ca47bccf32d148e5b3f6d852a988055d619fa61b01cd4fe0e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "11.0.11"
+  firebase_storage_platform_interface:
+    dependency: transitive
+    description:
+      name: firebase_storage_platform_interface
+      sha256: "9e58a2b184514b8bcea768dfe676cf814b5a8562440cf32f045b531f2178d599"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.1.27"
+  firebase_storage_web:
+    dependency: transitive
+    description:
+      name: firebase_storage_web
+      sha256: f559ab5ad244841165fa88630cac4b337599d164dbadab1e097beb92a97b5f29
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.3.20"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -136,6 +184,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  http:
+    dependency: transitive
+    description:
+      name: http
+      sha256: "6aa2946395183537c8b880962d935877325d6a09a2867c3970c05c0fed6ac482"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.13.5"
   http_parser:
     dependency: transitive
     description:
