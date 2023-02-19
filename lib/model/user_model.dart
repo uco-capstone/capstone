@@ -11,6 +11,7 @@ enum DocKeyUser {
   averageSleep,
   averageMealsEaten,
   kirbyPet,
+  age,
 }
 
 class KirbyUser {
@@ -22,6 +23,7 @@ class KirbyUser {
   Height? height;
   double? averageSleep; // hours
   int? averageMealsEaten;
+  int? age;
   KirbyPet? kirbyPet;
 
   KirbyUser({
@@ -33,6 +35,7 @@ class KirbyUser {
     this.height,
     this.averageSleep,
     this.averageMealsEaten,
+    this.age,
     this.kirbyPet,
   });
 
@@ -45,6 +48,7 @@ class KirbyUser {
       DocKeyUser.height.name: height,
       DocKeyUser.averageSleep.name: averageSleep,
       DocKeyUser.averageMealsEaten.name: averageMealsEaten,
+      DocKeyUser.age.name: age,
       DocKeyUser.kirbyPet.name: kirbyPet,
     };
   }
@@ -62,7 +66,32 @@ class KirbyUser {
       height: doc[DocKeyUser.height.name] ??= "",
       averageSleep: doc[DocKeyUser.averageSleep.name] ??= "",
       averageMealsEaten: doc[DocKeyUser.averageMealsEaten.name] ??= "",
+      age: doc[DocKeyUser.age.name] ??= "",
       kirbyPet: doc[DocKeyUser.kirbyPet.name] ??= "",
     );
+  }
+
+  static String? validateAge(String? value) {
+    if (value == null) return "Age cannot be empty.";
+    return (int.parse(value) == 0) ? "Age cannot be zero." : null;
+  }
+
+  static String? validateWeight(String? value) {
+    if (value == null) return "Weight cannot be empty.";
+    return (double.parse(value) == 0) ? "Weight cannot be zero." : null;
+  }
+
+  static String? validateHeight(String? value) {
+    if (value == null) return "Height cannot be empty.";
+    return (double.parse(value) == 0) ? "Height cannot be zero." : null;
+  }
+
+  static String? validateSleep(String? value) {
+    if (value == null) return "Sleep cannot be empty.";
+    return (int.parse(value) == 0) ? "There's only 24 hours sir." : null;
+  }
+
+  static String? validateMealsEaten(String? value) {
+    return (value == null) ? "Age cannot be empty." : null;
   }
 }

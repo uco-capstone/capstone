@@ -1,3 +1,4 @@
+import 'package:capstone/view/health_info_screen.dart';
 import 'package:capstone/view/start_dispatcher.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +22,7 @@ class CapstoneApp extends StatelessWidget {
       initialRoute: StartDispatcher.routeName,
       routes: {
         StartDispatcher.routeName: (context) => const StartDispatcher(),
+        HealthInfoScreen.routeName: (context) => const HealthInfoScreen(),
       },
       theme: ThemeData(
         primarySwatch: Colors.indigo,
