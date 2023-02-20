@@ -1,5 +1,6 @@
 import 'package:capstone/controller/auth_controller.dart';
 import 'package:capstone/model/home_scree_model.dart';
+import 'package:capstone/view/health_info_screen.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -57,8 +58,9 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           IconButton(
-              onPressed: con.toDoListScreen,
-              icon: const Icon(Icons.checklist_rounded)),
+            onPressed: con.toDoListScreen,
+            icon: const Icon(Icons.checklist_rounded),
+          ),
         ],
       ),
       drawer: Drawer(
@@ -82,6 +84,11 @@ class _HomeScreenState extends State<HomeScreen> {
               leading: const Icon(Icons.settings),
               title: const Text('Settings'),
               onTap: con.settingsScreen,
+            ),
+            ListTile(
+              leading: const Icon(Icons.healing),
+              title: const Text('Health Info'),
+              onTap: con.healthInfoScreen,
             ),
             ListTile(
               leading: const Icon(Icons.logout),
@@ -110,15 +117,16 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           Positioned(
-              //Sample Hunger Gauge Area
-              top: 30,
-              left: 50,
-              child: Container(
-                color: Colors.white,
-                height: 40,
-                width: 300,
-                child: const Center(child: Text('Hunger Gauge')),
-              )),
+            //Sample Hunger Gauge Area
+            top: 30,
+            left: 50,
+            child: Container(
+              color: Colors.white,
+              height: 40,
+              width: 300,
+              child: const Center(child: Text('Hunger Gauge')),
+            ),
+          ),
         ],
       ),
     );
@@ -133,15 +141,19 @@ class _Controller {
     //Navigate to the To-Do List Screen
   }
 
-  void signOut() {
-    Auth.signOut();
+  void storeScreen() {
+    //Navigate to Store Screen
   }
 
   void settingsScreen() {
     //Navigate to the Settings Screen
   }
 
-  void storeScreen() {
-    //Navigate to Store Screen
+  void healthInfoScreen() async {
+    await Navigator.pushNamed(state.context, HealthInfoScreen.routeName);
+  }
+
+  void signOut() {
+    Auth.signOut();
   }
 }
