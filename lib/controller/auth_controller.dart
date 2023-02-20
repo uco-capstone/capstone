@@ -23,5 +23,8 @@ class Auth {
     await FirebaseAuth.instance
         .createUserWithEmailAndPassword(email: email, password: password);
   }
-}
 
+  static User getUser() {
+    return user!;
+  }
+}

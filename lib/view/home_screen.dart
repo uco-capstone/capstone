@@ -1,5 +1,5 @@
 import 'package:capstone/controller/auth_controller.dart';
-import 'package:capstone/model/home_scree_model.dart';
+import 'package:capstone/model/home_screen_model.dart';
 import 'package:capstone/view/health_info_screen.dart';
 import 'package:flutter/material.dart';
 

@@ -1,9 +1,12 @@
+import 'dart:developer';
+
+import 'package:capstone/controller/firestore_controller.dart';
 import 'package:capstone/model/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../controller/auth_controller.dart';
-import '../model/home_scree_model.dart';
+import '../model/home_screen_model.dart';
 
 class HealthInfoScreen extends StatefulWidget {
   static const routeName = "/healthInfo";
@@ -21,6 +24,11 @@ class _HealthInfoState extends State<HealthInfoScreen> {
   late HomeScreenModel screenModel;
   var formKey = GlobalKey<FormState>();
   String title = "Health Form";
+  final TextEditingController ageController = TextEditingController();
+  final TextEditingController weightController = TextEditingController();
+  final TextEditingController heightController = TextEditingController();
+  final TextEditingController sleepController = TextEditingController();
+  final TextEditingController mealsController = TextEditingController();
 
   void render(fn) => setState(fn);
 
@@ -28,7 +36,16 @@ class _HealthInfoState extends State<HealthInfoScreen> {
   void initState() {
     super.initState();
     con = _Controller(this);
+    con.findKirbyUser();
     screenModel = HomeScreenModel(user: Auth.user!);
+  }
+
+  void showSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+      ),
+    );
   }
 
   @override
@@ -52,7 +69,8 @@ class _HealthInfoState extends State<HealthInfoScreen> {
                   autocorrect: true,
                   keyboardType: TextInputType.number,
                   validator: KirbyUser.validateAge,
-                  // onSaved: con.saveAge,
+                  onSaved: con.saveAge,
+                  controller: ageController,
                 ),
                 TextFormField(
                   decoration: const InputDecoration(
@@ -66,11 +84,14 @@ class _HealthInfoState extends State<HealthInfoScreen> {
                     FilteringTextInputFormatter.allow(
                         RegExp(r'^(\d+)?\.?\d{0,2}'))
                   ],
+                  validator: KirbyUser.validateWeight,
+                  onSaved: con.saveWeight,
+                  controller: weightController,
                 ),
                 TextFormField(
                   decoration: const InputDecoration(
-                    hintText: "Enter your Height in Inches",
-                    labelText: "Height (Inches)",
+                    hintText: "Enter your Height in cm",
+                    labelText: "Height (cm)",
                   ),
                   autocorrect: true,
                   keyboardType:
@@ -79,6 +100,9 @@ class _HealthInfoState extends State<HealthInfoScreen> {
                     FilteringTextInputFormatter.allow(
                         RegExp(r'^(\d+)?\.?\d{0,2}'))
                   ],
+                  validator: KirbyUser.validateHeight,
+                  onSaved: con.saveHeight,
+                  controller: heightController,
                 ),
                 TextFormField(
                   decoration: const InputDecoration(
@@ -87,6 +111,9 @@ class _HealthInfoState extends State<HealthInfoScreen> {
                   ),
                   autocorrect: true,
                   keyboardType: TextInputType.number,
+                  validator: KirbyUser.validateSleep,
+                  onSaved: con.saveSleep,
+                  controller: sleepController,
                 ),
                 TextFormField(
                   decoration: const InputDecoration(
@@ -95,11 +122,14 @@ class _HealthInfoState extends State<HealthInfoScreen> {
                   ),
                   autocorrect: true,
                   keyboardType: TextInputType.number,
+                  validator: KirbyUser.validateMealsEaten,
+                  onSaved: con.saveMeals,
+                  controller: mealsController,
                 ),
                 const SizedBox(
                   height: 10,
                 ),
-                ElevatedButton(onPressed: () => {}, child: const Text("Update"))
+                ElevatedButton(onPressed: con.save, child: const Text("Update"))
               ],
             ),
           ),
@@ -112,7 +142,83 @@ class _HealthInfoState extends State<HealthInfoScreen> {
 class _Controller {
   _HealthInfoState state;
   _Controller(this.state);
-  // KirbyUser tempUser = KirbyUser(firstName: )
+  KirbyUser tempKirbyUser = KirbyUser(
+      userId: Auth.getUser().uid,
+      firstName: Auth.getUser().displayName == null
+          ? ""
+          : Auth.getUser().displayName!);
 
-  void saveAge() {}
+  Future<void> findKirbyUser() async {
+    KirbyUser pulledUser =
+        await FirestoreController.getKirbyUser(userId: Auth.getUser().uid);
+    tempKirbyUser = pulledUser;
+    state.ageController.text = state.con.tempKirbyUser.age.toString() == "null"
+        ? ""
+        : state.con.tempKirbyUser.age.toString();
+    state.weightController.text =
+        state.con.tempKirbyUser.weight.toString() == "null"
+            ? ""
+            : state.con.tempKirbyUser.weight.toString();
+    state.heightController.text =
+        state.con.tempKirbyUser.height.toString() == "null"
+            ? ""
+            : state.con.tempKirbyUser.height.toString();
+    state.sleepController.text =
+        state.con.tempKirbyUser.averageSleep.toString() == "null"
+            ? ""
+            : state.con.tempKirbyUser.averageSleep.toString();
+    state.mealsController.text =
+        state.con.tempKirbyUser.averageMealsEaten.toString() == "null"
+            ? ""
+            : state.con.tempKirbyUser.averageMealsEaten.toString();
+  }
+
+  void save() async {
+    FormState? currentState = state.formKey.currentState;
+    if (currentState == null || !currentState.validate()) {
+      return;
+    }
+    currentState.save();
+
+    try {
+      await FirestoreController.addHealthInfo(kirbyUser: tempKirbyUser);
+      state.showSnackBar("Success!");
+    } catch (e) {
+      state.showSnackBar("Error: $e");
+    }
+  }
+
+  void saveAge(String? value) {
+    if (value != null) {
+      tempKirbyUser.age = int.parse(value);
+    }
+  }
+
+  void saveWeight(String? value) {
+    if (value != null) {
+      tempKirbyUser.weight = double.parse(value);
+    }
+  }
+
+  void saveHeight(String? value) {
+    if (value != null) {
+      tempKirbyUser.height = int.parse(value);
+    }
+  }
+
+  void saveSleep(String? value) {
+    if (value != null) {
+      tempKirbyUser.averageSleep = int.parse(value);
+    }
+  }
+
+  void saveMeals(String? value) {
+    if (value != null) {
+      tempKirbyUser.averageMealsEaten = int.parse(value);
+    }
+  }
+
+  // Pull Information
+
+  // Submit Information
 }
