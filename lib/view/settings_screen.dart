@@ -18,22 +18,19 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsState extends State<SettingsScreen> {
-  // late bool _preloadedTasksEnabled;
   bool _preloadedTasksEnabled = true;
   bool _notificationsEnabled = true;
   late _Controller con;
   late HomeScreenModel screenModel;
   // var formKey = GlobalKey<FormState>();
   String title = "Settings";
-  final TextEditingController ageController = TextEditingController();
+  // final TextEditingController ageController = TextEditingController();
   void render(fn) => setState(fn);
 
   @override
   void initState() {
     super.initState();
     con = _Controller(this);
-    // _preloadedTasksEnabled = true;
-    _preloadedTasksEnabled = con.tempKirbyUser.preloadedTasks ?? false;
     con.findKirbyUser();
     screenModel = HomeScreenModel(user: Auth.user!);
   }
@@ -95,34 +92,18 @@ class _Controller {
     KirbyUser pulledUser =
         await FirestoreController.getKirbyUser(userId: Auth.getUser().uid);
     tempKirbyUser = pulledUser;
-    state.ageController.text = state.con.tempKirbyUser.age.toString() == "null"
-        ? ""
-        : state.con.tempKirbyUser.age.toString();
-    // state.weightController.text =
-    //     state.con.tempKirbyUser.weight.toString() == "null"
-    //         ? ""
-    //         : state.con.tempKirbyUser.weight.toString();
-    // state.heightController.text =
-    //     state.con.tempKirbyUser.height.toString() == "null"
-    //         ? ""
-    //         : state.con.tempKirbyUser.height.toString();
-    // state.sleepController.text =
-    //     state.con.tempKirbyUser.averageSleep.toString() == "null"
-    //         ? ""
-    //         : state.con.tempKirbyUser.averageSleep.toString();
-    // state.mealsController.text =
-    //     state.con.tempKirbyUser.averageMealsEaten.toString() == "null"
-    //         ? ""
-    //         : state.con.tempKirbyUser.averageMealsEaten.toString();
-    state._preloadedTasksEnabled = false;
-    // state.con.tempKirbyUser.preloadedTasks == "null"
-    //     ? ""
-    //     : state.con.tempKirbyUser.preloadedTasks;
+    state._preloadedTasksEnabled =
+        state.con.tempKirbyUser.preloadedTasks ?? true;
+    state._notificationsEnabled = state.con.tempKirbyUser.notifications ?? true;
   }
 
   Future<void> setPreloadedTasksEnabled(value) async {
-    state.setState(() {
-      state._preloadedTasksEnabled = value;
-    });
+    // state.setState(() {
+    state._preloadedTasksEnabled = value;
+    // });
+    Map<String, dynamic> update = {};
+    update[DocKeyUser.preloadedTasks.name] = value;
+    await FirestoreController.updateKirbyUser(
+        userId: tempKirbyUser.userId!, update: update);
   }
 }
