@@ -15,9 +15,9 @@ void main() async {
 
 class CapstoneApp extends StatelessWidget {
   const CapstoneApp({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
+    //return const MaterialApp(
     return MaterialApp(
       title: 'Pet Planner',
       initialRoute: StartDispatcher.routeName,
@@ -32,3 +32,8 @@ class CapstoneApp extends StatelessWidget {
     );
   }
 }
+
+Widget f1(BuildContext context) {
+  return const ToDoScreen();
+}
+
