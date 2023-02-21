@@ -12,6 +12,8 @@ enum DocKeyUser {
   averageMealsEaten,
   kirbyPet,
   age,
+  preloadedTasks,
+  notifications,
 }
 
 class KirbyUser {
@@ -25,6 +27,8 @@ class KirbyUser {
   int? averageMealsEaten;
   int? age;
   KirbyPet? kirbyPet;
+  bool? preloadedTasks;
+  bool? notifications;
 
   KirbyUser({
     required this.userId,
@@ -37,6 +41,8 @@ class KirbyUser {
     this.averageMealsEaten,
     this.age,
     this.kirbyPet,
+    this.preloadedTasks,
+    this.notifications,
   });
 
   Map<String, dynamic> toFirestoreDoc() {
@@ -51,6 +57,8 @@ class KirbyUser {
       DocKeyUser.averageMealsEaten.name: averageMealsEaten,
       DocKeyUser.age.name: age,
       DocKeyUser.kirbyPet.name: kirbyPet,
+      DocKeyUser.preloadedTasks.name: preloadedTasks,
+      DocKeyUser.notifications.name: notifications,
     };
   }
 
@@ -69,6 +77,8 @@ class KirbyUser {
       averageMealsEaten: doc[DocKeyUser.averageMealsEaten.name] ??= "",
       age: doc[DocKeyUser.age.name] ??= "",
       // kirbyPet: doc[DocKeyUser.kirbyPet.name] ??= "",
+      preloadedTasks: doc[DocKeyUser.preloadedTasks.name] ??= "",
+      notifications: doc[DocKeyUser.notifications.name] ??= "",
     );
   }
 
