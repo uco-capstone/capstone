@@ -18,7 +18,7 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsState extends State<SettingsScreen> {
-  bool _preloadedTasksEnabled = true;
+  bool _preloadedTasksEnabled = false;
   bool _notificationsEnabled = true;
   late _Controller con;
   late HomeScreenModel screenModel;
@@ -57,10 +57,11 @@ class _SettingsState extends State<SettingsScreen> {
               title: const Text('Preloaded Tasks'),
               value: _preloadedTasksEnabled,
               onChanged: (value) {
-                // setState(() {
-                //   _preloadedTasksEnabled = value;
-                // });
-                con.setPreloadedTasksEnabled(value);
+                setState(() {
+                  con.setPreloadedTasksEnabled(value);
+                });
+                // con.setPreloadedTasksEnabled(value);
+                print("value preload: " + value.toString());
               },
             ),
             SwitchListTile(
