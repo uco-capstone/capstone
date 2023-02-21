@@ -77,8 +77,8 @@ class KirbyUser {
       averageMealsEaten: doc[DocKeyUser.averageMealsEaten.name] ??= "",
       age: doc[DocKeyUser.age.name] ??= "",
       // kirbyPet: doc[DocKeyUser.kirbyPet.name] ??= "",
-      preloadedTasks: doc[DocKeyUser.preloadedTasks.name] ??= "",
-      notifications: doc[DocKeyUser.notifications.name] ??= "",
+      preloadedTasks: doc[DocKeyUser.preloadedTasks.name] ??= false,
+      notifications: doc[DocKeyUser.notifications.name] ??= false,
     );
   }
 

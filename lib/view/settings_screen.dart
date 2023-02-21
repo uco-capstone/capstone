@@ -18,7 +18,8 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsState extends State<SettingsScreen> {
-  bool _preloadedTasksEnabled = false;
+  // late bool _preloadedTasksEnabled;
+  bool _preloadedTasksEnabled = true;
   bool _notificationsEnabled = true;
   late _Controller con;
   late HomeScreenModel screenModel;
@@ -31,6 +32,8 @@ class _SettingsState extends State<SettingsScreen> {
   void initState() {
     super.initState();
     con = _Controller(this);
+    // _preloadedTasksEnabled = true;
+    _preloadedTasksEnabled = con.tempKirbyUser.preloadedTasks ?? false;
     con.findKirbyUser();
     screenModel = HomeScreenModel(user: Auth.user!);
   }
@@ -57,9 +60,10 @@ class _SettingsState extends State<SettingsScreen> {
               title: const Text('Preloaded Tasks'),
               value: _preloadedTasksEnabled,
               onChanged: (value) {
-                setState(() {
-                  _preloadedTasksEnabled = value;
-                });
+                // setState(() {
+                //   _preloadedTasksEnabled = value;
+                // });
+                con.setPreloadedTasksEnabled(value);
               },
             ),
             SwitchListTile(
@@ -110,5 +114,15 @@ class _Controller {
     //     state.con.tempKirbyUser.averageMealsEaten.toString() == "null"
     //         ? ""
     //         : state.con.tempKirbyUser.averageMealsEaten.toString();
+    state._preloadedTasksEnabled = false;
+    // state.con.tempKirbyUser.preloadedTasks == "null"
+    //     ? ""
+    //     : state.con.tempKirbyUser.preloadedTasks;
+  }
+
+  Future<void> setPreloadedTasksEnabled(value) async {
+    state.setState(() {
+      state._preloadedTasksEnabled = value;
+    });
   }
 }
