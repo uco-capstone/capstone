@@ -61,7 +61,7 @@ class _SettingsState extends State<SettingsScreen> {
                   con.setPreloadedTasksEnabled(value);
                 });
                 // con.setPreloadedTasksEnabled(value);
-                print("value preload: " + value.toString());
+                // print("value preload: " + value.toString());
               },
             ),
             SwitchListTile(
@@ -69,7 +69,7 @@ class _SettingsState extends State<SettingsScreen> {
               value: _notificationsEnabled,
               onChanged: (value) {
                 setState(() {
-                  _notificationsEnabled = value;
+                  con.setNotificationsEnabled(value);
                 });
               },
             ),
@@ -99,11 +99,17 @@ class _Controller {
   }
 
   Future<void> setPreloadedTasksEnabled(value) async {
-    // state.setState(() {
     state._preloadedTasksEnabled = value;
-    // });
     Map<String, dynamic> update = {};
     update[DocKeyUser.preloadedTasks.name] = value;
+    await FirestoreController.updateKirbyUser(
+        userId: tempKirbyUser.userId!, update: update);
+  }
+
+  Future<void> setNotificationsEnabled(value) async {
+    state._notificationsEnabled = value;
+    Map<String, dynamic> update = {};
+    update[DocKeyUser.notifications.name] = value;
     await FirestoreController.updateKirbyUser(
         userId: tempKirbyUser.userId!, update: update);
   }
