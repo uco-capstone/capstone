@@ -1,4 +1,3 @@
-import 'package:capstone/controller/firestore_controller.dart';
 import 'package:capstone/view/view_util.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

@@ -1,5 +1,6 @@
 import 'package:capstone/view/health_info_screen.dart';
 import 'package:capstone/view/start_dispatcher.dart';
+import 'package:capstone/view/todo_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:capstone/view/create_account_screen.dart';
@@ -22,6 +23,7 @@ class CapstoneApp extends StatelessWidget {
       title: 'Pet Planner',
       initialRoute: StartDispatcher.routeName,
       routes: {
+        ToDoScreen.routeName: (context) => const ToDoScreen(),
         StartDispatcher.routeName: (context) => const StartDispatcher(),
         CreateAccountScreen.routeName: (context) => const CreateAccountScreen(),
         HealthInfoScreen.routeName: (context) => const HealthInfoScreen(),
@@ -33,7 +35,4 @@ class CapstoneApp extends StatelessWidget {
   }
 }
 
-Widget f1(BuildContext context) {
-  return const ToDoScreen();
-}
 
