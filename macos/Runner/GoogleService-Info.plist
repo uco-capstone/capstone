@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>1050240643949-l32pdl7q7ap9n72b4n6h692jviv68j6h.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.1050240643949-l32pdl7q7ap9n72b4n6h692jviv68j6h</string>
+	<key>API_KEY</key>
+	<string>AIzaSyC_P0JXzJuR98De_XSxm7L-aOKkc6MS6ko</string>
+	<key>GCM_SENDER_ID</key>
+	<string>1050240643949</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.capstone</string>
+	<key>PROJECT_ID</key>
+	<string>capstone-petplanner</string>
+	<key>STORAGE_BUCKET</key>
+	<string>capstone-petplanner.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:1050240643949:ios:ee5651783cf6fd370fa064</string>
+</dict>
+</plist>
