@@ -1,4 +1,5 @@
 import 'package:capstone/view/health_info_screen.dart';
+import 'package:capstone/view/settings_screen.dart';
 import 'package:capstone/view/start_dispatcher.dart';
 import 'package:capstone/view/todo_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -27,6 +28,7 @@ class CapstoneApp extends StatelessWidget {
         StartDispatcher.routeName: (context) => const StartDispatcher(),
         CreateAccountScreen.routeName: (context) => const CreateAccountScreen(),
         HealthInfoScreen.routeName: (context) => const HealthInfoScreen(),
+        SettingsScreen.routeName: (context) => const SettingsScreen(),
       },
       theme: ThemeData(
         primarySwatch: Colors.indigo,
@@ -34,5 +36,3 @@ class CapstoneApp extends StatelessWidget {
     );
   }
 }
-
-
