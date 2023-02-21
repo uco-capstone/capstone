@@ -20,15 +20,17 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsState extends State<SettingsScreen> {
+  bool _preloadedTasksEnabled = false;
+  bool _notificationsEnabled = true;
   late _Controller con;
   late HomeScreenModel screenModel;
   var formKey = GlobalKey<FormState>();
-  String title = "Health Form";
-  final TextEditingController ageController = TextEditingController();
-  final TextEditingController weightController = TextEditingController();
-  final TextEditingController heightController = TextEditingController();
-  final TextEditingController sleepController = TextEditingController();
-  final TextEditingController mealsController = TextEditingController();
+  String title = "Settings";
+  // final TextEditingController ageController = TextEditingController();
+  // final TextEditingController weightController = TextEditingController();
+  // final TextEditingController heightController = TextEditingController();
+  // final TextEditingController sleepController = TextEditingController();
+  // final TextEditingController mealsController = TextEditingController();
 
   void render(fn) => setState(fn);
 
@@ -52,88 +54,29 @@ class _SettingsState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Health Information"),
+        title: const Text("Settings"),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Form(
-          key: formKey,
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                TextFormField(
-                  decoration: const InputDecoration(
-                    hintText: "Enter your Age",
-                    labelText: "Age",
-                  ),
-                  autocorrect: true,
-                  keyboardType: TextInputType.number,
-                  validator: KirbyUser.validateAge,
-                  onSaved: con.saveAge,
-                  controller: ageController,
-                ),
-                TextFormField(
-                  decoration: const InputDecoration(
-                    hintText: "Enter your Weight in Pounds",
-                    labelText: "Weight (Pounds)",
-                  ),
-                  autocorrect: true,
-                  keyboardType:
-                      const TextInputType.numberWithOptions(decimal: true),
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.allow(
-                        RegExp(r'^(\d+)?\.?\d{0,2}'))
-                  ],
-                  validator: KirbyUser.validateWeight,
-                  onSaved: con.saveWeight,
-                  controller: weightController,
-                ),
-                TextFormField(
-                  decoration: const InputDecoration(
-                    hintText: "Enter your Height in cm",
-                    labelText: "Height (cm)",
-                  ),
-                  autocorrect: true,
-                  keyboardType:
-                      const TextInputType.numberWithOptions(decimal: true),
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.allow(
-                        RegExp(r'^(\d+)?\.?\d{0,2}'))
-                  ],
-                  validator: KirbyUser.validateHeight,
-                  onSaved: con.saveHeight,
-                  controller: heightController,
-                ),
-                TextFormField(
-                  decoration: const InputDecoration(
-                    hintText: "Enter the amount of hours you sleep a night",
-                    labelText: "Hours of Sleep",
-                  ),
-                  autocorrect: true,
-                  keyboardType: TextInputType.number,
-                  validator: KirbyUser.validateSleep,
-                  onSaved: con.saveSleep,
-                  controller: sleepController,
-                ),
-                TextFormField(
-                  decoration: const InputDecoration(
-                    hintText: "Enter the amount of meals taken a day",
-                    labelText: "Meals Taken a Day",
-                  ),
-                  autocorrect: true,
-                  keyboardType: TextInputType.number,
-                  validator: KirbyUser.validateMealsEaten,
-                  onSaved: con.saveMeals,
-                  controller: mealsController,
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                // ElevatedButton(onPressed: con.save, child: const Text("Update"))
-              ],
-            ),
+      body: ListView(
+        children: [
+          SwitchListTile(
+            title: Text('Preloaded Tasks'),
+            value: _preloadedTasksEnabled,
+            onChanged: (value) {
+              setState(() {
+                _preloadedTasksEnabled = value;
+              });
+            },
           ),
-        ),
+          SwitchListTile(
+            title: Text('Notifications'),
+            value: _notificationsEnabled,
+            onChanged: (value) {
+              setState(() {
+                _notificationsEnabled = value;
+              });
+            },
+          ),
+        ],
       ),
     );
   }
