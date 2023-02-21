@@ -1,6 +1,7 @@
 import 'package:capstone/controller/auth_controller.dart';
 import 'package:capstone/model/home_screen_model.dart';
 import 'package:capstone/view/health_info_screen.dart';
+import 'package:capstone/view/todo_screen.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -138,7 +139,7 @@ class _Controller {
   _Controller(this.state);
 
   void toDoListScreen() {
-    //Navigate to the To-Do List Screen
+    Navigator.pushNamed(state.context, ToDoScreen.routeName);
   }
 
   void storeScreen() {
