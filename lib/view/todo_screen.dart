@@ -183,7 +183,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
                                                 ),
                                                 controller: con.timePickedController,
                                                 validator: KirbyTask.validateTimePicked,
-                                                onSaved: (context) => con.saveTimePicked,
+                                                onSaved: con.saveTimePicked,
                                                 onTap: () async {
                                                   timePicked = await showTimePicker(
                                                     context: context, 
@@ -353,10 +353,10 @@ class _Controller {
     }
   }
 
-  void saveTimePicked(String? newValue, BuildContext context) {
+  void saveTimePicked(String? newValue) {
     if (newValue != null) {
       if(tempTask.dueDate == null) {
-        showSnackBar(context: context, message: 'Must choose a date in order to choose a time.');
+        showSnackBar(context: state.context, message: 'Must choose a date in order to choose a time.');
         return;
       } else {
         var tempDueDate = DateTime(
