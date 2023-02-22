@@ -43,6 +43,19 @@ class _ToDoScreenState extends State<ToDoScreen> {
         ],
       ),
       //body: const Text('To Do Items'),
+      floatingActionButton:
+          FloatingActionButton(
+            onPressed: () {},
+            backgroundColor: Colors.purple[200], 
+            elevation: 10,
+            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5))),
+            child: const Text(
+              '+',
+              style: TextStyle(
+                fontSize: 32,
+              ),
+            ),
+          ),
       body: Stack(
         children: [
           Container(
@@ -288,15 +301,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
                                                             );
                                                             setState(() {
                                                               if(timePicked != null) {
-                                                                if(timePicked!.hour > 12) {
-                                                                  con.timePickedController.text = "${timePicked!.hour - 12}:${timePicked!.minute} PM";
-                                                                } else if(timePicked!.hour == 12) {
-                                                                  con.timePickedController.text = "${timePicked!.hour}:${timePicked!.minute} PM";
-                                                                } else if(timePicked!.hour < 12 && timePicked!.hour != 0) {
-                                                                  con.timePickedController.text = "${timePicked!.hour}:${timePicked!.minute} AM";
-                                                                } else if(timePicked!.hour == 0) {
-                                                                  con.timePickedController.text = "12:${timePicked!.minute} AM";
-                                                                }
+                                                                con.timePickedController.text = "${timePicked!.hour}:${timePicked!.minute}";
                                                               }
                                                             });
                                                           },
@@ -312,20 +317,32 @@ class _ToDoScreenState extends State<ToDoScreen> {
                                       ],
                                     ),
                                   ),
-                                  Align(
-                                    alignment: Alignment.bottomCenter,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(20.0),
-                                      child: ElevatedButton(
-                                        onPressed: con.addNewTask, 
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.purple[200],
-                                          elevation: 5,
+                                  Positioned(
+                                    bottom: 0,
+                                    right: 0,
+                                    child: Row(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(20.0),
+                                          child: OutlinedButton(
+                                            onPressed: () { Navigator.pop(context); },
+                                            child: Text('Cancel', style: TextStyle(color: Colors.purple[200]),),
+                                          )
                                         ),
-                                        child: const Text(
-                                          'Add New Task',
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(0, 20, 30, 20),
+                                          child: ElevatedButton(
+                                            onPressed: con.addNewTask, 
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.purple[200],
+                                              elevation: 5,
+                                            ),
+                                            child: const Text(
+                                              'Add New Task',
+                                            ),
+                                          ),
                                         ),
-                                      ),
+                                      ],
                                     ),
                                   ),
                                 ],
@@ -359,6 +376,7 @@ class _Controller {
   _ToDoScreenState state;
   _Controller(this.state);
 
+  //Used to edit the text on the textformfields
   final datePickedController = TextEditingController();  
   final timePickedController = TextEditingController();  
 
