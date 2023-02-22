@@ -31,7 +31,9 @@ class _ToDoScreenState extends State<ToDoScreen> {
   void initState() {
     super.initState();
     con = _Controller(this);
+    con.getKirbyUser();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -181,7 +183,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
                                                 ),
                                                 controller: con.timePickedController,
                                                 validator: KirbyTask.validateTimePicked,
-                                                onSaved: con.saveTimePicked,
+                                                onSaved: (context) => con.saveTimePicked,
                                                 onTap: () async {
                                                   timePicked = await showTimePicker(
                                                     context: context, 
@@ -213,7 +215,11 @@ class _ToDoScreenState extends State<ToDoScreen> {
                               Padding(
                                 padding: const EdgeInsets.all(20.0),
                                 child: OutlinedButton(
-                                  onPressed: () { Navigator.pop(context); },
+                                  onPressed: () { 
+                                    con.datePickedController.clear();
+                                    con.timePickedController.clear();
+                                    Navigator.pop(context); 
+                                  },
                                   child: Text('Cancel', style: TextStyle(color: Colors.purple[200]),),
                                 )
                               ),
@@ -323,10 +329,8 @@ class _Controller {
   _ToDoScreenState state;
   late KirbyTask tempTask;
   late KirbyUser kirbyUser;
-  _Controller(this.state) {
-    getKirbyUser();
-    tempTask = KirbyTask(user: kirbyUser);
-  }
+  late String dueDateString;
+  _Controller(this.state);
 
   //Used to edit the text on the textformfields
   final datePickedController = TextEditingController();  
@@ -334,22 +338,37 @@ class _Controller {
 
   void getKirbyUser() async {
     kirbyUser = await FirestoreController.getKirbyUser(userId: Auth.getUser().uid);
+    tempTask = KirbyTask(user: kirbyUser);
   }
 
-  String? validateTaskName(String? value) {}
-
-  void saveTaskName(String? newValue) {}
-
-  String? validateDatePicked(String? value) {
+  void saveTaskName(String? newValue) {
+    if(newValue != null) {
+      tempTask.title = newValue;
+    }
   }
 
   void saveDatePicked(String? newValue) {
+    if(newValue != null) {
+      tempTask.dueDate = state.datePicked;
+    }
   }
 
-  String? validateTimePicked(String? value) {
-  }
-
-  void saveTimePicked(String? newValue) {
+  void saveTimePicked(String? newValue, BuildContext context) {
+    if (newValue != null) {
+      if(tempTask.dueDate == null) {
+        showSnackBar(context: context, message: 'Must choose a date in order to choose a time.');
+        return;
+      } else {
+        var tempDueDate = DateTime(
+          state.datePicked!.year, 
+          state.datePicked!.month,
+          state.datePicked!.day,
+          state.timePicked!.hour,
+          state.timePicked!.minute
+        );
+        tempTask.dueDate = tempDueDate;
+      }
+    }
   }
 
   void addNewTask() {

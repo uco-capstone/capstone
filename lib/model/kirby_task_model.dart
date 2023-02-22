@@ -60,6 +60,8 @@ class KirbyTask {
     );
   }
 
+  //Input Validation
+
   static String? validateTaskName(String? value) {
     return (value == null || value.trim().length < 3) ? 'Task Name is too short.' : null;
   }
@@ -83,9 +85,9 @@ class KirbyTask {
         if(daysString.startsWith('0')) {
           daysString.replaceFirst(RegExp(r'0'), '');
         }
-        if(months < 0 || months > 12) {
+        if(months <= 0 || months > 12) {
           return 'Invalid month input';
-        } else if (days < 0 || days > 31) {
+        } else if (days <= 0 || days > 31) {
           return 'Invalid day input.';
         } else {
           return null;
