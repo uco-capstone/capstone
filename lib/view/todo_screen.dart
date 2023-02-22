@@ -1,6 +1,11 @@
+import 'package:capstone/controller/firestore_controller.dart';
+import 'package:capstone/model/kirby_task_model.dart';
 import 'package:capstone/model/todo_item.dart';
 import 'package:capstone/view/view/view_util.dart';
 import 'package:flutter/material.dart';
+
+import '../controller/auth_controller.dart';
+import '../model/user_model.dart';
 
 class ToDoScreen extends StatefulWidget {
   static const routeName = '/todoScreen';
@@ -92,7 +97,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
                                           hintText: "Task Name...",
                                           border: InputBorder.none,
                                         ),
-                                        validator: con.validateTaskName,
+                                        validator: KirbyTask.validateTaskName,
                                         onSaved: con.saveTaskName,
                                       ),
                                     ),
@@ -127,7 +132,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
                                                   border: InputBorder.none,
                                                 ),
                                                 controller: con.datePickedController,
-                                                validator: con.validateDatePicked,
+                                                validator: KirbyTask.validateDatePicked,
                                                 onSaved: con.saveDatePicked,
                                                 onTap: () async {
                                                   datePicked = await showDatePicker(
@@ -175,7 +180,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
                                                   border: InputBorder.none,
                                                 ),
                                                 controller: con.timePickedController,
-                                                validator: con.validateTimePicked,
+                                                validator: KirbyTask.validateTimePicked,
                                                 onSaved: con.saveTimePicked,
                                                 onTap: () async {
                                                   timePicked = await showTimePicker(
@@ -316,11 +321,20 @@ class _ToDoScreenState extends State<ToDoScreen> {
 
 class _Controller {
   _ToDoScreenState state;
-  _Controller(this.state);
+  late KirbyTask tempTask;
+  late KirbyUser kirbyUser;
+  _Controller(this.state) {
+    getKirbyUser();
+    tempTask = KirbyTask(user: kirbyUser);
+  }
 
   //Used to edit the text on the textformfields
   final datePickedController = TextEditingController();  
   final timePickedController = TextEditingController();  
+
+  void getKirbyUser() async {
+    kirbyUser = await FirestoreController.getKirbyUser(userId: Auth.getUser().uid);
+  }
 
   String? validateTaskName(String? value) {}
 
