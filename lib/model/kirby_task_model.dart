@@ -71,24 +71,19 @@ class KirbyTask {
       return null;
     } else {
       // var dateFormat = RegExp('\d{2}/{1}\d{2}/{1}\d{4}');
-      var dateFormat = RegExp(r'([0-9][0-9]/[0-9][0-9]/[0-9][0-9][0-9][0-9])');
+      var dateFormat = RegExp(r'([0-9]{1,2}/[0-9][0-9]{1,2}/[0-9][0-9][0-9][0-9])');
       if (dateFormat.hasMatch(value) == false) {
         return 'Not in MM/DD/YYYY format.'; 
       } else {
-        String monthsString = value.substring(0, 2);
-        String daysString = value.substring(3, 5);
-        int months = int.parse(monthsString);
-        if(monthsString.startsWith('0')) {
-          monthsString.replaceFirst(RegExp(r'0'), '');
-        }
-        int days = int.parse(daysString);
-        if(daysString.startsWith('0')) {
-          daysString.replaceFirst(RegExp(r'0'), '');
-        }
+        var dateArray = value.split('/');
+        int months = int.parse(dateArray[0]);
+        int days = int.parse(dateArray[1]);
         if(months <= 0 || months > 12) {
           return 'Invalid month input';
         } else if (days <= 0 || days > 31) {
           return 'Invalid day input.';
+        } else if(dateArray[2].length < 4 || dateArray[2].length > 5) {
+          return 'Invalid year input.';
         } else {
           return null;
         }

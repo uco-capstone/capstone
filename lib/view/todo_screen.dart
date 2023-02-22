@@ -5,6 +5,7 @@ import 'package:capstone/view/view/view_util.dart';
 import 'package:flutter/material.dart';
 
 import '../controller/auth_controller.dart';
+import '../model/constants.dart';
 import '../model/user_model.dart';
 
 class ToDoScreen extends StatefulWidget {
@@ -20,8 +21,8 @@ class ToDoScreen extends StatefulWidget {
 
 class _ToDoScreenState extends State<ToDoScreen> {
   late _Controller con;
-  late DateTime? datePicked;
-  late TimeOfDay? timePicked;
+  DateTime? datePicked;
+  TimeOfDay? timePicked;
   var formKey = GlobalKey<FormState>();
   //late ToDoScreenModel screenModel;
 
@@ -58,191 +59,199 @@ class _ToDoScreenState extends State<ToDoScreen> {
                 builder: (context) {
                   return Form(
                     key: formKey,
-                    child: Stack(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                          child: Column(
-                            children: [
-                              Text(
-                                'Add a New Task',
-                                style: TextStyle(
-                                    fontSize: 30,
-                                    color: Colors.purple[300],
-                                    fontWeight: FontWeight.bold
-                                  ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(30.0),
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 20,
-                                        vertical: 5,
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        top: 20,
+                        bottom: MediaQuery.of(context).viewInsets.bottom
+                      ),
+                      child: SizedBox(
+                        height: 400,
+                        child: Stack(
+                          children: [
+                            Column(
+                              children: [
+                                Text(
+                                  'Add a New Task',
+                                  style: TextStyle(
+                                      fontSize: 30,
+                                      color: Colors.purple[300],
+                                      fontWeight: FontWeight.bold
+                                    ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(30.0),
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 20,
+                                          vertical: 5,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          // ignore: prefer_const_literals_to_create_immutables
+                                          boxShadow: [
+                                            const BoxShadow(
+                                              color: Colors.grey,
+                                              offset: Offset(0.0, 0.0),
+                                              blurRadius: 5.0,
+                                              spreadRadius: 0.0,
+                                            ),
+                                          ],
+                                          borderRadius: BorderRadius.circular(10),
+                                        ),
+                                        child: TextFormField(
+                                          decoration: const InputDecoration(
+                                            hintText: "Task Name...",
+                                            border: InputBorder.none,
+                                          ),
+                                          validator: KirbyTask.validateTaskName,
+                                          onSaved: con.saveTaskName,
+                                        ),
                                       ),
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        // ignore: prefer_const_literals_to_create_immutables
-                                        boxShadow: [
-                                          const BoxShadow(
-                                            color: Colors.grey,
-                                            offset: Offset(0.0, 0.0),
-                                            blurRadius: 5.0,
-                                            spreadRadius: 0.0,
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            flex: 1,
+                                            child: Padding(
+                                              padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+                                              child: Container(
+                                                width: 150,
+                                                padding: const EdgeInsets.symmetric(
+                                                  horizontal: 20,
+                                                  vertical: 5,
+                                                ),
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  // ignore: prefer_const_literals_to_create_immutables
+                                                  boxShadow: [
+                                                    const BoxShadow(
+                                                      color: Colors.grey,
+                                                      offset: Offset(0.0, 0.0),
+                                                      blurRadius: 5.0,
+                                                      spreadRadius: 0.0,
+                                                    ),
+                                                  ],
+                                                  borderRadius: BorderRadius.circular(10),
+                                                ),
+                                                child: TextFormField(
+                                                  decoration: const InputDecoration(
+                                                    hintText: "Task Date...",
+                                                    border: InputBorder.none,
+                                                  ),
+                                                  controller: con.datePickedController,
+                                                  validator: KirbyTask.validateDatePicked,
+                                                  onSaved: con.saveDatePicked,
+                                                  onTap: () async {
+                                                    datePicked = await showDatePicker(
+                                                      context: context, 
+                                                      initialDate: DateTime.now(), 
+                                                      firstDate: DateTime.now(), 
+                                                      lastDate: DateTime(3000),
+                                                    );
+                                                    setState(() {
+                                                      if(datePicked != null) {
+                                                        con.datePickedController.text = '${datePicked!.month}/${datePicked!.day}/${datePicked!.year}';
+                                                      }
+                                                    });
+                                                  },
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: Padding(
+                                              padding: const EdgeInsets.fromLTRB(20, 30, 0, 0),
+                                              child: Container(
+                                                width: 150,
+                                                padding: const EdgeInsets.symmetric(
+                                                  horizontal: 20,
+                                                  vertical: 5,
+                                                ),
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  // ignore: prefer_const_literals_to_create_immutables
+                                                  boxShadow: [
+                                                    const BoxShadow(
+                                                      color: Colors.grey,
+                                                      offset: Offset(0.0, 0.0),
+                                                      blurRadius: 5.0,
+                                                      spreadRadius: 0.0,
+                                                    ),
+                                                  ],
+                                                  borderRadius: BorderRadius.circular(10),
+                                                ),
+                                                child: TextFormField(
+                                                  decoration: const InputDecoration(
+                                                    hintText: "Task Time...",
+                                                    border: InputBorder.none,
+                                                  ),
+                                                  controller: con.timePickedController,
+                                                  validator: KirbyTask.validateTimePicked,
+                                                  onSaved: con.saveTimePicked,
+                                                  onTap: () async {
+                                                    timePicked = await showTimePicker(
+                                                      context: context, 
+                                                      initialTime: TimeOfDay.now(),
+                                                    );
+                                                    setState(() {
+                                                      if(timePicked != null) {
+                                                        con.timePickedController.text = "${timePicked!.hour}:${(timePicked!.minute < 10) ? '0${timePicked!.minute}' : timePicked!.minute}";
+                                                      }
+                                                    });
+                                                  },
+                                                ),
+                                              ),
+                                            ),
                                           ),
                                         ],
-                                        borderRadius: BorderRadius.circular(10),
                                       ),
-                                      child: TextFormField(
-                                        decoration: const InputDecoration(
-                                          hintText: "Task Name...",
-                                          border: InputBorder.none,
-                                        ),
-                                        validator: KirbyTask.validateTaskName,
-                                        onSaved: con.saveTaskName,
-                                      ),
-                                    ),
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                          flex: 1,
-                                          child: Padding(
-                                            padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
-                                            child: Container(
-                                              width: 150,
-                                              padding: const EdgeInsets.symmetric(
-                                                horizontal: 20,
-                                                vertical: 5,
-                                              ),
-                                              decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                // ignore: prefer_const_literals_to_create_immutables
-                                                boxShadow: [
-                                                  const BoxShadow(
-                                                    color: Colors.grey,
-                                                    offset: Offset(0.0, 0.0),
-                                                    blurRadius: 5.0,
-                                                    spreadRadius: 0.0,
-                                                  ),
-                                                ],
-                                                borderRadius: BorderRadius.circular(10),
-                                              ),
-                                              child: TextFormField(
-                                                decoration: const InputDecoration(
-                                                  hintText: "Task Date...",
-                                                  border: InputBorder.none,
-                                                ),
-                                                controller: con.datePickedController,
-                                                validator: KirbyTask.validateDatePicked,
-                                                onSaved: con.saveDatePicked,
-                                                onTap: () async {
-                                                  datePicked = await showDatePicker(
-                                                    context: context, 
-                                                    initialDate: DateTime.now(), 
-                                                    firstDate: DateTime.now(), 
-                                                    lastDate: DateTime(3000),
-                                                  );
-                                                  setState(() {
-                                                    if(datePicked != null) {
-                                                      con.datePickedController.text = '${datePicked!.month}/${datePicked!.day}/${datePicked!.year}';
-                                                    }
-                                                  });
-                                                },
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        Expanded(
-                                          flex: 1,
-                                          child: Padding(
-                                            padding: const EdgeInsets.fromLTRB(20, 30, 0, 0),
-                                            child: Container(
-                                              width: 150,
-                                              padding: const EdgeInsets.symmetric(
-                                                horizontal: 20,
-                                                vertical: 5,
-                                              ),
-                                              decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                // ignore: prefer_const_literals_to_create_immutables
-                                                boxShadow: [
-                                                  const BoxShadow(
-                                                    color: Colors.grey,
-                                                    offset: Offset(0.0, 0.0),
-                                                    blurRadius: 5.0,
-                                                    spreadRadius: 0.0,
-                                                  ),
-                                                ],
-                                                borderRadius: BorderRadius.circular(10),
-                                              ),
-                                              child: TextFormField(
-                                                decoration: const InputDecoration(
-                                                  hintText: "Task Time...",
-                                                  border: InputBorder.none,
-                                                ),
-                                                controller: con.timePickedController,
-                                                validator: KirbyTask.validateTimePicked,
-                                                onSaved: con.saveTimePicked,
-                                                onTap: () async {
-                                                  timePicked = await showTimePicker(
-                                                    context: context, 
-                                                    initialTime: TimeOfDay.now(),
-                                                  );
-                                                  setState(() {
-                                                    if(timePicked != null) {
-                                                      con.timePickedController.text = "${timePicked!.hour}:${timePicked!.minute}";
-                                                    }
-                                                  });
-                                                },
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Positioned(
-                          bottom: 0,
-                          right: 0,
-                          child: Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(20.0),
-                                child: OutlinedButton(
-                                  onPressed: () { 
-                                    con.datePickedController.clear();
-                                    con.timePickedController.clear();
-                                    Navigator.pop(context); 
-                                  },
-                                  child: Text('Cancel', style: TextStyle(color: Colors.purple[200]),),
-                                )
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(0, 20, 30, 20),
-                                child: ElevatedButton(
-                                  onPressed: con.addNewTask, 
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.purple[200],
-                                    elevation: 5,
-                                  ),
-                                  child: const Text(
-                                    'Add New Task',
+                                    ],
                                   ),
                                 ),
+                              ],
+                            ),
+                            Positioned(
+                              bottom: 0,
+                              right: 0,
+                              child: Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(20.0),
+                                    child: OutlinedButton(
+                                      onPressed: () { 
+                                        con.datePickedController.clear();
+                                        con.timePickedController.clear();
+                                        Navigator.pop(context); 
+                                      },
+                                      child: Text('Cancel', style: TextStyle(color: Colors.purple[200]),),
+                                    )
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(0, 20, 30, 20),
+                                    child: ElevatedButton(
+                                      onPressed: con.addNewTask, 
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.purple[200],
+                                        elevation: 5,
+                                      ),
+                                      child: const Text(
+                                        'Add New Task',
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   );
-                });
+                },
+                isScrollControlled: true,  
+              );
             },
             backgroundColor: Colors.purple[200], 
             elevation: 10,
@@ -348,29 +357,59 @@ class _Controller {
   }
 
   void saveDatePicked(String? newValue) {
-    if(newValue != null) {
+    if(newValue != null && state.datePicked != null) {
       tempTask.dueDate = state.datePicked;
+    } else {
+      return;
     }
   }
 
   void saveTimePicked(String? newValue) {
-    if (newValue != null) {
-      if(tempTask.dueDate == null) {
-        showSnackBar(context: state.context, message: 'Must choose a date in order to choose a time.');
-        return;
-      } else {
-        var tempDueDate = DateTime(
-          state.datePicked!.year, 
-          state.datePicked!.month,
-          state.datePicked!.day,
-          state.timePicked!.hour,
-          state.timePicked!.minute
-        );
-        tempTask.dueDate = tempDueDate;
-      }
+    if (newValue != null && state.timePicked != null && state.datePicked != null) {
+      var tempDueDate = DateTime(
+        state.datePicked!.year, 
+        state.datePicked!.month,
+        state.datePicked!.day,
+        state.timePicked!.hour,
+        state.timePicked!.minute
+      );
+      tempTask.dueDate = tempDueDate;
     }
   }
 
-  void addNewTask() {
+  void addNewTask() async {
+    FormState? currentState = state.formKey.currentState;
+    if(currentState == null || !currentState.validate()) {
+      return;
+    }
+
+    if(state.datePicked == null && state.timePicked != null) {
+      showDialog(context: state.context, builder: (context) => AlertDialog(
+        title: const Text('Kirby Spotted An Error!'),
+        content: const Text('Must choose a date in order to add a time. \n\nTo create a task, either add a date, or remove the time!'),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('OK'),
+            onPressed: () {
+              Navigator.of(state.context).pop();
+            },
+          ),
+        ],
+      ));
+    }
+
+    currentState.save();
+
+    try {
+      String docID = await FirestoreController.addTask(kirbyTask: tempTask);
+      datePickedController.clear();
+      timePickedController.clear();
+      Navigator.pop(state.context);
+      showSnackBar(context: state.context, seconds: 20, message: 'Task Added!');
+    } catch (e) {
+      Navigator.pop(state.context);
+      if(Constant.devMode) print('************* Add KirbyTask Error: $e');
+      showSnackBar(context: state.context, seconds: 20, message: 'Add KirbyTask Error: $e');
+    }
   }
 }
