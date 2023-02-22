@@ -1,9 +1,9 @@
-import 'package:capstone/view/health_info_screen.dart';
-import 'package:capstone/view/start_dispatcher.dart';
-import 'package:capstone/view/todo_screen.dart';
+import 'package:capstone/viewpage/health_info_screen.dart';
+import 'package:capstone/viewpage/start_dispatcher.dart';
+import 'package:capstone/viewpage/todo_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:capstone/view/create_account_screen.dart';
+import 'package:capstone/viewpage/create_account_screen.dart';
 import 'firebase_options.dart';
 
 void main() async {

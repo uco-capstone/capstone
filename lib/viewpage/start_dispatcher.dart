@@ -1,5 +1,5 @@
-import 'package:capstone/view/home_screen.dart';
-import 'package:capstone/view/login_screen.dart';
+import 'package:capstone/viewpage/home_screen.dart';
+import 'package:capstone/viewpage/login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 

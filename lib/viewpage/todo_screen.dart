@@ -1,5 +1,5 @@
-import 'package:capstone/model/todo_item.dart';
-import 'package:capstone/view/view/view_util.dart';
+import 'package:capstone/viewpage/todo_item.dart';
+import 'package:capstone/viewpage/view/view_util.dart';
 import 'package:flutter/material.dart';
 
 class ToDoScreen extends StatelessWidget {
