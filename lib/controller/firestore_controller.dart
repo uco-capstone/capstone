@@ -61,6 +61,29 @@ class FirestoreController {
         .doc(querySnapshot.docs[0].id)
         .update(update);
   }
+
+  static Future<List<KirbyTask>> getKirbyTaskList({
+    required String uid,
+  }) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+                                  .collection(taskCollection)
+                                  .where(DocKeyKirbyTask.userId.name, isEqualTo: uid)
+                                  //.orderBy(DocKeyKirbyTask.dueDate, descending: false)
+                                  .get();
+
+    var result = <KirbyTask>[];
+    for(var doc in querySnapshot.docs) {
+      if(doc.data() != null) {
+        var document = doc.data() as Map<String, dynamic>;
+        var t = KirbyTask.fromFirestoreDoc(doc: document, taskId: doc.id);
+        if(t != null) {
+          result.add(t);
+        }
+      }
+    }
+
+    return result;
+  }
 }
 
 // // example code for reference
