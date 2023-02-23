@@ -1,4 +1,4 @@
-import 'package:capstone/model/todo_item.dart';
+import 'package:capstone/view/todo_item.dart';
 import 'package:capstone/view/view/view_util.dart';
 import 'package:flutter/material.dart';
 
