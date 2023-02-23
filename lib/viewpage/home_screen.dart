@@ -1,6 +1,7 @@
 import 'package:capstone/controller/auth_controller.dart';
 import 'package:capstone/model/home_screen_model.dart';
 import 'package:capstone/viewpage/health_info_screen.dart';
+import 'package:capstone/viewpage/settings_screen.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -145,8 +146,9 @@ class _Controller {
     //Navigate to Store Screen
   }
 
-  void settingsScreen() {
+  void settingsScreen() async {
     //Navigate to the Settings Screen
+    await Navigator.pushNamed(state.context, SettingsScreen.routeName);
   }
 
   void healthInfoScreen() async {
