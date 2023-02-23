@@ -1,5 +1,5 @@
 import 'package:capstone/model/kirby_task_model.dart';
-import 'package:capstone/model/user_model.dart';
+import 'package:capstone/model/kirby_user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FirestoreController {
