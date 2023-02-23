@@ -1,12 +1,11 @@
 import 'package:capstone/controller/firestore_controller.dart';
 import 'package:capstone/model/kirby_task_model.dart';
-import 'package:capstone/model/todo_item.dart';
-import 'package:capstone/view/view/view_util.dart';
+import 'package:capstone/viewpage/todo_item.dart';
+import 'package:capstone/viewpage/view/view_util.dart';
 import 'package:flutter/material.dart';
 
 import '../controller/auth_controller.dart';
 import '../model/constants.dart';
-import '../model/user_model.dart';
 
 class ToDoScreen extends StatefulWidget {
   static const routeName = '/todoScreen';
@@ -456,16 +455,20 @@ class _Controller {
 
     try {
       tempTask.userId = Auth.getUser().uid;
+      // ignore: unused_local_variable
       String docID = await FirestoreController.addTask(kirbyTask: tempTask);
       state.render(() {
         state.taskList.add(tempTask);
       });
       datePickedController.clear();
       timePickedController.clear();
-      Navigator.pop(state.context);
-      showSnackBar(context: state.context, seconds: 20, message: 'Task Added!');
+      if (state.mounted) {
+        Navigator.pop(state.context);
+        showSnackBar(context: state.context, seconds: 20, message: 'Task Added!');
+      }
     } catch (e) {
       Navigator.pop(state.context);
+      // ignore: avoid_print
       if (Constant.devMode) print('************* Add KirbyTask Error: $e');
       showSnackBar(
         context: state.context,

@@ -1,8 +1,8 @@
-import 'package:capstone/view/view_util.dart';
+import 'package:capstone/viewpage/view_util.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:capstone/model/login_screen_model.dart';
-import 'package:capstone/view/create_account_screen.dart';
+import 'package:capstone/viewpage/create_account_screen.dart';
 
 import '../controller/auth_controller.dart';
 import '../model/constants.dart';

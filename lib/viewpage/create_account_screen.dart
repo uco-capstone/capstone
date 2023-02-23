@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:capstone/model/constants.dart';
 import 'package:capstone/model/create_account_screen_model.dart';
-import 'package:capstone/view/view_util.dart';
+import 'package:capstone/viewpage/view_util.dart';
 
 import '../controller/auth_controller.dart';
 
@@ -46,7 +46,7 @@ class _CreateAccountState extends State<CreateAccountScreen> {
               children: [
                 Text(
                   "Create new account",
-                  style: Theme.of(context).textTheme.headline5,
+                  style: Theme.of(context).textTheme.headlineSmall,
                 ),
                 TextFormField(
                   decoration: const InputDecoration(
@@ -90,7 +90,7 @@ class _CreateAccountState extends State<CreateAccountScreen> {
                   onPressed: con.createAccount,
                   child: Text(
                     "Create",
-                    style: Theme.of(context).textTheme.button,
+                    style: Theme.of(context).textTheme.labelLarge,
                   ),
                 ),
               ],
