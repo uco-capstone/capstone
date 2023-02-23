@@ -1,4 +1,4 @@
-import 'package:capstone/viewpage/view_util.dart';
+import 'package:capstone/viewpage/view/view_util.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:capstone/model/login_screen_model.dart';
@@ -135,14 +135,14 @@ class _Controller {
         // ignore: avoid_print
         print("============== $error");
       }
-      createSnackBar(context: state.context, seconds: 20, message: error);
+      showSnackBar(context: state.context, seconds: 20, message: error);
     } catch (e) {
       state.render(() => state.screenModel.isSignInUnderway = false);
       if (Constant.devMode) {
         // ignore: avoid_print
         print("============== Sign In Error! $e");
       }
-      createSnackBar(
+      showSnackBar(
           context: state.context, seconds: 20, message: "Sign In Error! $e");
     }
   }

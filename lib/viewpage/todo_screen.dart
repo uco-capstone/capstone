@@ -37,11 +37,13 @@ class _ToDoScreenState extends State<ToDoScreen> {
   }
 
   @override
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.purple[300],
         title: const Text('To Do List'),
+
         actions: [
           IconButton(
             onPressed: () =>
@@ -484,3 +486,4 @@ class _Controller {
     state.render(() {});
   }
 }
+

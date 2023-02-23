@@ -1,3 +1,4 @@
+import 'package:capstone/model/kirby_user_model.dart';
 
 enum DocKeyKirbyTask {
   title,

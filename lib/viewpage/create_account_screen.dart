@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:capstone/model/constants.dart';
 import 'package:capstone/model/create_account_screen_model.dart';
-import 'package:capstone/viewpage/view_util.dart';
+import 'package:capstone/viewpage/view/view_util.dart';
 
 import '../controller/auth_controller.dart';
 
@@ -112,7 +112,7 @@ class _Controller {
     currentState.save();
 
     if (state.screenModel.password != state.screenModel.passwordConf) {
-      createSnackBar(
+      showSnackBar(
         context: state.context,
         message: "Passwords do not match",
         seconds: 5,
@@ -131,7 +131,7 @@ class _Controller {
     } on FirebaseAuthException catch (e) {
       // ignore: avoid_print
       if (Constant.devMode) print("======= failed to create: $e");
-      createSnackBar(
+      showSnackBar(
         context: state.context,
         message: "${e.code} ${e.message}",
         seconds: 5,
@@ -139,7 +139,7 @@ class _Controller {
     } catch (e) {
       // ignore: avoid_print
       if (Constant.devMode) print("======= failed to create: $e");
-      createSnackBar(
+      showSnackBar(
         context: state.context,
         message: "Failed to create account: $e",
         seconds: 5,
