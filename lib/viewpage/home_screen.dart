@@ -1,6 +1,7 @@
 import 'package:capstone/controller/auth_controller.dart';
 import 'package:capstone/model/home_screen_model.dart';
 import 'package:capstone/viewpage/health_info_screen.dart';
+
 import 'package:capstone/viewpage/settings_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -139,12 +140,13 @@ class _Controller {
   _Controller(this.state);
 
   void toDoListScreen() {
-    //Navigate to the To-Do List Screen
+    Navigator.pushNamed(state.context, ToDoScreen.routeName);
   }
 
   void storeScreen() {
     //Navigate to Store Screen
   }
+
 
   void settingsScreen() async {
     //Navigate to the Settings Screen

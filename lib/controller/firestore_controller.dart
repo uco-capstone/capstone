@@ -20,6 +20,7 @@ class FirestoreController {
         .get();
 
     if (querySnapshot.docs.length != 1) {
+      // ignore: unused_local_variable
       DocumentReference ref = await FirebaseFirestore.instance
           .collection(kirbyUserCollection)
           .add(kirbyUser.toFirestoreDoc());
@@ -60,5 +61,26 @@ class FirestoreController {
         .collection(kirbyUserCollection)
         .doc(querySnapshot.docs[0].id)
         .update(update);
+  }
+
+  static Future<List<KirbyTask>> getKirbyTaskList({
+    required String uid,
+  }) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+                                  .collection(taskCollection)
+                                  .where(DocKeyKirbyTask.userId.name, isEqualTo: uid)
+                                  //.orderBy(DocKeyKirbyTask.dueDate, descending: false)
+                                  .get();
+
+    var result = <KirbyTask>[];
+    for(var doc in querySnapshot.docs) {
+      if(doc.data() != null) {
+        var document = doc.data() as Map<String, dynamic>;
+        var t = KirbyTask.fromFirestoreDoc(doc: document, taskId: doc.id);
+        result.add(t);
+      }
+    }
+
+    return result;
   }
 }
