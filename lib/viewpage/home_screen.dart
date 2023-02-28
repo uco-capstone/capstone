@@ -6,6 +6,9 @@ import 'package:capstone/viewpage/settings_screen.dart';
 import 'package:capstone/viewpage/todo_screen.dart';
 import 'package:flutter/material.dart';
 
+import '../controller/firestore_controller.dart';
+import '../model/kirby_user_model.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
   static const routeName = '/homeScreen';
@@ -148,10 +151,12 @@ class _Controller {
     //Navigate to Store Screen
   }
 
-
   void settingsScreen() async {
+    KirbyUser pulledKirbyUser =
+        await FirestoreController.getKirbyUser(userId: Auth.getUser().uid);
     //Navigate to the Settings Screen
-    await Navigator.pushNamed(state.context, SettingsScreen.routeName);
+    await Navigator.pushNamed(state.context, SettingsScreen.routeName,
+        arguments: pulledKirbyUser);
   }
 
   void healthInfoScreen() async {

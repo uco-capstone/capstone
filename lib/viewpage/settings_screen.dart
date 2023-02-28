@@ -7,8 +7,9 @@ import '../model/home_screen_model.dart';
 
 class SettingsScreen extends StatefulWidget {
   static const routeName = "/settings";
+  final KirbyUser kirbyUser;
 
-  const SettingsScreen({super.key});
+  const SettingsScreen({super.key, required this.kirbyUser});
 
   @override
   State<StatefulWidget> createState() {
@@ -17,9 +18,9 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsState extends State<SettingsScreen> {
-  bool? preloadedtasksEnabled;
-  bool? notificationsEnabled;
-  late KirbyUser kirbyUser;
+  // bool? preloadedtasksEnabled;
+  // bool? notificationsEnabled;
+  // late KirbyUser kirbyUser;
   late _Controller con;
   late HomeScreenModel screenModel;
   String title = "Settings";
@@ -28,7 +29,7 @@ class _SettingsState extends State<SettingsScreen> {
   void initState() {
     super.initState();
     con = _Controller(this);
-    con.setKirbyUser();
+    // con.setKirbyUser();
     screenModel = HomeScreenModel(user: Auth.user!);
   }
 
@@ -54,7 +55,7 @@ class _SettingsState extends State<SettingsScreen> {
           children: [
             SwitchListTile(
               title: const Text('Preloaded Tasks'),
-              value: con.state.kirbyUser.preloadedTasks!,
+              value: widget.kirbyUser.preloadedTasks!,
               onChanged: (value) {
                 setState(() {
                   con.setPreloadedTasksEnabled(value);
@@ -63,7 +64,7 @@ class _SettingsState extends State<SettingsScreen> {
             ),
             SwitchListTile(
               title: const Text('Notifications'),
-              value: con.state.kirbyUser.notifications!,
+              value: widget.kirbyUser.notifications!,
               onChanged: (value) {
                 setState(() {
                   con.setNotificationsEnabled(value);
@@ -80,17 +81,14 @@ class _SettingsState extends State<SettingsScreen> {
 class _Controller {
   _SettingsState state;
   // late Future<KirbyUser> kirbyUser;
-  _Controller(this.state) {
-    setKirbyUser();
-    initPreloadedTasksEnabled();
-  }
+  _Controller(this.state);
 
-  Future<void> setKirbyUser() async {
-    KirbyUser pulledKirbyUser =
-        await FirestoreController.getKirbyUser(userId: Auth.getUser().uid);
-    state.kirbyUser = pulledKirbyUser;
-    state.setState(() {});
-  }
+  // Future<void> setKirbyUser() async {
+  //   KirbyUser pulledKirbyUser =
+  //       await FirestoreController.getKirbyUser(userId: Auth.getUser().uid);
+  //   state.kirbyUser = pulledKirbyUser;
+  //   state.setState(() {});
+  // }
 
   Future<KirbyUser> getKirbyUser() async {
     KirbyUser pulledKirbyUser =
@@ -99,38 +97,38 @@ class _Controller {
   }
 
   Future<void> setPreloadedTasksEnabled(value) async {
-    state.preloadedtasksEnabled = value;
+    state.widget.kirbyUser.preloadedTasks = value;
     Map<String, dynamic> update = {};
     update[DocKeyUser.preloadedTasks.name] = value;
     await FirestoreController.updateKirbyUser(
-        userId: state.kirbyUser.userId!, update: update);
+        userId: state.widget.kirbyUser.userId!, update: update);
   }
 
   Future<void> setNotificationsEnabled(value) async {
-    state.notificationsEnabled = value;
+    state.widget.kirbyUser.notifications = value;
     Map<String, dynamic> update = {};
     update[DocKeyUser.notifications.name] = value;
     await FirestoreController.updateKirbyUser(
-        userId: state.kirbyUser.userId!, update: update);
+        userId: state.widget.kirbyUser.userId!, update: update);
   }
 
   Future<bool> getPreloadedTasksEnabled() async {
-    KirbyUser pulledUser =
-        await FirestoreController.getKirbyUser(userId: Auth.getUser().uid);
-    state.kirbyUser = pulledUser;
-    return state.kirbyUser.notifications ?? true;
+    // KirbyUser pulledUser =
+    //     await FirestoreController.getKirbyUser(userId: Auth.getUser().uid);
+    // state.widget.kirbyUser = pulledUser;
+    return state.widget.kirbyUser.notifications ?? true;
   }
 
-  bool getPreloadedTasksEnabled2() {
-    return state.kirbyUser.preloadedTasks!;
-  }
+  // bool getPreloadedTasksEnabled2() {
+  //   return state.kirbyUser.preloadedTasks!;
+  // }
 
-  Future<void> initPreloadedTasksEnabled() async {
-    KirbyUser pulledUser =
-        await FirestoreController.getKirbyUser(userId: Auth.getUser().uid);
-    state.kirbyUser = pulledUser;
-    state.kirbyUser.preloadedTasks ?? true;
-    state.preloadedtasksEnabled = state.kirbyUser.preloadedTasks;
-    state.setState(() {});
-  }
+  // Future<void> initPreloadedTasksEnabled() async {
+  //   KirbyUser pulledUser =
+  //       await FirestoreController.getKirbyUser(userId: Auth.getUser().uid);
+  //   state.kirbyUser = pulledUser;
+  //   state.kirbyUser.preloadedTasks ?? true;
+  //   state.preloadedtasksEnabled = state.kirbyUser.preloadedTasks;
+  //   state.setState(() {});
+  // }
 }
