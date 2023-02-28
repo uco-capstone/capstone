@@ -18,9 +18,6 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsState extends State<SettingsScreen> {
-  // bool? preloadedtasksEnabled;
-  // bool? notificationsEnabled;
-  // late KirbyUser kirbyUser;
   late _Controller con;
   late HomeScreenModel screenModel;
   String title = "Settings";
@@ -29,7 +26,6 @@ class _SettingsState extends State<SettingsScreen> {
   void initState() {
     super.initState();
     con = _Controller(this);
-    // con.setKirbyUser();
     screenModel = HomeScreenModel(user: Auth.user!);
   }
 
@@ -80,21 +76,7 @@ class _SettingsState extends State<SettingsScreen> {
 
 class _Controller {
   _SettingsState state;
-  // late Future<KirbyUser> kirbyUser;
   _Controller(this.state);
-
-  // Future<void> setKirbyUser() async {
-  //   KirbyUser pulledKirbyUser =
-  //       await FirestoreController.getKirbyUser(userId: Auth.getUser().uid);
-  //   state.kirbyUser = pulledKirbyUser;
-  //   state.setState(() {});
-  // }
-
-  Future<KirbyUser> getKirbyUser() async {
-    KirbyUser pulledKirbyUser =
-        await FirestoreController.getKirbyUser(userId: Auth.getUser().uid);
-    return pulledKirbyUser;
-  }
 
   Future<void> setPreloadedTasksEnabled(value) async {
     state.widget.kirbyUser.preloadedTasks = value;
@@ -111,24 +93,4 @@ class _Controller {
     await FirestoreController.updateKirbyUser(
         userId: state.widget.kirbyUser.userId!, update: update);
   }
-
-  Future<bool> getPreloadedTasksEnabled() async {
-    // KirbyUser pulledUser =
-    //     await FirestoreController.getKirbyUser(userId: Auth.getUser().uid);
-    // state.widget.kirbyUser = pulledUser;
-    return state.widget.kirbyUser.notifications ?? true;
-  }
-
-  // bool getPreloadedTasksEnabled2() {
-  //   return state.kirbyUser.preloadedTasks!;
-  // }
-
-  // Future<void> initPreloadedTasksEnabled() async {
-  //   KirbyUser pulledUser =
-  //       await FirestoreController.getKirbyUser(userId: Auth.getUser().uid);
-  //   state.kirbyUser = pulledUser;
-  //   state.kirbyUser.preloadedTasks ?? true;
-  //   state.preloadedtasksEnabled = state.kirbyUser.preloadedTasks;
-  //   state.setState(() {});
-  // }
 }
