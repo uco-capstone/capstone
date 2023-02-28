@@ -7,7 +7,6 @@ import 'package:capstone/viewpage/todo_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../controller/firestore_controller.dart';
-import '../model/kirby_user_model.dart';
 import '../model/constants.dart';
 
 class HomeScreen extends StatefulWidget {
