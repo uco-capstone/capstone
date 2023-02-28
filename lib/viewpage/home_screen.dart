@@ -164,9 +164,6 @@ class _Controller {
   }
 
   void settingsScreen() async {
-    // KirbyUser pulledKirbyUser =
-    //     await FirestoreController.getKirbyUser(userId: Auth.getUser().uid);
-    //Navigate to the Settings Screen
     await Navigator.pushNamed(state.context, SettingsScreen.routeName,
         arguments: state.screenModel.kirbyUser);
   }
