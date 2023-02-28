@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 
 import '../controller/firestore_controller.dart';
 import '../model/kirby_user_model.dart';
+import '../model/constants.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -30,6 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     con = _Controller(this);
     screenModel = HomeScreenModel(user: Auth.user!);
+    con.loadKirbyUser();
   }
 
   @override
@@ -143,6 +145,17 @@ class _Controller {
   _HomeScreenState state;
   _Controller(this.state);
 
+  Future<void> loadKirbyUser() async {
+    try {
+      state.screenModel.kirbyUser =
+          await FirestoreController.getKirbyUser(userId: Auth.getUser().uid);
+      state.render(() {});
+    } catch (e) {
+      if (Constant.devMode) print(" ==== loading error $e");
+      state.render(() => state.screenModel.loadingErrorMessage = "$e");
+    }
+  }
+
   void toDoListScreen() {
     Navigator.pushNamed(state.context, ToDoScreen.routeName);
   }
@@ -152,11 +165,11 @@ class _Controller {
   }
 
   void settingsScreen() async {
-    KirbyUser pulledKirbyUser =
-        await FirestoreController.getKirbyUser(userId: Auth.getUser().uid);
+    // KirbyUser pulledKirbyUser =
+    //     await FirestoreController.getKirbyUser(userId: Auth.getUser().uid);
     //Navigate to the Settings Screen
     await Navigator.pushNamed(state.context, SettingsScreen.routeName,
-        arguments: pulledKirbyUser);
+        arguments: state.screenModel.kirbyUser);
   }
 
   void healthInfoScreen() async {
