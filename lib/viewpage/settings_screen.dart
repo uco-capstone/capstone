@@ -1,5 +1,6 @@
 import 'package:capstone/controller/firestore_controller.dart';
 import 'package:capstone/model/kirby_user_model.dart';
+import 'package:capstone/model/settings_screen_model.dart';
 import 'package:flutter/material.dart';
 
 import '../controller/auth_controller.dart';
@@ -19,14 +20,14 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsState extends State<SettingsScreen> {
   late _Controller con;
-  late HomeScreenModel screenModel;
+  late SettingsScreenModel screenModel;
   String title = "Settings";
 
   @override
   void initState() {
     super.initState();
     con = _Controller(this);
-    screenModel = HomeScreenModel(user: Auth.user!);
+    screenModel = SettingsScreenModel(user: Auth.user!);
   }
 
   void render(fn) => setState(fn);
