@@ -1,10 +1,10 @@
 import 'package:capstone/controller/firestore_controller.dart';
+import 'package:capstone/model/health_screen_model.dart';
 import 'package:capstone/model/kirby_user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../controller/auth_controller.dart';
-import '../model/home_screen_model.dart';
 
 class HealthInfoScreen extends StatefulWidget {
   static const routeName = "/healthInfo";
@@ -19,7 +19,7 @@ class HealthInfoScreen extends StatefulWidget {
 
 class _HealthInfoState extends State<HealthInfoScreen> {
   late _Controller con;
-  late HomeScreenModel screenModel;
+  late HealthInfoScreenModel screenModel;
   var formKey = GlobalKey<FormState>();
   String title = "Health Form";
   final TextEditingController ageController = TextEditingController();
@@ -35,7 +35,7 @@ class _HealthInfoState extends State<HealthInfoScreen> {
     super.initState();
     con = _Controller(this);
     con.findKirbyUser();
-    screenModel = HomeScreenModel(user: Auth.user!);
+    screenModel = HealthInfoScreenModel(user: Auth.user!);
   }
 
   void showSnackBar(String message) {
