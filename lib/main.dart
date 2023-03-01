@@ -36,5 +36,3 @@ class CapstoneApp extends StatelessWidget {
     );
   }
 }
-
-

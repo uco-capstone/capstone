@@ -6,6 +6,9 @@ import 'package:capstone/viewpage/settings_screen.dart';
 import 'package:capstone/viewpage/todo_screen.dart';
 import 'package:flutter/material.dart';
 
+import '../controller/firestore_controller.dart';
+import '../model/constants.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
   static const routeName = '/homeScreen';
@@ -27,6 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     con = _Controller(this);
     screenModel = HomeScreenModel(user: Auth.user!);
+    con.loadKirbyUser();
   }
 
   @override
@@ -140,6 +144,18 @@ class _Controller {
   _HomeScreenState state;
   _Controller(this.state);
 
+  Future<void> loadKirbyUser() async {
+    try {
+      state.screenModel.kirbyUser =
+          await FirestoreController.getKirbyUser(userId: Auth.getUser().uid);
+      state.render(() {});
+    } catch (e) {
+      // ignore: avoid_print
+      if (Constants.devMode) print(" ==== loading error $e");
+      state.render(() => state.screenModel.loadingErrorMessage = "$e");
+    }
+  }
+
   void toDoListScreen() {
     Navigator.pushNamed(state.context, ToDoScreen.routeName);
   }
@@ -148,9 +164,7 @@ class _Controller {
     //Navigate to Store Screen
   }
 
-
   void settingsScreen() async {
-    //Navigate to the Settings Screen
     await Navigator.pushNamed(state.context, SettingsScreen.routeName);
   }
 

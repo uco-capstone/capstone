@@ -130,7 +130,7 @@ class _Controller {
       }
     } on FirebaseAuthException catch (e) {
       // ignore: avoid_print
-      if (Constant.devMode) print("======= failed to create: $e");
+      if (Constants.devMode) print("======= failed to create: $e");
       showSnackBar(
         context: state.context,
         message: "${e.code} ${e.message}",
@@ -138,7 +138,7 @@ class _Controller {
       );
     } catch (e) {
       // ignore: avoid_print
-      if (Constant.devMode) print("======= failed to create: $e");
+      if (Constants.devMode) print("======= failed to create: $e");
       showSnackBar(
         context: state.context,
         message: "Failed to create account: $e",

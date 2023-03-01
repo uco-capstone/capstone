@@ -37,13 +37,11 @@ class _ToDoScreenState extends State<ToDoScreen> {
   }
 
   @override
-
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.purple[300],
         title: const Text('To Do List'),
-
         actions: [
           IconButton(
             onPressed: () =>
@@ -322,60 +320,61 @@ class _ToDoScreenState extends State<ToDoScreen> {
                 ),
               ),
               taskList.isEmpty
-              ? Center(
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 75, bottom: 40),
-                        child: SizedBox(
-                          height: 200,
-                          child: Image.asset('images/kirby-happy-jumping.png'),
-                        ),
-                      ),
-                      const Text(
-                        'All Tasks Completed!\nGreat Job!',
-                        style: TextStyle(
-                          fontSize: 30,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  )
-                )
-              : Column(
-                children: [
-                  SizedBox(
-                    height: 500,
-                    child: ListView(
-                      //shrinkWrap: true,
+                  ? Center(
+                      child: Column(
                       children: [
-                        Container(
-                          margin: const EdgeInsets.only(
-                            top: 50,
-                            bottom: 20,
-                          ),
-                          child: const Text(
-                            'All Tasks',
-                            style: TextStyle(
-                              fontSize: 30,
-                              fontWeight: FontWeight.w500,
-                            ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 75, bottom: 40),
+                          child: SizedBox(
+                            height: 200,
+                            child:
+                                Image.asset('images/kirby-happy-jumping.png'),
                           ),
                         ),
-                        Column(
-                          children: [
-                            for (var t in taskList)
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 10),
-                                child: ToDoItem(task: t),
+                        const Text(
+                          'All Tasks Completed!\nGreat Job!',
+                          style: TextStyle(
+                            fontSize: 30,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ))
+                  : Column(
+                      children: [
+                        SizedBox(
+                          height: 500,
+                          child: ListView(
+                            //shrinkWrap: true,
+                            children: [
+                              Container(
+                                margin: const EdgeInsets.only(
+                                  top: 50,
+                                  bottom: 20,
+                                ),
+                                child: const Text(
+                                  'All Tasks',
+                                  style: TextStyle(
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
                               ),
-                          ],
-                        )
+                              Column(
+                                children: [
+                                  for (var t in taskList)
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 10),
+                                      child: ToDoItem(task: t),
+                                    ),
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
                       ],
                     ),
-                  ),
-                ],
-              ),
             ],
           ),
         ),
@@ -462,17 +461,17 @@ class _Controller {
       timePickedController.clear();
       if (state.mounted) {
         Navigator.pop(state.context);
-        showSnackBar(context: state.context, seconds: 20, message: 'Task Added!');
+        showSnackBar(
+            context: state.context, seconds: 20, message: 'Task Added!');
       }
     } catch (e) {
       Navigator.pop(state.context);
       // ignore: avoid_print
-      if (Constant.devMode) print('************* Add KirbyTask Error: $e');
+      if (Constants.devMode) print('************* Add KirbyTask Error: $e');
       showSnackBar(
-        context: state.context,
-        seconds: 20,
-        message: 'Add KirbyTask Error: $e'
-      );
+          context: state.context,
+          seconds: 20,
+          message: 'Add KirbyTask Error: $e');
     }
   }
 
@@ -482,4 +481,3 @@ class _Controller {
     state.render(() {});
   }
 }
-

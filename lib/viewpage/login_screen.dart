@@ -131,14 +131,14 @@ class _Controller {
     } on FirebaseAuthException catch (e) {
       state.render(() => state.screenModel.isSignInUnderway = false);
       var error = 'Sign in error! Reason: ${e.code} ${e.message ?? ""}';
-      if (Constant.devMode) {
+      if (Constants.devMode) {
         // ignore: avoid_print
         print("============== $error");
       }
       showSnackBar(context: state.context, seconds: 20, message: error);
     } catch (e) {
       state.render(() => state.screenModel.isSignInUnderway = false);
-      if (Constant.devMode) {
+      if (Constants.devMode) {
         // ignore: avoid_print
         print("============== Sign In Error! $e");
       }
