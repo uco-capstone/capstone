@@ -111,11 +111,14 @@ class FirestoreController {
         .get();
     if (querySnapshot.docs.isEmpty) {
       // no preloadedTask; make new preloadedTasks
+      DateTime now = DateTime.now();
       KirbyTask eatMeals = KirbyTask(
-        userId: uid,
-        title: "Eat 3 meals today",
-        isPreloaded: true,
-      );
+          userId: uid,
+          title: "Eat 3 meals today",
+          isPreloaded: true,
+          isReoccuring: true,
+          // due midnight tonight
+          dueDate: DateTime(now.year, now.month, now.day, 24));
       addTask(kirbyTask: eatMeals);
       result.add(eatMeals);
     }
