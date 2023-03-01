@@ -150,7 +150,8 @@ class _Controller {
           await FirestoreController.getKirbyUser(userId: Auth.getUser().uid);
       state.render(() {});
     } catch (e) {
-      if (Constant.devMode) print(" ==== loading error $e");
+      // ignore: avoid_print
+      if (Constants.devMode) print(" ==== loading error $e");
       state.render(() => state.screenModel.loadingErrorMessage = "$e");
     }
   }
@@ -164,8 +165,7 @@ class _Controller {
   }
 
   void settingsScreen() async {
-    await Navigator.pushNamed(state.context, SettingsScreen.routeName,
-        arguments: state.screenModel.kirbyUser);
+    await Navigator.pushNamed(state.context, SettingsScreen.routeName);
   }
 
   void healthInfoScreen() async {

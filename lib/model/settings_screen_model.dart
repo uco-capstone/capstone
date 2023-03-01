@@ -6,6 +6,7 @@ class SettingsScreenModel {
   User user;
   String? loadingErrorMessage;
   KirbyUser? kirbyUser;
+  bool loading = false;
 
   SettingsScreenModel({required this.user});
 }

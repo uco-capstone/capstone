@@ -1,3 +1,3 @@
-class Constant {
+class Constants {
   static const devMode = true;
 }
