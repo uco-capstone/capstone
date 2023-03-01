@@ -96,16 +96,21 @@ class FirestoreController {
         .get();
     if (querySnapshot.docs.isEmpty) {
       // no preloadedTask; make new preloadedTasks
-      DateTime now = DateTime.now();
-      KirbyTask eatMeals = KirbyTask(
-          userId: uid,
-          title: "Eat 3 meals today",
-          isPreloaded: true,
-          isReoccuring: true,
-          // due midnight tonight
-          dueDate: DateTime(now.year, now.month, now.day, 24));
-      addTask(kirbyTask: eatMeals);
-      result.add(eatMeals);
+      // DateTime now = DateTime.now();
+      // KirbyTask eatMeals = KirbyTask(
+      //     userId: uid,
+      //     title: "Eat 3 meals today",
+      //     isPreloaded: true,
+      //     isReoccuring: true,
+      //     // due midnight tonight
+      //     dueDate: DateTime(now.year, now.month, now.day, 24));
+      List<KirbyTask> tempList = [];
+      tempList = getPreloadedTaskList(uid: uid);
+      for (var element in tempList) {
+        result.add(element);
+      }
+      // addTask(kirbyTask: eatMeals);
+      // result.add(eatMeals);
     }
 
     for (var doc in querySnapshot.docs) {
@@ -117,5 +122,38 @@ class FirestoreController {
     }
 
     return result;
+  }
+
+  List<KirbyTask> getPreloadedTasks({required String uid}) {
+    List<KirbyTask> taskList = [];
+    DateTime now = DateTime.now();
+    KirbyTask eatMeals = KirbyTask(
+        userId: uid,
+        title: "Eat 3 meals today",
+        isPreloaded: true,
+        isReoccuring: true,
+        // due midnight tonight
+        dueDate: DateTime(now.year, now.month, now.day, 24));
+    taskList.add(eatMeals);
+
+    KirbyTask drinkWater = KirbyTask(
+        userId: uid,
+        title: "Drink half my weight in ounces",
+        isPreloaded: true,
+        isReoccuring: true,
+        // due midnight tonight
+        dueDate: DateTime(now.year, now.month, now.day, 24));
+    taskList.add(drinkWater);
+
+    KirbyTask sleep = KirbyTask(
+        userId: uid,
+        title: "Sleep",
+        isPreloaded: true,
+        isReoccuring: true,
+        // due midnight tonight
+        dueDate: DateTime(now.year, now.month, now.day, 24));
+    taskList.add(sleep);
+
+    return taskList;
   }
 }
