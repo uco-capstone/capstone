@@ -457,6 +457,9 @@ class _Controller {
 
     try {
       tempTask.userId = Auth.getUser().uid;
+      tempTask.isCompleted = false;           //Task is just created, it can't be completed yet
+      tempTask.isPreloaded = false;           //User added task cannot be preloaded
+      tempTask.isReoccuring = false;          //This should be changed when we implement the reoccuring function
       // ignore: unused_local_variable
       String docID = await FirestoreController.addTask(kirbyTask: tempTask);
       state.render(() {
