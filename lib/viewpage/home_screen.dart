@@ -146,6 +146,11 @@ class _Controller {
 
   Future<void> loadKirbyUser() async {
     try {
+      bool hasKirbyUser =
+          await FirestoreController.hasKirbyUser(Auth.getUser().uid);
+      if (hasKirbyUser && state.mounted) {
+        Navigator.pushNamed(state.context, HealthInfoScreen.routeName);
+      }
       state.screenModel.kirbyUser =
           await FirestoreController.getKirbyUser(userId: Auth.getUser().uid);
       state.render(() {});

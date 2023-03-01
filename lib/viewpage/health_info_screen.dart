@@ -127,7 +127,7 @@ class _HealthInfoState extends State<HealthInfoScreen> {
                 const SizedBox(
                   height: 10,
                 ),
-                ElevatedButton(onPressed: con.save, child: const Text("Update"))
+                ElevatedButton(onPressed: con.save, child: const Text("Save"))
               ],
             ),
           ),
@@ -181,6 +181,9 @@ class _Controller {
     try {
       await FirestoreController.addHealthInfo(kirbyUser: tempKirbyUser);
       state.showSnackBar("Success!");
+      if (state.mounted) {
+        Navigator.of(state.context).pop();
+      }
     } catch (e) {
       state.showSnackBar("Error: $e");
     }
