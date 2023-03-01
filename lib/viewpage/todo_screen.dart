@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 import '../controller/auth_controller.dart';
 import '../model/constants.dart';
+import '../model/todo_screen_model.dart';
 
 class ToDoScreen extends StatefulWidget {
   static const routeName = '/todoScreen';
@@ -24,7 +25,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
   TimeOfDay? timePicked;
   var taskList = <KirbyTask>[];
   var formKey = GlobalKey<FormState>();
-  //late ToDoScreenModel screenModel;
+  late TodoScreenModel screenModel;
 
   void render(fn) => setState(fn);
 
@@ -33,7 +34,9 @@ class _ToDoScreenState extends State<ToDoScreen> {
     super.initState();
     con = _Controller(this);
     //con.getKirbyUser();
+    con.loadPreloadedTaskList();
     con.getTaskList();
+    screenModel = TodoScreenModel(user: Auth.user!);
   }
 
   @override
@@ -449,9 +452,11 @@ class _Controller {
 
     try {
       tempTask.userId = Auth.getUser().uid;
-      tempTask.isCompleted = false;           //Task is just created, it can't be completed yet
-      tempTask.isPreloaded = false;           //User added task cannot be preloaded
-      tempTask.isReoccuring = false;          //This should be changed when we implement the reoccuring function
+      tempTask.isCompleted =
+          false; //Task is just created, it can't be completed yet
+      tempTask.isPreloaded = false; //User added task cannot be preloaded
+      tempTask.isReoccuring =
+          false; //This should be changed when we implement the reoccuring function
       // ignore: unused_local_variable
       String docID = await FirestoreController.addTask(kirbyTask: tempTask);
       state.render(() {
@@ -476,8 +481,25 @@ class _Controller {
   }
 
   void getTaskList() async {
-    state.taskList =
+    // state.taskList =
+    //     await FirestoreController.getKirbyTaskList(uid: Auth.getUser().uid);
+    // state.render(() {});
+    List<KirbyTask> tasks =
         await FirestoreController.getKirbyTaskList(uid: Auth.getUser().uid);
+    for (var element in tasks) {
+      state.taskList.add(element);
+    }
+    state.render(() {});
+  }
+
+  // Future<List<KirbyTask>> loadPreloadedTaskList() async {
+  Future<void> loadPreloadedTaskList() async {
+    List<KirbyTask> preloadedTasks =
+        await FirestoreController.getPreloadedTaskList(uid: Auth.getUser().uid);
+    // add preloaded tasks to tasklist
+    for (var element in preloadedTasks) {
+      state.taskList.add(element);
+    }
     state.render(() {});
   }
 }

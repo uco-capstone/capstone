@@ -98,4 +98,36 @@ class FirestoreController {
 
     return result;
   }
+
+  static Future<List<KirbyTask>> getPreloadedTaskList({
+    required String uid,
+  }) async {
+    var result = <KirbyTask>[];
+
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(taskCollection)
+        .where(DocKeyKirbyTask.userId.name, isEqualTo: uid)
+        .where(DocKeyKirbyTask.isPreloaded.name, isEqualTo: true)
+        .get();
+    if (querySnapshot.docs.isEmpty) {
+      // no preloadedTask; make new preloadedTasks
+      KirbyTask eatMeals = KirbyTask(
+        userId: uid,
+        title: "Eat 3 meals today",
+        isPreloaded: true,
+      );
+      addTask(kirbyTask: eatMeals);
+      result.add(eatMeals);
+    }
+
+    for (var doc in querySnapshot.docs) {
+      if (doc.data() != null) {
+        var document = doc.data() as Map<String, dynamic>;
+        var t = KirbyTask.fromFirestoreDoc(doc: document, taskId: doc.id);
+        result.add(t);
+      }
+    }
+
+    return result;
+  }
 }
