@@ -1,48 +1,40 @@
-import 'package:capstone/model/kirby_user_model.dart';
-
 enum DocKeyKirbyTask {
   title,
   user,
   userId,
-  description,
   dueDate,
+  isCompleted,
+  isPreloaded,
+  isReoccuring,
 }
 
 class KirbyTask {
   String? taskId;
-  //KirbyUser user;
   String userId;
   String? title;
-  String? description;
   DateTime? dueDate;
+  bool? isCompleted;
+  bool? isPreloaded;
+  bool? isReoccuring;
 
   KirbyTask({
     this.taskId,
-    //required this.user,
     required this.userId,
     this.title,
-    this.description,
     this.dueDate,
+    this.isCompleted,
+    this.isPreloaded,
+    this.isReoccuring,
   });
 
   Map<String, dynamic> toFirestoreDoc() {
     return {
-      // DocKeyKirbyTask.user.name: user,
-
-      // DocKeyKirbyTask.user.name: {
-      //   'userId': user.userId,
-      //   'firstName': user.firstName,
-      //   'lastName': user.lastName,
-      //   'birthday': user.birthday,
-      //   'weight': user.weight,
-      //   'height': user.height,
-      //   'averageSleep': user.averageSleep,
-      //   'averageMealsEaten': user.averageMealsEaten,
-      // },
       DocKeyKirbyTask.userId.name: userId,
       DocKeyKirbyTask.title.name: title,
-      DocKeyKirbyTask.description.name: description,
       DocKeyKirbyTask.dueDate.name: dueDate,
+      DocKeyKirbyTask.isCompleted.name: isCompleted,
+      DocKeyKirbyTask.isPreloaded.name: isPreloaded,
+      DocKeyKirbyTask.isReoccuring.name: isReoccuring,
     };
   }
 
@@ -52,15 +44,16 @@ class KirbyTask {
   }) {
     return KirbyTask(
       taskId: taskId,
-      //user: doc[DocKeyKirbyTask.user.name] ??= "",
       userId: doc[DocKeyKirbyTask.userId.name] ??= "",
       title: doc[DocKeyKirbyTask.title.name] ??= "",
-      description: doc[DocKeyKirbyTask.description.name] ??= "",
       dueDate: doc[DocKeyKirbyTask.dueDate.name] != null
           ? DateTime.fromMillisecondsSinceEpoch(
               doc[DocKeyKirbyTask.dueDate.name].millisecondsSinceEpoch,
             )
           : null,
+      isCompleted: doc[DocKeyKirbyTask.isCompleted.name] ??= false,
+      isPreloaded: doc[DocKeyKirbyTask.isPreloaded.name] ??= false,
+      isReoccuring: doc[DocKeyKirbyTask.isReoccuring.name] ??= false,
     );
   }
 
@@ -94,8 +87,6 @@ class KirbyTask {
         }
       }
     }
-
-
   }
 
   static String? validateTimePicked(String? value) {

@@ -387,19 +387,12 @@ class _ToDoScreenState extends State<ToDoScreen> {
 class _Controller {
   _ToDoScreenState state;
   KirbyTask tempTask = KirbyTask(userId: Auth.getUser().uid);
-  //late KirbyUser kirbyUser;
   late String dueDateString;
   _Controller(this.state);
 
   //Used to edit the text on the textformfields
   final datePickedController = TextEditingController();
   final timePickedController = TextEditingController();
-
-  // void getKirbyUser() async {
-  //   kirbyUser =
-  //       await FirestoreController.getKirbyUser(userId: Auth.getUser().uid);
-  //   tempTask = KirbyTask(user: kirbyUser);
-  // }
 
   void saveTaskName(String? newValue) {
     if (newValue != null) {
@@ -457,6 +450,9 @@ class _Controller {
 
     try {
       tempTask.userId = Auth.getUser().uid;
+      tempTask.isCompleted = false;           //Task is just created, it can't be completed yet
+      tempTask.isPreloaded = false;           //User added task cannot be preloaded
+      tempTask.isReoccuring = false;          //This should be changed when we implement the reoccuring function
       // ignore: unused_local_variable
       String docID = await FirestoreController.addTask(kirbyTask: tempTask);
       state.render(() {
