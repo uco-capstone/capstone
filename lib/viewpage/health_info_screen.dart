@@ -1,5 +1,5 @@
 import 'package:capstone/controller/firestore_controller.dart';
-import 'package:capstone/model/health_screen_model.dart';
+import 'package:capstone/model/health_info_screen_model.dart';
 import 'package:capstone/model/kirby_user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
