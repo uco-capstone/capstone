@@ -79,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Icons.person,
                 size: 70,
               ),
-              accountName: Text(screenModel.kirbyUser!.firstName),
+              accountName: const Text("Some Dude"),
               accountEmail: Text("${screenModel.user.email}"),
             ),
             ListTile(
