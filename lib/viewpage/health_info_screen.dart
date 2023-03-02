@@ -34,8 +34,8 @@ class _HealthInfoState extends State<HealthInfoScreen> {
   void initState() {
     super.initState();
     con = _Controller(this);
-    con.findKirbyUser();
     screenModel = HealthInfoScreenModel(user: Auth.user!);
+    con.findKirbyUser();
   }
 
   void showSnackBar(String message) {
