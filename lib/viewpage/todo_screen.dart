@@ -501,8 +501,6 @@ class _Controller {
     if (state.screenModel.kirbyUser?.preloadedTasks == true) {
       // if preloaded task are enabled, load them
       List<KirbyTask> preloadedTasks =
-          //     await FirestoreController.getPreloadedTaskList(
-          //         uid: Auth.getUser().uid);
           await state.screenModel.getPreloadedTaskList();
       // add preloaded tasks to tasklist
       for (var element in preloadedTasks) {
