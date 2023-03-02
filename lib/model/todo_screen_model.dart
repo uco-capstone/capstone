@@ -39,7 +39,7 @@ class TodoScreenModel {
 
     KirbyTask sleep = KirbyTask(
         userId: user.uid,
-        title: "Sleep",
+        title: "Sleep for ${getSleep()} hours",
         isPreloaded: true,
         isReoccuring: true,
         // due midnight tonight
@@ -67,6 +67,14 @@ class TodoScreenModel {
       return (kirbyUser!.weight! * 8).round().toString();
     } else {
       return "100";
+    }
+  }
+
+  String getSleep() {
+    if (kirbyUser?.averageSleep != null) {
+      return kirbyUser!.averageSleep!.toString();
+    } else {
+      return "7";
     }
   }
 }
