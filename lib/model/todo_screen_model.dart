@@ -15,9 +15,12 @@ class TodoScreenModel {
   Future<void> addPreloadedTasks() async {
     List<KirbyTask> taskList = [];
     DateTime now = DateTime.now();
+    String meals = kirbyUser?.averageMealsEaten.toString() == ""
+        ? "4"
+        : kirbyUser!.averageMealsEaten.toString();
     KirbyTask eatMeals = KirbyTask(
         userId: user.uid,
-        title: "Eat 3 meals today",
+        title: "Eat $meals meals today",
         isPreloaded: true,
         isReoccuring: true,
         // due midnight tonight
@@ -52,7 +55,7 @@ class TodoScreenModel {
     var result = await FirestoreController.getPreloadedTaskList(uid: user.uid);
     if (result.isEmpty) {
       // add preloaded tasks to firebase
-      addPreloadedTasks();
+      await addPreloadedTasks();
       result = await FirestoreController.getPreloadedTaskList(uid: user.uid);
     }
     return result;
