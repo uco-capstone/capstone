@@ -73,14 +73,14 @@ class _HomeScreenState extends State<HomeScreen> {
       drawer: Drawer(
         child: ListView(
           children: [
-            const UserAccountsDrawerHeader(
+            UserAccountsDrawerHeader(
               //Default Profile, will add in actual user profile info later
-              currentAccountPicture: Icon(
+              currentAccountPicture: const Icon(
                 Icons.person,
                 size: 70,
               ),
-              accountName: Text('No Profile'),
-              accountEmail: Text('default@test.com'),
+              accountName: const Text("Some Dude"),
+              accountEmail: Text("${screenModel.user.email}"),
             ),
             ListTile(
               leading: const Icon(Icons.store),
@@ -91,11 +91,6 @@ class _HomeScreenState extends State<HomeScreen> {
               leading: const Icon(Icons.settings),
               title: const Text('Settings'),
               onTap: con.settingsScreen,
-            ),
-            ListTile(
-              leading: const Icon(Icons.healing),
-              title: const Text('Health Info'),
-              onTap: con.healthInfoScreen,
             ),
             ListTile(
               leading: const Icon(Icons.logout),
@@ -171,10 +166,6 @@ class _Controller {
 
   void settingsScreen() async {
     await Navigator.pushNamed(state.context, SettingsScreen.routeName);
-  }
-
-  void healthInfoScreen() async {
-    await Navigator.pushNamed(state.context, HealthInfoScreen.routeName);
   }
 
   void signOut() {
