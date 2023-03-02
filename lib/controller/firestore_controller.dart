@@ -48,6 +48,21 @@ class FirestoreController {
         userId: userId);
   }
 
+  static Future<bool> hasKirbyUser(String userId) async {
+    try {
+      // Get reference to Firestore collection
+      QuerySnapshot snapshot = await FirebaseFirestore.instance
+          .collection(kirbyUserCollection)
+          .where(DocKeyUser.userId.name, isEqualTo: userId)
+          .get();
+      return snapshot.docs.isEmpty;
+    } catch (e) {
+      // ignore: avoid_print
+      print(e);
+    }
+    return false;
+  }
+
   static Future<void> updateKirbyUser({
     required String userId,
     required Map<String, dynamic> update,
@@ -67,14 +82,14 @@ class FirestoreController {
     required String uid,
   }) async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-                                  .collection(taskCollection)
-                                  .where(DocKeyKirbyTask.userId.name, isEqualTo: uid)
-                                  //.orderBy(DocKeyKirbyTask.dueDate, descending: false)
-                                  .get();
+        .collection(taskCollection)
+        .where(DocKeyKirbyTask.userId.name, isEqualTo: uid)
+        //.orderBy(DocKeyKirbyTask.dueDate, descending: false)
+        .get();
 
     var result = <KirbyTask>[];
-    for(var doc in querySnapshot.docs) {
-      if(doc.data() != null) {
+    for (var doc in querySnapshot.docs) {
+      if (doc.data() != null) {
         var document = doc.data() as Map<String, dynamic>;
         var t = KirbyTask.fromFirestoreDoc(doc: document, taskId: doc.id);
         result.add(t);

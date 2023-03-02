@@ -83,25 +83,36 @@ class KirbyUser {
 
   static String? validateAge(String? value) {
     if (value == null || value == "") return "Age cannot be empty.";
+    if (notANumber(value)) return "Must enter numbers only.";
     return (int.parse(value) == 0) ? "Age cannot be zero." : null;
   }
 
   static String? validateWeight(String? value) {
     if (value == null || value == "") return "Weight cannot be empty.";
+    if (notANumber(value)) return "Must enter numbers only.";
     return (double.parse(value) == 0) ? "Weight cannot be zero." : null;
   }
 
   static String? validateHeight(String? value) {
     if (value == null || value == "") return "Height cannot be empty.";
+    if (notANumber(value)) return "Must enter numbers only.";
     return (double.parse(value) == 0) ? "Height cannot be zero." : null;
   }
 
   static String? validateSleep(String? value) {
     if (value == null || value == "") return "Sleep cannot be empty.";
-    return (int.parse(value) == 0) ? "There's only 24 hours sir." : null;
+    if (notANumber(value)) return "Must enter numbers only.";
+    return (int.parse(value) == 0 || int.parse(value) >= 24)
+        ? "You ok bestie?"
+        : null;
   }
 
   static String? validateMealsEaten(String? value) {
-    return (value == null || value == "") ? "Age cannot be empty." : null;
+    if (value == null || value == "") return "Age cannot be empty.";
+    if (notANumber(value)) return "Must enter numbers only.";
+  }
+
+  static bool notANumber(String value) {
+    return double.tryParse(value) == null;
   }
 }
