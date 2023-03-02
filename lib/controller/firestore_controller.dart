@@ -104,8 +104,7 @@ class FirestoreController {
       //     isReoccuring: true,
       //     // due midnight tonight
       //     dueDate: DateTime(now.year, now.month, now.day, 24));
-      List<KirbyTask> tempList = [];
-      tempList = getPreloadedTaskList(uid: uid);
+      List<KirbyTask> tempList = getPreloadedTasks(uid: uid);
       for (var element in tempList) {
         result.add(element);
       }
@@ -124,7 +123,7 @@ class FirestoreController {
     return result;
   }
 
-  List<KirbyTask> getPreloadedTasks({required String uid}) {
+  static List<KirbyTask> getPreloadedTasks({required String uid}) {
     List<KirbyTask> taskList = [];
     DateTime now = DateTime.now();
     KirbyTask eatMeals = KirbyTask(
@@ -154,6 +153,10 @@ class FirestoreController {
         dueDate: DateTime(now.year, now.month, now.day, 24));
     taskList.add(sleep);
 
+    // add to firebase
+    for (var element in taskList) {
+      addTask(kirbyTask: element);
+    }
     return taskList;
   }
 }
