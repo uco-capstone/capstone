@@ -94,12 +94,6 @@ class FirestoreController {
         .where(DocKeyKirbyTask.userId.name, isEqualTo: uid)
         .where(DocKeyKirbyTask.isPreloaded.name, isEqualTo: true)
         .get();
-    if (querySnapshot.docs.isEmpty) {
-      List<KirbyTask> tempList = getPreloadedTasks(uid: uid);
-      for (var element in tempList) {
-        result.add(element);
-      }
-    }
 
     for (var doc in querySnapshot.docs) {
       if (doc.data() != null) {
@@ -132,42 +126,5 @@ class FirestoreController {
     }
 
     return result;
-  }
-
-  static List<KirbyTask> getPreloadedTasks({required String uid}) {
-    List<KirbyTask> taskList = [];
-    DateTime now = DateTime.now();
-    KirbyTask eatMeals = KirbyTask(
-        userId: uid,
-        title: "Eat 3 meals today",
-        isPreloaded: true,
-        isReoccuring: true,
-        // due midnight tonight
-        dueDate: DateTime(now.year, now.month, now.day, 24));
-    taskList.add(eatMeals);
-
-    KirbyTask drinkWater = KirbyTask(
-        userId: uid,
-        title: "Drink half my weight in ounces",
-        isPreloaded: true,
-        isReoccuring: true,
-        // due midnight tonight
-        dueDate: DateTime(now.year, now.month, now.day, 24));
-    taskList.add(drinkWater);
-
-    KirbyTask sleep = KirbyTask(
-        userId: uid,
-        title: "Sleep",
-        isPreloaded: true,
-        isReoccuring: true,
-        // due midnight tonight
-        dueDate: DateTime(now.year, now.month, now.day, 24));
-    taskList.add(sleep);
-
-    // add to firebase
-    for (var element in taskList) {
-      addTask(kirbyTask: element);
-    }
-    return taskList;
   }
 }
