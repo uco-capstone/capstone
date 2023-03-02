@@ -68,7 +68,7 @@ class KirbyTask {
       return null;
     } else {
       // var dateFormat = RegExp('\d{2}/{1}\d{2}/{1}\d{4}');
-      var dateFormat = RegExp(r'([0-9]{1,2}/[0-9][0-9]{1,2}/[0-9][0-9][0-9][0-9])');
+      var dateFormat = RegExp(r'([0-9]{1,2}/[0-9]{1,2}/[0-9][0-9][0-9][0-9])');
       if (dateFormat.hasMatch(value) == false) {
         return 'Not in MM/DD/YYYY format.'; 
       } else {
@@ -93,7 +93,8 @@ class KirbyTask {
     if(value == null || value.trim().isEmpty) {
       return null;
     } else {
-      if(value.contains(':') == false) {
+      var timeFormat = RegExp(r'([0-9][0-9]:[0-9][0-9])');
+      if(timeFormat.hasMatch(value) == false) {
         return 'Not in HH:MM format.';
       } else {
         var timeArray = value.split(':');
