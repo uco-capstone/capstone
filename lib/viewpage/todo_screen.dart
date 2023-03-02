@@ -33,12 +33,8 @@ class _ToDoScreenState extends State<ToDoScreen> {
   void initState() {
     super.initState();
     con = _Controller(this);
-    //con.getKirbyUser();
     screenModel = TodoScreenModel(user: Auth.user!);
-    // con.loadKirbyUser();
-    // con.loadPreloadedTaskList();
     con.loadKirbyUserAndPreloads();
-    // con.getTaskList();
     con.getNonPreloadedTaskList();
   }
 
@@ -505,8 +501,9 @@ class _Controller {
     if (state.screenModel.kirbyUser?.preloadedTasks == true) {
       // if preloaded task are enabled, load them
       List<KirbyTask> preloadedTasks =
-          await FirestoreController.getPreloadedTaskList(
-              uid: Auth.getUser().uid);
+          //     await FirestoreController.getPreloadedTaskList(
+          //         uid: Auth.getUser().uid);
+          await state.screenModel.getPreloadedTaskList();
       // add preloaded tasks to tasklist
       for (var element in preloadedTasks) {
         state.taskList.add(element);
