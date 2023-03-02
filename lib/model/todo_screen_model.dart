@@ -18,6 +18,7 @@ class TodoScreenModel {
     String meals = kirbyUser?.averageMealsEaten.toString() == ""
         ? "4"
         : kirbyUser!.averageMealsEaten.toString();
+
     KirbyTask eatMeals = KirbyTask(
         userId: user.uid,
         title: "Eat $meals meals today",
@@ -29,7 +30,7 @@ class TodoScreenModel {
 
     KirbyTask drinkWater = KirbyTask(
         userId: user.uid,
-        title: "Drink half my weight in ounces",
+        title: "Drink ${getHalfWeight()}oz of water",
         isPreloaded: true,
         isReoccuring: true,
         // due midnight tonight
@@ -59,5 +60,13 @@ class TodoScreenModel {
       result = await FirestoreController.getPreloadedTaskList(uid: user.uid);
     }
     return result;
+  }
+
+  String getHalfWeight() {
+    if (kirbyUser?.weight != null) {
+      return (kirbyUser!.weight! * 8).round().toString();
+    } else {
+      return "100";
+    }
   }
 }
