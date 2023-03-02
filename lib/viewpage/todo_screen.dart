@@ -34,9 +34,12 @@ class _ToDoScreenState extends State<ToDoScreen> {
     super.initState();
     con = _Controller(this);
     //con.getKirbyUser();
-    con.loadPreloadedTaskList();
-    con.getTaskList();
     screenModel = TodoScreenModel(user: Auth.user!);
+    // con.loadKirbyUser();
+    // con.loadPreloadedTaskList();
+    con.loadKirbyUserAndPreloads();
+    // con.getTaskList();
+    con.getNonPreloadedTaskList();
   }
 
   @override
@@ -481,9 +484,6 @@ class _Controller {
   }
 
   void getTaskList() async {
-    // state.taskList =
-    //     await FirestoreController.getKirbyTaskList(uid: Auth.getUser().uid);
-    // state.render(() {});
     List<KirbyTask> tasks =
         await FirestoreController.getKirbyTaskList(uid: Auth.getUser().uid);
     for (var element in tasks) {
@@ -492,14 +492,45 @@ class _Controller {
     state.render(() {});
   }
 
-  // Future<List<KirbyTask>> loadPreloadedTaskList() async {
-  Future<void> loadPreloadedTaskList() async {
-    List<KirbyTask> preloadedTasks =
-        await FirestoreController.getPreloadedTaskList(uid: Auth.getUser().uid);
-    // add preloaded tasks to tasklist
-    for (var element in preloadedTasks) {
+  void getNonPreloadedTaskList() async {
+    List<KirbyTask> tasks = await FirestoreController.getNonPreloadedTaskList(
+        uid: Auth.getUser().uid);
+    for (var element in tasks) {
       state.taskList.add(element);
     }
     state.render(() {});
+  }
+
+  Future<void> loadPreloadedTaskList() async {
+    if (state.screenModel.kirbyUser?.preloadedTasks == true) {
+      // if preloaded task are enabled, load them
+      List<KirbyTask> preloadedTasks =
+          await FirestoreController.getPreloadedTaskList(
+              uid: Auth.getUser().uid);
+      // add preloaded tasks to tasklist
+      for (var element in preloadedTasks) {
+        state.taskList.add(element);
+      }
+      state.render(() {});
+    }
+  }
+
+  Future<void> loadKirbyUser() async {
+    try {
+      // state.screenModel.loading = true;
+      state.screenModel.kirbyUser =
+          await FirestoreController.getKirbyUser(userId: Auth.getUser().uid);
+      state.render(() {});
+    } catch (e) {
+      // ignore: avoid_print
+      if (Constants.devMode) print(" ==== loading error $e");
+      state.render(() => state.screenModel.loadingErrorMessage = "$e");
+    }
+    state.screenModel.loading = false;
+  }
+
+  Future<void> loadKirbyUserAndPreloads() async {
+    await loadKirbyUser();
+    await loadPreloadedTaskList();
   }
 }

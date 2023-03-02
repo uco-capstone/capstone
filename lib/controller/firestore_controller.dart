@@ -110,22 +110,33 @@ class FirestoreController {
         .where(DocKeyKirbyTask.isPreloaded.name, isEqualTo: true)
         .get();
     if (querySnapshot.docs.isEmpty) {
-      // no preloadedTask; make new preloadedTasks
-      // DateTime now = DateTime.now();
-      // KirbyTask eatMeals = KirbyTask(
-      //     userId: uid,
-      //     title: "Eat 3 meals today",
-      //     isPreloaded: true,
-      //     isReoccuring: true,
-      //     // due midnight tonight
-      //     dueDate: DateTime(now.year, now.month, now.day, 24));
       List<KirbyTask> tempList = getPreloadedTasks(uid: uid);
       for (var element in tempList) {
         result.add(element);
       }
-      // addTask(kirbyTask: eatMeals);
-      // result.add(eatMeals);
     }
+
+    for (var doc in querySnapshot.docs) {
+      if (doc.data() != null) {
+        var document = doc.data() as Map<String, dynamic>;
+        var t = KirbyTask.fromFirestoreDoc(doc: document, taskId: doc.id);
+        result.add(t);
+      }
+    }
+
+    return result;
+  }
+
+  static Future<List<KirbyTask>> getNonPreloadedTaskList({
+    required String uid,
+  }) async {
+    var result = <KirbyTask>[];
+
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(taskCollection)
+        .where(DocKeyKirbyTask.userId.name, isEqualTo: uid)
+        .where(DocKeyKirbyTask.isPreloaded.name, isEqualTo: false)
+        .get();
 
     for (var doc in querySnapshot.docs) {
       if (doc.data() != null) {
