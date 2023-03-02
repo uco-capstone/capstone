@@ -431,20 +431,22 @@ class _Controller {
 
     if (state.datePicked == null && state.timePicked != null) {
       showDialog(
-          context: state.context,
-          builder: (context) => AlertDialog(
-                title: const Text('Kirby Spotted An Error!'),
-                content: const Text(
-                    'Must choose a date in order to add a time. \n\nTo create a task, either add a date, or remove the time!'),
-                actions: <Widget>[
-                  TextButton(
-                    child: const Text('OK'),
-                    onPressed: () {
-                      Navigator.of(state.context).pop();
-                    },
-                  ),
-                ],
-              ));
+        context: state.context,
+        builder: (context) => AlertDialog(
+          title: const Text('Kirby Spotted An Error!'),
+          content: const Text(
+              'Must choose a date in order to add a time. \n\nTo create a task, either add a date, or remove the time!'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(state.context).pop();
+              },
+            ),
+          ],
+        )
+      );
+      return;
     }
 
     currentState.save();
@@ -458,9 +460,12 @@ class _Controller {
           false; //This should be changed when we implement the reoccuring function
       // ignore: unused_local_variable
       String docID = await FirestoreController.addTask(kirbyTask: tempTask);
+      
+      state.taskList = await FirestoreController.getKirbyTaskList(uid: Auth.getUser().uid);
       state.render(() {
-        state.taskList.add(tempTask);
+        state.taskList = state.taskList;
       });
+      
       datePickedController.clear();
       timePickedController.clear();
       if (state.mounted) {
