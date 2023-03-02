@@ -22,6 +22,7 @@ class _HealthInfoState extends State<HealthInfoScreen> {
   late HealthInfoScreenModel screenModel;
   var formKey = GlobalKey<FormState>();
   String title = "Health Form";
+  final TextEditingController nameController = TextEditingController();
   final TextEditingController ageController = TextEditingController();
   final TextEditingController weightController = TextEditingController();
   final TextEditingController heightController = TextEditingController();
@@ -60,6 +61,17 @@ class _HealthInfoState extends State<HealthInfoScreen> {
           child: SingleChildScrollView(
             child: Column(
               children: [
+                TextFormField(
+                  decoration: const InputDecoration(
+                    hintText: "Enter your Name",
+                    labelText: "Name",
+                  ),
+                  autocorrect: false,
+                  keyboardType: TextInputType.name,
+                  validator: KirbyUser.validateName,
+                  onSaved: con.saveName,
+                  controller: nameController,
+                ),
                 TextFormField(
                   decoration: const InputDecoration(
                     hintText: "Enter your Age",
@@ -151,6 +163,10 @@ class _Controller {
     KirbyUser pulledUser =
         await FirestoreController.getKirbyUser(userId: Auth.getUser().uid);
     tempKirbyUser = pulledUser;
+    state.nameController.text =
+        state.con.tempKirbyUser.firstName.toString() == "null"
+            ? ""
+            : state.con.tempKirbyUser.firstName.toString();
     state.ageController.text = state.con.tempKirbyUser.age.toString() == "null"
         ? ""
         : state.con.tempKirbyUser.age.toString();
@@ -187,6 +203,12 @@ class _Controller {
       }
     } catch (e) {
       state.showSnackBar("Error: $e");
+    }
+  }
+
+  void saveName(String? value) {
+    if (value != null) {
+      tempKirbyUser.firstName = value;
     }
   }
 
