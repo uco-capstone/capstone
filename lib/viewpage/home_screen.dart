@@ -3,6 +3,7 @@ import 'package:capstone/model/home_screen_model.dart';
 import 'package:capstone/viewpage/health_info_screen.dart';
 
 import 'package:capstone/viewpage/settings_screen.dart';
+import 'package:capstone/viewpage/store_screen.dart';
 import 'package:capstone/viewpage/todo_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -161,7 +162,7 @@ class _Controller {
   }
 
   void storeScreen() {
-    //Navigate to Store Screen
+    Navigator.pushNamed(state.context, StoreScreen.routeName);
   }
 
   void settingsScreen() async {

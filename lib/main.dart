@@ -1,6 +1,7 @@
 import 'package:capstone/viewpage/health_info_screen.dart';
 import 'package:capstone/viewpage/settings_screen.dart';
 import 'package:capstone/viewpage/start_dispatcher.dart';
+import 'package:capstone/viewpage/store_screen.dart';
 import 'package:capstone/viewpage/todo_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +26,7 @@ class CapstoneApp extends StatelessWidget {
       initialRoute: StartDispatcher.routeName,
       routes: {
         ToDoScreen.routeName: (context) => const ToDoScreen(),
+        StoreScreen.routeName: (context) => const StoreScreen(),
         StartDispatcher.routeName: (context) => const StartDispatcher(),
         CreateAccountScreen.routeName: (context) => const CreateAccountScreen(),
         HealthInfoScreen.routeName: (context) => const HealthInfoScreen(),
