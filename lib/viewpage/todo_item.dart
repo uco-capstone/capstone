@@ -39,7 +39,7 @@ class ToDoItem extends StatelessWidget {
             icon: const Icon(Icons.delete),
             iconSize: 17,
             onPressed: () {},
-          ),
+          ), 
         ),
         subtitle: Text(dueDate()),//Text('Due: ${task.dueDate!.month}/${task.dueDate!.day}/${task.dueDate!.year} at ${task.dueDate!.hour}:${task.dueDate!.minute}'),
       );
