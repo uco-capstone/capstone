@@ -5,12 +5,15 @@ import 'package:flutter/material.dart';
 
 class ToDoItem extends StatefulWidget {
   const ToDoItem(
-      {required this.task, required this.idx, required this.delete, Key? key})
+      {required this.task,
+      required this.taskIndex,
+      required this.deleteFn,
+      Key? key})
       : super(key: key);
 
-  final Function delete;
+  final Function deleteFn;
   final KirbyTask task;
-  final int idx;
+  final int taskIndex;
 
   @override
   State<ToDoItem> createState() => _ToDoItemState();
@@ -25,7 +28,10 @@ class _ToDoItemState extends State<ToDoItem> {
   }
 
   void deleteTask() {
-    widget.delete(widget.task.taskId!);
+    widget.deleteFn(widget.task.taskId!);
+    setState(() {
+      notSelected = !notSelected;
+    });
   }
 
   @override
