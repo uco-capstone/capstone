@@ -4,9 +4,11 @@ import 'package:capstone/viewpage/view/view_util.dart';
 import 'package:flutter/material.dart';
 
 class ToDoItem extends StatefulWidget {
-  const ToDoItem({required this.task, required this.idx, Key? key})
+  const ToDoItem(
+      {required this.task, required this.idx, required this.delete, Key? key})
       : super(key: key);
 
+  final Function delete;
   final KirbyTask task;
   final int idx;
 
@@ -22,65 +24,52 @@ class _ToDoItemState extends State<ToDoItem> {
     });
   }
 
-  var deleting = false;
   void deleteTask() {
-    setState(() async {
-      deleting = true;
-      await FirestoreController.deleteKirbyTask(taskId: widget.task.taskId!);
-    });
-    setState(() {
-      deleting = false;
-    });
+    widget.delete(widget.task.taskId!);
   }
 
   @override
   Widget build(BuildContext context) {
     if (widget.task.dueDate != null) {
-      if (deleting) {
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      } else {
-        return ListTile(
-          onLongPress: toggleSelected,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
+      return ListTile(
+        onLongPress: toggleSelected,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        tileColor: Colors.white,
+        leading: const Icon(
+          Icons.check_box,
+          color: Colors.blue,
+        ),
+        title: Text(
+          widget.task.title!,
+          style: const TextStyle(
+            fontSize: 17,
+            color: Colors.black,
+            //decoration: TextDecoration.lineThrough,
           ),
-          tileColor: Colors.white,
-          leading: const Icon(
-            Icons.check_box,
-            color: Colors.blue,
+        ),
+        trailing: Container(
+          height: 50,
+          width: 35,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5),
           ),
-          title: Text(
-            widget.task.title!,
-            style: const TextStyle(
-              fontSize: 17,
-              color: Colors.black,
-              //decoration: TextDecoration.lineThrough,
-            ),
-          ),
-          trailing: Container(
-            height: 50,
-            width: 35,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-            ),
-            child: notSelected
-                ? kirbabButton(
-                    context: context,
-                    fn: () => showSnackBar(context: context, message: "Hi"),
-                  )
-                : IconButton(
-                    color: Colors.red,
-                    icon: const Icon(Icons.delete),
-                    iconSize: 17,
-                    onPressed: deleteTask,
-                  ),
-          ),
-          subtitle: Text(
-              dueDate()), //Text('Due: ${task.dueDate!.month}/${task.dueDate!.day}/${task.dueDate!.year} at ${task.dueDate!.hour}:${task.dueDate!.minute}'),
-        );
-      }
+          child: notSelected
+              ? kirbabButton(
+                  context: context,
+                  fn: () => showSnackBar(context: context, message: "Hi"),
+                )
+              : IconButton(
+                  color: Colors.red,
+                  icon: const Icon(Icons.delete),
+                  iconSize: 17,
+                  onPressed: deleteTask,
+                ),
+        ),
+        subtitle: Text(
+            dueDate()), //Text('Due: ${task.dueDate!.month}/${task.dueDate!.day}/${task.dueDate!.year} at ${task.dueDate!.hour}:${task.dueDate!.minute}'),
+      );
     } else {
       return ListTile(
         onLongPress: toggleSelected,

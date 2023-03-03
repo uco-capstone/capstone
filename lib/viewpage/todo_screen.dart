@@ -392,6 +392,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
                       child: ToDoItem(
                         task: t,
                         idx: screenModel.taskList.indexOf(t),
+                        delete: con.deleteTask,
                       ),
                     ),
                 ],
