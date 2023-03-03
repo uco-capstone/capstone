@@ -36,7 +36,15 @@ class _StartState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Log In"),
+        title: const Text("Kirby's Planner"),
+        centerTitle: true,
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.purple, Colors.pink],
+            ),
+          ),
+        ),
       ),
       body: screenModel.isSignInUnderway
           ? const Center(
@@ -54,7 +62,7 @@ class _StartState extends State<LoginScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Text("Pet To-Do App",
+              Text("Please Log In",
                   style: Theme.of(context).textTheme.displaySmall),
               TextFormField(
                 decoration: const InputDecoration(hintText: "Email address"),
