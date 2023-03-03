@@ -1,4 +1,5 @@
 import 'package:capstone/model/kirby_task_model.dart';
+import 'package:capstone/viewpage/view/view_util.dart';
 import 'package:flutter/material.dart';
 
 class ToDoItem extends StatelessWidget {
@@ -28,18 +29,22 @@ class ToDoItem extends StatelessWidget {
           ),
         ),
         trailing: Container(
-          height: 35,
+          height: 50,
           width: 35,
           decoration: BoxDecoration(
-            color: Colors.red,
+            color: Colors.white,
             borderRadius: BorderRadius.circular(5),
           ),
-          child: IconButton(
-            color: Colors.white,
-            icon: const Icon(Icons.delete),
-            iconSize: 17,
-            onPressed: () {},
-          ), 
+          child: kirbabButton(
+            context: context, 
+            fn: () => showSnackBar(context: context, message: "Hi"),
+          ),
+          // child: IconButton(
+          //   color: Colors.white,
+          //   icon: const Icon(Icons.delete),
+          //   iconSize: 17,
+          //   onPressed: () {},
+          // ), 
         ),
         subtitle: Text(dueDate()),//Text('Due: ${task.dueDate!.month}/${task.dueDate!.day}/${task.dueDate!.year} at ${task.dueDate!.hour}:${task.dueDate!.minute}'),
       );
