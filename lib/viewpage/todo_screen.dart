@@ -143,6 +143,69 @@ class _ToDoScreenState extends State<ToDoScreen> {
                   ),
                 ),
               ),
+// delete from here
+              screenModel.taskList.isEmpty
+                  ? Center(
+                      child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 75, bottom: 40),
+                          child: SizedBox(
+                            height: 200,
+                            child:
+                                Image.asset('images/kirby-happy-jumping.png'),
+                          ),
+                        ),
+                        const Text(
+                          'All Tasks Completed!\nGreat Job!',
+                          style: TextStyle(
+                            fontSize: 30,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ))
+                  : Column(
+                      children: [
+                        SizedBox(
+                          height: 500,
+                          child: ListView(
+                            //shrinkWrap: true,
+                            children: [
+                              Container(
+                                margin: const EdgeInsets.only(
+                                  top: 50,
+                                  bottom: 20,
+                                ),
+                                child: const Text(
+                                  'All Tasks',
+                                  style: TextStyle(
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                              Column(
+                                children: [
+                                  for (var t in screenModel.taskList)
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 10),
+                                      child: ToDoItem(
+                                        task: t,
+                                        taskIndex:
+                                            screenModel.taskList.indexOf(t),
+                                        deleteFn: con.deleteTask,
+                                      ),
+                                    ),
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+// to here
             ],
           ),
         ),
@@ -391,8 +454,8 @@ class _ToDoScreenState extends State<ToDoScreen> {
                       padding: const EdgeInsets.only(bottom: 10),
                       child: ToDoItem(
                         task: t,
-                        idx: screenModel.taskList.indexOf(t),
-                        delete: con.deleteTask,
+                        taskIndex: screenModel.taskList.indexOf(t),
+                        deleteFn: con.deleteTask,
                       ),
                     ),
                 ],
