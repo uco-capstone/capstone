@@ -39,6 +39,7 @@ class _ToDoItemState extends State<ToDoItem> {
     if (widget.task.dueDate != null) {
       return ListTile(
         onLongPress: toggleSelected,
+        onTap: () => notSelected ? (){} : setState(() => notSelected = true),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
@@ -79,6 +80,7 @@ class _ToDoItemState extends State<ToDoItem> {
     } else {
       return ListTile(
         onLongPress: toggleSelected,
+        onTap: () => notSelected ? (){} : setState(() => notSelected = true),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
