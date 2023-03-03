@@ -8,6 +8,7 @@ class TodoScreenModel {
   User user;
   String? loadingErrorMessage;
   KirbyUser? kirbyUser;
+  var taskList = <KirbyTask>[];
   late KirbyTask tempTask;
   late TimeOfDay _tempTime;
 
