@@ -91,6 +91,8 @@ class _ShopScreen extends State<ShopScreen> {
                   duration: const Duration(milliseconds: 500),
                   curve: Curves.easeOut,
                 );
+              } else {
+                _onItemTapped(index);
               }
               break;
             case 1:
