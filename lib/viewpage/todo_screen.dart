@@ -23,7 +23,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
   late _Controller con;
   DateTime? datePicked;
   TimeOfDay? timePicked;
-  var taskList = <KirbyTask>[];
+  // var taskList = <KirbyTask>[];
   var formKey = GlobalKey<FormState>();
   late TodoScreenModel screenModel;
 
@@ -333,7 +333,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
                 ),
               ),
             ),
-            taskList.isEmpty ? emptyTaskList() : tasks(),
+            screenModel.taskList.isEmpty ? emptyTaskList() : tasks(),
           ],
         ),
       ),
@@ -386,10 +386,13 @@ class _ToDoScreenState extends State<ToDoScreen> {
               ),
               Column(
                 children: [
-                  for (var t in taskList)
+                  for (var t in screenModel.taskList)
                     Padding(
                       padding: const EdgeInsets.only(bottom: 10),
-                      child: ToDoItem(task: t),
+                      child: ToDoItem(
+                        task: t,
+                        idx: screenModel.taskList.indexOf(t),
+                      ),
                     ),
                 ],
               )
@@ -420,6 +423,7 @@ class _Controller {
           kirbyTask: state.screenModel.tempTask);
       state.screenModel.tempTask.taskId = docId;
       getTaskList();
+
       datePickedController.clear();
       timePickedController.clear();
       if (!state.mounted) return;
@@ -435,10 +439,10 @@ class _Controller {
   }
 
   void getTaskList() async {
-    List<KirbyTask> tasks =
+    state.screenModel.taskList =
         await FirestoreController.getKirbyTaskList(uid: Auth.getUser().uid);
-    for (var element in tasks) {
-      state.taskList.add(element);
+    for (var element in state.screenModel.taskList) {
+      state.screenModel.taskList.add(element);
     }
     state.render(() {});
   }
@@ -447,7 +451,7 @@ class _Controller {
     List<KirbyTask> tasks = await FirestoreController.getNonPreloadedTaskList(
         uid: Auth.getUser().uid);
     for (var element in tasks) {
-      state.taskList.add(element);
+      state.screenModel.taskList.add(element);
     }
     state.render(() {});
   }
@@ -459,7 +463,7 @@ class _Controller {
           await state.screenModel.getPreloadedTaskList();
       // add preloaded tasks to tasklist
       for (var element in preloadedTasks) {
-        state.taskList.add(element);
+        state.screenModel.taskList.add(element);
       }
       state.render(() {});
     }

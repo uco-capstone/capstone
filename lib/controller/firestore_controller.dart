@@ -108,7 +108,6 @@ class FirestoreController {
         result.add(t);
       }
     }
-
     return result;
   }
 

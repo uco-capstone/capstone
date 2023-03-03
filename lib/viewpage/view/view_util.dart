@@ -21,7 +21,6 @@ Widget kirbabButton({
       onTap: fn,
       child: Container(
           decoration: const BoxDecoration(
-            color: Colors.white,
             image: DecorationImage(
                 image: AssetImage("images/kirbab-icon.png"),
                 fit: BoxFit.fitHeight),
