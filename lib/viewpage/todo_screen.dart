@@ -431,21 +431,20 @@ class _Controller {
 
     if (state.datePicked == null && state.timePicked != null) {
       showDialog(
-        context: state.context,
-        builder: (context) => AlertDialog(
-          title: const Text('Kirby Spotted An Error!'),
-          content: const Text(
-              'Must choose a date in order to add a time. \n\nTo create a task, either add a date, or remove the time!'),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('OK'),
-              onPressed: () {
-                Navigator.of(state.context).pop();
-              },
-            ),
-          ],
-        )
-      );
+          context: state.context,
+          builder: (context) => AlertDialog(
+                title: const Text('Kirby Spotted An Error!'),
+                content: const Text(
+                    'Must choose a date in order to add a time. \n\nTo create a task, either add a date, or remove the time!'),
+                actions: <Widget>[
+                  TextButton(
+                    child: const Text('OK'),
+                    onPressed: () {
+                      Navigator.of(state.context).pop();
+                    },
+                  ),
+                ],
+              ));
       return;
     }
 
@@ -459,13 +458,15 @@ class _Controller {
       tempTask.isReoccuring =
           false; //This should be changed when we implement the reoccuring function
       // ignore: unused_local_variable
-      String docID = await FirestoreController.addTask(kirbyTask: tempTask);
-      
-      state.taskList = await FirestoreController.getKirbyTaskList(uid: Auth.getUser().uid);
+      String docID =
+          await FirestoreController.addKirbyTask(kirbyTask: tempTask);
+
+      state.taskList =
+          await FirestoreController.getKirbyTaskList(uid: Auth.getUser().uid);
       state.render(() {
         state.taskList = state.taskList;
       });
-      
+
       datePickedController.clear();
       timePickedController.clear();
       if (state.mounted) {
@@ -532,5 +533,10 @@ class _Controller {
   Future<void> loadKirbyUserAndPreloads() async {
     await loadKirbyUser();
     await loadPreloadedTaskList();
+  }
+
+  void deleteTask(String taskId) async {
+    await FirestoreController.deleteKirbyTask(taskId: taskId);
+    getTaskList();
   }
 }
