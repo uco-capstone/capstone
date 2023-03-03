@@ -57,7 +57,7 @@ class _ToDoItemState extends State<ToDoItem> {
           ),
         ),
         trailing: Container(
-          height: 50,
+          height: 40,
           width: 35,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
