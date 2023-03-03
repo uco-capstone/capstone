@@ -6,12 +6,7 @@ class FirestoreController {
   static const taskCollection = 'task_collection';
   static const kirbyUserCollection = 'kirby_user_collection';
 
-  static Future<String> addTask({required KirbyTask kirbyTask}) async {
-    DocumentReference ref = await FirebaseFirestore.instance
-        .collection(taskCollection)
-        .add(kirbyTask.toFirestoreDoc());
-    return ref.id;
-  }
+  //============== USER INFO ==================
 
   static Future<void> addHealthInfo({required KirbyUser kirbyUser}) async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
@@ -31,6 +26,8 @@ class FirestoreController {
         .doc(querySnapshot.docs[0].id)
         .update(kirbyUser.toFirestoreDoc());
   }
+
+  //============== KIRBY USER ==================
 
   static Future<KirbyUser> getKirbyUser({
     required String userId,
@@ -76,6 +73,22 @@ class FirestoreController {
         .collection(kirbyUserCollection)
         .doc(querySnapshot.docs[0].id)
         .update(update);
+  }
+
+  //============== KIRBY TASK ==================
+
+  static Future<String> addKirbyTask({required KirbyTask kirbyTask}) async {
+    DocumentReference ref = await FirebaseFirestore.instance
+        .collection(taskCollection)
+        .add(kirbyTask.toFirestoreDoc());
+    return ref.id;
+  }
+
+  static Future<void> deleteKirbyTask({required String taskId}) async {
+    await FirebaseFirestore.instance
+        .collection(taskCollection)
+        .doc(taskId)
+        .delete();
   }
 
   static Future<List<KirbyTask>> getKirbyTaskList({
