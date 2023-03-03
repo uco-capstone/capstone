@@ -485,4 +485,9 @@ class _Controller {
         await FirestoreController.getKirbyTaskList(uid: Auth.getUser().uid);
     state.render(() {});
   }
+
+  void deleteTask(String taskId) async {
+    await FirestoreController.deleteKirbyTask(taskId: taskId);
+    getTaskList();
+  }
 }
