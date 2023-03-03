@@ -12,3 +12,19 @@ void showSnackBar({
   );
   ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }
+
+Widget kirbabButton({
+  required BuildContext context,
+  required fn,
+}) {
+  return GestureDetector(
+      onTap: fn,
+      child: Container(
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            image: DecorationImage(
+                image: AssetImage("images/kirbab-icon.png"),
+                fit: BoxFit.fitHeight),
+          ))
+      );
+}
