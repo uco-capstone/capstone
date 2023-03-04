@@ -22,7 +22,6 @@ class _ToDoScreenState extends State<ToDoScreen> {
   late _Controller con;
   DateTime? datePicked;
   TimeOfDay? timePicked;
-  var taskList = <KirbyTask>[];
   var formKey = GlobalKey<FormState>();
   late TodoScreenModel screenModel;
 
@@ -33,7 +32,6 @@ class _ToDoScreenState extends State<ToDoScreen> {
     super.initState();
     con = _Controller(this);
     screenModel = TodoScreenModel(user: Auth.getUser());
-    //con.getKirbyUser();
     con.getTaskList();
   }
 
@@ -51,7 +49,6 @@ class _ToDoScreenState extends State<ToDoScreen> {
           ),
         ],
       ),
-      //body: const Text('To Do Items'),
       floatingActionButton: addTaskButton(),
       body: body(),
     );
@@ -67,7 +64,9 @@ class _ToDoScreenState extends State<ToDoScreen> {
               key: formKey,
               child: Padding(
                 padding: EdgeInsets.only(
-                    top: 20, bottom: MediaQuery.of(context).viewInsets.bottom),
+                  top: 20,
+                  bottom: MediaQuery.of(context).viewInsets.bottom,
+                ),
                 child: SizedBox(
                   height: 400,
                   child: addTaskBody(),
@@ -81,7 +80,8 @@ class _ToDoScreenState extends State<ToDoScreen> {
       backgroundColor: Colors.purple[200],
       elevation: 10,
       shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(5))),
+        borderRadius: BorderRadius.all(Radius.circular(5)),
+      ),
       child: const Text(
         '+',
         style: TextStyle(
@@ -115,18 +115,19 @@ class _ToDoScreenState extends State<ToDoScreen> {
           child: Row(
             children: [
               Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: OutlinedButton(
-                    onPressed: () {
-                      con.datePickedController.clear();
-                      con.timePickedController.clear();
-                      Navigator.pop(context);
-                    },
-                    child: Text(
-                      'Cancel',
-                      style: TextStyle(color: Colors.purple[200]),
-                    ),
-                  )),
+                padding: const EdgeInsets.all(20.0),
+                child: OutlinedButton(
+                  onPressed: () {
+                    con.datePickedController.clear();
+                    con.timePickedController.clear();
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    'Cancel',
+                    style: TextStyle(color: Colors.purple[200]),
+                  ),
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 20, 30, 20),
                 child: ElevatedButton(
@@ -318,8 +319,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
                   ),
                   contentPadding: EdgeInsets.all(25), // padding needed
                   prefixIconConstraints: BoxConstraints(
-                    maxHeight:
-                        50, // this value was too small -- must be bigger than image size
+                    maxHeight: 50,
                     minWidth: 25,
                   ),
                   border: InputBorder.none,
@@ -330,7 +330,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
                 ),
               ),
             ),
-            taskList.isEmpty ? emptyTaskList() : tasks(),
+            screenModel.taskList.isEmpty ? emptyTaskList() : tasks(),
           ],
         ),
       ),
@@ -383,10 +383,14 @@ class _ToDoScreenState extends State<ToDoScreen> {
               ),
               Column(
                 children: [
-                  for (var t in taskList)
+                  for (var t in screenModel.taskList)
                     Padding(
                       padding: const EdgeInsets.only(bottom: 10),
-                      child: ToDoItem(task: t),
+                      child: ToDoItem(
+                        task: t,
+                        taskIndex: screenModel.taskList.indexOf(t),
+                        deleteFn: con.deleteTask,
+                      ),
                     ),
                 ],
               )
@@ -414,31 +418,49 @@ class _Controller {
     try {
       currentSate.save();
       String docId = await FirestoreController.addKirbyTask(
-          kirbyTask: state.screenModel.tempTask);
+        kirbyTask: state.screenModel.tempTask,
+      );
       state.screenModel.tempTask.taskId = docId;
       getTaskList();
       datePickedController.clear();
       timePickedController.clear();
       if (!state.mounted) return;
       Navigator.pop(state.context);
-      showSnackBar(context: state.context, seconds: 3, message: 'Task Added!');
+      showSnackBar(
+        context: state.context,
+        seconds: 3,
+        message: 'Task Added!',
+      );
     } catch (e) {
       showSnackBar(
-          context: state.context,
-          message: "Something went wrong...\nTry again!");
+        context: state.context,
+        message: "Something went wrong...\nTry again!",
+      );
       // ignore: avoid_print
-      print("======== upload task error");
+      print("======== upload task error: $e");
     }
   }
 
   void getTaskList() async {
-    state.taskList =
+    state.screenModel.taskList =
         await FirestoreController.getKirbyTaskList(uid: Auth.getUser().uid);
     state.render(() {});
   }
 
   void deleteTask(String taskId) async {
-    await FirestoreController.deleteKirbyTask(taskId: taskId);
+    try {
+      await FirestoreController.deleteKirbyTask(taskId: taskId);
+      if (!state.mounted) return;
+      showSnackBar(
+        context: state.context,
+        message: "Deleted Task",
+      );
+    } catch (e) {
+      showSnackBar(
+        context: state.context,
+        message: "Something went wrong...\n Try again!",
+      );
+    }
     getTaskList();
   }
 }
