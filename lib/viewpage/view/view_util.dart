@@ -13,6 +13,39 @@ void showSnackBar({
   ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }
 
+void showDialogBox({
+  required BuildContext context,
+  required String title,
+  required String content,
+  required String buttonName,
+  required Function fn,
+}) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text(title),
+        content: Text(content),
+        actions: [
+          MaterialButton(
+            child: Text(buttonName),
+            onPressed: () {
+              fn();
+              Navigator.of(context).pop();
+            },
+          ),
+          MaterialButton(
+            child: const Text("Cancel"),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+
 Widget kirbabButton({
   required BuildContext context,
   required fn,
@@ -21,9 +54,7 @@ Widget kirbabButton({
       onTap: fn,
       child: Container(
           decoration: const BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage("images/kirbab-icon.png"),
-                fit: BoxFit.fitHeight),
-          ))
-      );
+        image: DecorationImage(
+            image: AssetImage("images/kirbab-icon.png"), fit: BoxFit.fitHeight),
+      )));
 }

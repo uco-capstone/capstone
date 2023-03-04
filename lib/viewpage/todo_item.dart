@@ -27,7 +27,13 @@ class _ToDoItemState extends State<ToDoItem> {
   }
 
   void deleteTask() {
-    widget.deleteFn(widget.task.taskId!);
+    showDialogBox(
+     context: context,
+      title: "Delete Task",
+      content: "Are you sure you want to delete this task?",
+      buttonName: "Yes",
+      fn: () => widget.deleteFn(widget.task.taskId!),
+    );
     setState(() {
       notSelected = !notSelected;
     });
@@ -71,8 +77,8 @@ class _ToDoItemState extends State<ToDoItem> {
                 onPressed: deleteTask,
               ),
       ),
-      subtitle: widget.task.dueDate != null 
-          ? Text(dueDate()) 
+      subtitle: widget.task.dueDate != null
+          ? Text(dueDate())
           : const SizedBox.shrink(),
     );
   }
