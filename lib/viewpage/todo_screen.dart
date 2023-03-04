@@ -23,7 +23,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
   late _Controller con;
   DateTime? datePicked;
   TimeOfDay? timePicked;
-  // var taskList = <KirbyTask>[];
+  var taskList = <KirbyTask>[];
   var formKey = GlobalKey<FormState>();
   late TodoScreenModel screenModel;
 
@@ -143,9 +143,6 @@ class _ToDoScreenState extends State<ToDoScreen> {
                   ),
                 ),
               ),
-              screenModel.taskList.isEmpty
-                ? emptyTaskList()
-                : tasks(),
             ],
           ),
         ),
@@ -336,7 +333,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
                 ),
               ),
             ),
-            screenModel.taskList.isEmpty ? emptyTaskList() : tasks(),
+            taskList.isEmpty ? emptyTaskList() : tasks(),
           ],
         ),
       ),
@@ -389,7 +386,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
               ),
               Column(
                 children: [
-                  for (var t in screenModel.taskList)
+                  for (var t in taskList)
                     Padding(
                       padding: const EdgeInsets.only(bottom: 10),
                       child: ToDoItem(
@@ -427,7 +424,6 @@ class _Controller {
           kirbyTask: state.screenModel.tempTask);
       state.screenModel.tempTask.taskId = docId;
       getTaskList();
-
       datePickedController.clear();
       timePickedController.clear();
       if (!state.mounted) return;
@@ -443,7 +439,7 @@ class _Controller {
   }
 
   void getTaskList() async {
-    state.screenModel.taskList =
+    state.taskList =
         await FirestoreController.getKirbyTaskList(uid: Auth.getUser().uid);
     for (var element in state.screenModel.taskList) {
       state.screenModel.taskList.add(element);
