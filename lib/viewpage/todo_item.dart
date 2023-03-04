@@ -1,3 +1,4 @@
+import 'package:capstone/controller/firestore_controller.dart';
 import 'package:capstone/model/kirby_task_model.dart';
 import 'package:capstone/viewpage/view/view_util.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +24,7 @@ class ToDoItem extends StatefulWidget {
 }
 
 class _ToDoItemState extends State<ToDoItem> {
+  void render(fn) => setState(fn);
   var notSelected = true;
   SampleItem? selectedMenu;
   void toggleSelected() {
@@ -61,8 +63,20 @@ class _ToDoItemState extends State<ToDoItem> {
         borderRadius: BorderRadius.circular(20),
       ),
       tileColor: Colors.white,
-      leading: const Icon(
-        Icons.check_box,
+      leading: IconButton(
+        onPressed: () async {
+          await FirestoreController.updateTaskCompletion(
+            taskId: widget.task.taskId!,
+            isCompleted: widget.task.isCompleted,
+          );
+
+          render(() {
+            widget.task.isCompleted = !widget.task.isCompleted;
+          });
+        },
+        icon: widget.task.isCompleted
+            ? const Icon(Icons.check_box)
+            : const Icon(Icons.check_box_outline_blank),
         color: Colors.blue,
       ),
       title: Text(
@@ -151,3 +165,5 @@ class _ToDoItemState extends State<ToDoItem> {
     return dueDate;
   }
 }
+
+class _Controller {}

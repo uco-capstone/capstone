@@ -205,9 +205,8 @@ class _ToDoScreenState extends State<ToDoScreen> {
           ),
           decoration: BoxDecoration(
             color: Colors.white,
-            // ignore: prefer_const_literals_to_create_immutables
-            boxShadow: [
-              const BoxShadow(
+            boxShadow: const [
+              BoxShadow(
                 color: Colors.grey,
                 offset: Offset(0.0, 0.0),
                 blurRadius: 5.0,
@@ -261,9 +260,8 @@ class _ToDoScreenState extends State<ToDoScreen> {
           ),
           decoration: BoxDecoration(
             color: Colors.white,
-            // ignore: prefer_const_literals_to_create_immutables
-            boxShadow: [
-              const BoxShadow(
+            boxShadow: const [
+              BoxShadow(
                 color: Colors.grey,
                 offset: Offset(0.0, 0.0),
                 blurRadius: 5.0,
