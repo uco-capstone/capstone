@@ -463,6 +463,8 @@ class _Controller {
 
       state.taskList =
           await FirestoreController.getKirbyTaskList(uid: Auth.getUser().uid);
+      
+      state.taskList = await FirestoreController.getKirbyTaskList(uid: Auth.getUser().uid);
       state.render(() {
         state.taskList = state.taskList;
       });
