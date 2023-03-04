@@ -22,7 +22,6 @@ class _ToDoScreenState extends State<ToDoScreen> {
   late _Controller con;
   DateTime? datePicked;
   TimeOfDay? timePicked;
-  var taskList = <KirbyTask>[];
   var formKey = GlobalKey<FormState>();
   late TodoScreenModel screenModel;
 
@@ -33,7 +32,6 @@ class _ToDoScreenState extends State<ToDoScreen> {
     super.initState();
     con = _Controller(this);
     screenModel = TodoScreenModel(user: Auth.getUser());
-    //con.getKirbyUser();
     con.getTaskList();
   }
 
@@ -51,7 +49,6 @@ class _ToDoScreenState extends State<ToDoScreen> {
           ),
         ],
       ),
-      //body: const Text('To Do Items'),
       floatingActionButton: addTaskButton(),
       body: body(),
     );
@@ -330,7 +327,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
                 ),
               ),
             ),
-            taskList.isEmpty ? emptyTaskList() : tasks(),
+            screenModel.taskList.isEmpty ? emptyTaskList() : tasks(),
           ],
         ),
       ),
@@ -383,7 +380,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
               ),
               Column(
                 children: [
-                  for (var t in taskList)
+                  for (var t in screenModel.taskList)
                     Padding(
                       padding: const EdgeInsets.only(bottom: 10),
                       child: ToDoItem(
@@ -413,10 +410,16 @@ class _Controller {
   Future<void> save() async {
     FormState? currentSate = state.formKey.currentState;
     if (currentSate == null || !currentSate.validate()) {
+      // ignore: avoid_print
+      print("======= state not valid...");
       return;
     }
     try {
+      // ignore: avoid_print
+      print("======== saving...");
       currentSate.save();
+      // ignore: avoid_print
+      print("======== saved!");
       String docId = await FirestoreController.addKirbyTask(
           kirbyTask: state.screenModel.tempTask);
       state.screenModel.tempTask.taskId = docId;
@@ -431,12 +434,12 @@ class _Controller {
           context: state.context,
           message: "Something went wrong...\nTry again!");
       // ignore: avoid_print
-      print("======== upload task error");
+      print("======== upload task error: $e");
     }
   }
 
   void getTaskList() async {
-    state.taskList =
+    state.screenModel.taskList =
         await FirestoreController.getKirbyTaskList(uid: Auth.getUser().uid);
     state.render(() {});
   }
