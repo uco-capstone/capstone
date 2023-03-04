@@ -2,6 +2,8 @@ import 'package:capstone/controller/firestore_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'kirby_task_model.dart';
+import 'package:flutter/material.dart';
+
 import 'kirby_user_model.dart';
 
 class TodoScreenModel {
@@ -9,9 +11,20 @@ class TodoScreenModel {
   String? loadingErrorMessage;
   KirbyUser? kirbyUser;
   bool loading = false;
-  
+  late KirbyTask tempTask;
+  late TimeOfDay _tempTime;
 
-  TodoScreenModel({required this.user});
+  TodoScreenModel({required this.user}) {
+    tempTask = KirbyTask(
+      userId: user.uid,
+      title: "",
+      dueDate: null,
+      isCompleted: false,
+      isPreloaded: false,
+      isReoccuring: false,
+    );
+    _tempTime = const TimeOfDay(hour: 23, minute: 59);
+  }
 
   Future<void> addPreloadedTasks() async {
     List<KirbyTask> taskList = [];
@@ -49,7 +62,7 @@ class TodoScreenModel {
 
     // add to firebase
     for (var element in taskList) {
-      await FirestoreController.addTask(kirbyTask: element);
+      await FirestoreController.addKirbyTask(kirbyTask: element);
     }
   }
 
@@ -76,6 +89,40 @@ class TodoScreenModel {
       return kirbyUser!.averageSleep!.toString();
     } else {
       return "7";
+    }
+  }
+
+  void saveTaskName(String? value) {
+    if (value != null) {
+      tempTask.title = value;
+    }
+  }
+
+  void saveDatePicked(String? value) {
+    if (value != null) {
+      var date = value.split("/");
+      int day = int.parse(date[0]);
+      int month = int.parse(date[1]);
+      int year = int.parse(date[2]);
+      tempTask.dueDate = DateTime(
+        year,
+        month,
+        day,
+        _tempTime.hour,
+        _tempTime.minute,
+      );
+    } else {
+      return;
+    }
+  }
+
+  void saveTimePicked(String? value) {
+    if (value != null) {
+      var time = value.split(":");
+      _tempTime =
+          TimeOfDay(hour: int.parse(time[0]), minute: int.parse(time[1]));
+    } else {
+      return;
     }
   }
 }
