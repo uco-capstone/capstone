@@ -27,7 +27,6 @@ class _ToDoScreenState extends State<ToDoScreen> {
 
   void render(fn) => setState(fn);
 
-
   @override
   void initState() {
     super.initState();
@@ -65,7 +64,9 @@ class _ToDoScreenState extends State<ToDoScreen> {
               key: formKey,
               child: Padding(
                 padding: EdgeInsets.only(
-                    top: 20, bottom: MediaQuery.of(context).viewInsets.bottom),
+                  top: 20,
+                  bottom: MediaQuery.of(context).viewInsets.bottom,
+                ),
                 child: SizedBox(
                   height: 400,
                   child: addTaskBody(),
@@ -79,7 +80,8 @@ class _ToDoScreenState extends State<ToDoScreen> {
       backgroundColor: Colors.purple[200],
       elevation: 10,
       shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(5))),
+        borderRadius: BorderRadius.all(Radius.circular(5)),
+      ),
       child: const Text(
         '+',
         style: TextStyle(
@@ -113,18 +115,19 @@ class _ToDoScreenState extends State<ToDoScreen> {
           child: Row(
             children: [
               Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: OutlinedButton(
-                    onPressed: () {
-                      con.datePickedController.clear();
-                      con.timePickedController.clear();
-                      Navigator.pop(context);
-                    },
-                    child: Text(
-                      'Cancel',
-                      style: TextStyle(color: Colors.purple[200]),
-                    ),
-                  )),
+                padding: const EdgeInsets.all(20.0),
+                child: OutlinedButton(
+                  onPressed: () {
+                    con.datePickedController.clear();
+                    con.timePickedController.clear();
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    'Cancel',
+                    style: TextStyle(color: Colors.purple[200]),
+                  ),
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 20, 30, 20),
                 child: ElevatedButton(
@@ -316,8 +319,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
                   ),
                   contentPadding: EdgeInsets.all(25), // padding needed
                   prefixIconConstraints: BoxConstraints(
-                    maxHeight:
-                        50, // this value was too small -- must be bigger than image size
+                    maxHeight: 50,
                     minWidth: 25,
                   ),
                   border: InputBorder.none,
@@ -411,29 +413,29 @@ class _Controller {
   Future<void> save() async {
     FormState? currentSate = state.formKey.currentState;
     if (currentSate == null || !currentSate.validate()) {
-      // ignore: avoid_print
-      print("======= state not valid...");
       return;
     }
     try {
-      // ignore: avoid_print
-      print("======== saving...");
       currentSate.save();
-      // ignore: avoid_print
-      print("======== saved!");
       String docId = await FirestoreController.addKirbyTask(
-          kirbyTask: state.screenModel.tempTask);
+        kirbyTask: state.screenModel.tempTask,
+      );
       state.screenModel.tempTask.taskId = docId;
       getTaskList();
       datePickedController.clear();
       timePickedController.clear();
       if (!state.mounted) return;
       Navigator.pop(state.context);
-      showSnackBar(context: state.context, seconds: 3, message: 'Task Added!');
+      showSnackBar(
+        context: state.context,
+        seconds: 3,
+        message: 'Task Added!',
+      );
     } catch (e) {
       showSnackBar(
-          context: state.context,
-          message: "Something went wrong...\nTry again!");
+        context: state.context,
+        message: "Something went wrong...\nTry again!",
+      );
       // ignore: avoid_print
       print("======== upload task error: $e");
     }
@@ -446,7 +448,19 @@ class _Controller {
   }
 
   void deleteTask(String taskId) async {
-    await FirestoreController.deleteKirbyTask(taskId: taskId);
+    try {
+      await FirestoreController.deleteKirbyTask(taskId: taskId);
+      if (!state.mounted) return;
+      showSnackBar(
+        context: state.context,
+        message: "Deleted Task",
+      );
+    } catch (e) {
+      showSnackBar(
+        context: state.context,
+        message: "Something went wrong...\n Try again!",
+      );
+    }
     getTaskList();
   }
 }
