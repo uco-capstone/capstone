@@ -14,7 +14,7 @@ class KirbyTask {
   String userId;
   String? title;
   DateTime? dueDate;
-  bool? isCompleted;
+  bool isCompleted;
   bool? isPreloaded;
   bool? isReoccuring;
 
@@ -23,7 +23,7 @@ class KirbyTask {
     required this.userId,
     this.title,
     this.dueDate,
-    this.isCompleted,
+    required this.isCompleted,
     this.isPreloaded,
     this.isReoccuring,
   });

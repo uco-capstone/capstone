@@ -8,6 +8,17 @@ class FirestoreController {
 
   //============== USER INFO ==================
 
+  static Future<void> updateTaskCompletion({
+    required String taskId,
+    required bool isCompleted,
+  }) async {
+    // Update an existing document
+    FirebaseFirestore.instance
+        .collection(taskCollection)
+        .doc(taskId)
+        .update({'isCompleted': !isCompleted});
+  }
+
   static Future<void> addHealthInfo({required KirbyUser kirbyUser}) async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection(kirbyUserCollection)
