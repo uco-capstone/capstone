@@ -28,7 +28,7 @@ class _ToDoItemState extends State<ToDoItem> {
 
   void deleteTask() {
     showDialogBox(
-     context: context,
+      context: context,
       title: "Delete Task",
       content: "Are you sure you want to delete this task?",
       buttonName: "Yes",
