@@ -83,6 +83,7 @@ class _ToDoItemState extends State<ToDoItem> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
+        tileColor: Colors.white,
         leading: const Icon(
           Icons.check_box,
           color: Colors.blue,
@@ -96,7 +97,7 @@ class _ToDoItemState extends State<ToDoItem> {
           ),
         ),
         trailing: Container(
-          height: 35,
+          height: 40,
           width: 35,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
