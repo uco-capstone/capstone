@@ -35,87 +35,46 @@ class _ToDoItemState extends State<ToDoItem> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.task.dueDate != null) {
-      return ListTile(
-        onLongPress: toggleSelected,
-        onTap: () => notSelected ? (){} : setState(() => notSelected = true),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
+    return ListTile(
+      onLongPress: toggleSelected,
+      onTap: () => notSelected ? () {} : setState(() => notSelected = true),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      tileColor: Colors.white,
+      leading: const Icon(
+        Icons.check_box,
+        color: Colors.blue,
+      ),
+      title: Text(
+        widget.task.title!,
+        style: const TextStyle(
+          fontSize: 17,
+          color: Colors.black,
         ),
-        tileColor: Colors.white,
-        leading: const Icon(
-          Icons.check_box,
-          color: Colors.blue,
+      ),
+      trailing: Container(
+        height: 40,
+        width: 35,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5),
         ),
-        title: Text(
-          widget.task.title!,
-          style: const TextStyle(
-            fontSize: 17,
-            color: Colors.black,
-            //decoration: TextDecoration.lineThrough,
-          ),
-        ),
-        trailing: Container(
-          height: 40,
-          width: 35,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-          ),
-          child: notSelected
-              ? kirbabButton(
-                  context: context,
-                  fn: () => showSnackBar(context: context, message: "Hi"),
-                )
-              : IconButton(
-                  color: Colors.red,
-                  icon: const Icon(Icons.delete),
-                  iconSize: 17,
-                  onPressed: deleteTask,
-                ),
-        ),
-        subtitle: Text(
-            dueDate()), //Text('Due: ${task.dueDate!.month}/${task.dueDate!.day}/${task.dueDate!.year} at ${task.dueDate!.hour}:${task.dueDate!.minute}'),
-      );
-    } else {
-      return ListTile(
-        onLongPress: toggleSelected,
-        onTap: () => notSelected ? (){} : setState(() => notSelected = true),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-        tileColor: Colors.white,
-        leading: const Icon(
-          Icons.check_box,
-          color: Colors.blue,
-        ),
-        title: Text(
-          widget.task.title!,
-          style: const TextStyle(
-            fontSize: 17,
-            color: Colors.black,
-            //decoration: TextDecoration.lineThrough,
-          ),
-        ),
-        trailing: Container(
-          height: 40,
-          width: 35,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-          ),
-          child: notSelected
-              ? kirbabButton(
-                  context: context,
-                  fn: () => showSnackBar(context: context, message: "Hi"),
-                )
-              : IconButton(
-                  color: Colors.red,
-                  icon: const Icon(Icons.delete),
-                  iconSize: 17,
-                  onPressed: deleteTask,
-                ),
-        ),
-      );
-    }
+        child: notSelected
+            ? kirbabButton(
+                context: context,
+                fn: () => showSnackBar(context: context, message: "Hi"),
+              )
+            : IconButton(
+                color: Colors.red,
+                icon: const Icon(Icons.delete),
+                iconSize: 17,
+                onPressed: deleteTask,
+              ),
+      ),
+      subtitle: widget.task.dueDate != null 
+          ? Text(dueDate()) 
+          : const SizedBox.shrink(),
+    );
   }
 
   String dueDate() {
