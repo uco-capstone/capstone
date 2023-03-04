@@ -179,105 +179,113 @@ class _ToDoScreenState extends State<ToDoScreen> {
         ),
         Row(
           children: [
-            Expanded(
-              flex: 1,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
-                child: Container(
-                  width: 150,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 5,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    // ignore: prefer_const_literals_to_create_immutables
-                    boxShadow: [
-                      const BoxShadow(
-                        color: Colors.grey,
-                        offset: Offset(0.0, 0.0),
-                        blurRadius: 5.0,
-                        spreadRadius: 0.0,
-                      ),
-                    ],
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: TextFormField(
-                    decoration: const InputDecoration(
-                      hintText: "Task Date...",
-                      border: InputBorder.none,
-                    ),
-                    controller: con.datePickedController,
-                    validator: KirbyTask.validateDatePicked,
-                    onSaved: screenModel.saveDatePicked,
-                    onTap: () async {
-                      datePicked = await showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime.now(),
-                        lastDate: DateTime(3000),
-                      );
-                      setState(() {
-                        if (datePicked != null) {
-                          con.datePickedController.text =
-                              '${datePicked!.month}/${datePicked!.day}/${datePicked!.year}';
-                        }
-                      });
-                    },
-                  ),
-                ),
-              ),
-            ),
-            Expanded(
-              flex: 1,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 30, 0, 0),
-                child: Container(
-                  width: 150,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 5,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    // ignore: prefer_const_literals_to_create_immutables
-                    boxShadow: [
-                      const BoxShadow(
-                        color: Colors.grey,
-                        offset: Offset(0.0, 0.0),
-                        blurRadius: 5.0,
-                        spreadRadius: 0.0,
-                      ),
-                    ],
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: TextFormField(
-                    decoration: const InputDecoration(
-                      hintText: "Task Time...",
-                      border: InputBorder.none,
-                    ),
-                    controller: con.timePickedController,
-                    validator: KirbyTask.validateTimePicked,
-                    onSaved: screenModel.saveTimePicked,
-                    onTap: () async {
-                      timePicked = await showTimePicker(
-                        context: context,
-                        initialTime: TimeOfDay.now(),
-                      );
-                      setState(() {
-                        if (timePicked != null) {
-                          con.timePickedController.text =
-                              "${(timePicked!.hour < 10) ? '0${timePicked!.hour}' : timePicked!.hour}:${(timePicked!.minute < 10) ? '0${timePicked!.minute}' : timePicked!.minute}";
-                        }
-                      });
-                    },
-                  ),
-                ),
-              ),
-            ),
+            addTaskDateInput(),
+            addTaskTimeInput(),
           ],
         ),
       ],
+    );
+  }
+
+  Widget addTaskDateInput() {
+    return Expanded(
+      flex: 1,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+        child: Container(
+          width: 150,
+          padding: const EdgeInsets.symmetric(
+            horizontal: 20,
+            vertical: 5,
+          ),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            // ignore: prefer_const_literals_to_create_immutables
+            boxShadow: [
+              const BoxShadow(
+                color: Colors.grey,
+                offset: Offset(0.0, 0.0),
+                blurRadius: 5.0,
+                spreadRadius: 0.0,
+              ),
+            ],
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: TextFormField(
+            decoration: const InputDecoration(
+              hintText: "Task Date...",
+              border: InputBorder.none,
+            ),
+            controller: con.datePickedController,
+            validator: KirbyTask.validateDatePicked,
+            onSaved: screenModel.saveDatePicked,
+            onTap: () async {
+              datePicked = await showDatePicker(
+                context: context,
+                initialDate: DateTime.now(),
+                firstDate: DateTime.now(),
+                lastDate: DateTime(3000),
+              );
+              setState(() {
+                if (datePicked != null) {
+                  con.datePickedController.text =
+                      '${datePicked!.month}/${datePicked!.day}/${datePicked!.year}';
+                }
+              });
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget addTaskTimeInput() {
+    return Expanded(
+      flex: 1,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(20, 30, 0, 0),
+        child: Container(
+          width: 150,
+          padding: const EdgeInsets.symmetric(
+            horizontal: 20,
+            vertical: 5,
+          ),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            // ignore: prefer_const_literals_to_create_immutables
+            boxShadow: [
+              const BoxShadow(
+                color: Colors.grey,
+                offset: Offset(0.0, 0.0),
+                blurRadius: 5.0,
+                spreadRadius: 0.0,
+              ),
+            ],
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: TextFormField(
+            decoration: const InputDecoration(
+              hintText: "Task Time...",
+              border: InputBorder.none,
+            ),
+            controller: con.timePickedController,
+            validator: KirbyTask.validateTimePicked,
+            onSaved: screenModel.saveTimePicked,
+            onTap: () async {
+              timePicked = await showTimePicker(
+                context: context,
+                initialTime: TimeOfDay.now(),
+              );
+              setState(() {
+                if (timePicked != null) {
+                  con.timePickedController.text =
+                      "${(timePicked!.hour < 10) ? '0${timePicked!.hour}' : timePicked!.hour}:${(timePicked!.minute < 10) ? '0${timePicked!.minute}' : timePicked!.minute}";
+                }
+              });
+            },
+          ),
+        ),
+      ),
     );
   }
 
