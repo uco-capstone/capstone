@@ -115,7 +115,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           Center(
-            //Pet is currently a sample image, to change pet, change the asset image
+            //Pet, if there is no configured Kirby Pet, then it'll show a default image
             child: SizedBox(
                 height: 300,
                 child: screenModel.kirbyUser == null
@@ -123,14 +123,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     : screenModel.kirbyUser!.kirbyPetSkin == null
                         ? Image.asset('images/default-kirby.png')
                         : Image.asset(screenModel.kirbyUser!.kirbyPetSkin!)),
-                // screenModel.kirbyUser == null
-                //     ? Image.asset('images/default-kirby.png')
-                //     : screenModel.kirbyUser!.kirbyPet == null
-                //         ? Image.asset('images/default-kirby.png')
-                //         : screenModel.kirbyUser!.kirbyPet!.kirbySkin == null
-                //             ? Image.asset('images/default-kirby.png')
-                //             : Image.asset(
-                //                 screenModel.kirbyUser!.kirbyPet!.kirbySkin!)),
           ),
           Positioned(
             //Sample Hunger Gauge Area
