@@ -1,13 +1,16 @@
 import 'package:capstone/controller/auth_controller.dart';
 import 'package:capstone/model/home_screen_model.dart';
+import 'package:capstone/model/kirby_pet_model.dart';
 import 'package:capstone/viewpage/health_info_screen.dart';
 
 import 'package:capstone/viewpage/settings_screen.dart';
 import 'package:capstone/viewpage/todo_screen.dart';
+import 'package:capstone/viewpage/view/view_util.dart';
 import 'package:flutter/material.dart';
 
 import '../controller/firestore_controller.dart';
 import '../model/constants.dart';
+import '../model/kirby_user_model.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -114,9 +117,20 @@ class _HomeScreenState extends State<HomeScreen> {
           Center(
             //Pet is currently a sample image, to change pet, change the asset image
             child: SizedBox(
-              height: 300,
-              child: Image.asset('images/sample-kirby.png'),
-            ),
+                height: 300,
+                child: screenModel.kirbyUser == null
+                    ? Image.asset('images/default-kirby.png')
+                    : screenModel.kirbyUser!.kirbyPetSkin == null
+                        ? Image.asset('images/default-kirby.png')
+                        : Image.asset(screenModel.kirbyUser!.kirbyPetSkin!)),
+                // screenModel.kirbyUser == null
+                //     ? Image.asset('images/default-kirby.png')
+                //     : screenModel.kirbyUser!.kirbyPet == null
+                //         ? Image.asset('images/default-kirby.png')
+                //         : screenModel.kirbyUser!.kirbyPet!.kirbySkin == null
+                //             ? Image.asset('images/default-kirby.png')
+                //             : Image.asset(
+                //                 screenModel.kirbyUser!.kirbyPet!.kirbySkin!)),
           ),
           Positioned(
             //Sample Hunger Gauge Area
@@ -128,6 +142,15 @@ class _HomeScreenState extends State<HomeScreen> {
               width: 300,
               child: const Center(child: Text('Hunger Gauge')),
             ),
+          ),
+          Column(
+            children: [
+              for (int i = 0; i < skinCustomizations.length; i++)
+                ElevatedButton(
+                    onPressed: () =>
+                        con.updateSkinCustomization(skinCustomizations[i]),
+                    child: Text(skinCustomizations[i]))
+            ],
           ),
         ],
       ),
@@ -170,5 +193,24 @@ class _Controller {
 
   void signOut() {
     Auth.signOut();
+  }
+
+  void updateSkinCustomization(String customization) async {
+    if(state.screenModel.kirbyUser != null) {
+      state.screenModel.kirbyUser!.kirbyPetSkin = customization;
+    }
+    try {
+      Map<String, dynamic> update = {};
+      update[DocKeyUser.kirbyPetSkin.name] = customization;
+      await FirestoreController.updateKirbyUser(
+          userId: state.screenModel.kirbyUser!.userId!, update: update);
+    } catch (e) {
+      if (Constants.devMode) {
+        print('======================= Skin Customization Update Error: $e');
+      }
+      showSnackBar(context: state.context, message: 'Skin Update Error: $e');
+    }
+  
+    state.render(() {});
   }
 }
