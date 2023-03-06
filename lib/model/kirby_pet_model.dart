@@ -9,3 +9,10 @@ class KirbyPet {
     this.hungerGauge,
   });
 }
+
+//Array of all skin customization paths
+  var skinCustomizations = [
+    'images/default-kirby.png',
+    'images/blue-kirby.png',
+    'images/yellow-kirby.png'
+  ];

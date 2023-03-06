@@ -1,5 +1,3 @@
-import 'package:capstone/model/kirby_pet_model.dart';
-
 enum DocKeyUser {
   userId,
   firstName,
@@ -9,10 +7,12 @@ enum DocKeyUser {
   height,
   averageSleep,
   averageMealsEaten,
-  kirbyPet,
   age,
   preloadedTasks,
   notifications,
+  kirbyPetSkin,
+  kirbyPetBackground,
+  kirbyPetHungerGuage,
 }
 
 class KirbyUser {
@@ -25,9 +25,13 @@ class KirbyUser {
   int? averageSleep; // hours
   int? averageMealsEaten;
   int? age;
-  KirbyPet? kirbyPet;
   bool? preloadedTasks;
   bool? notifications;
+  //KibryPet Stuff
+  String? kirbyPetSkin;
+  String? kirbyPetBackground;
+  int? kirbyPetHungerGuage;
+
 
   KirbyUser({
     required this.userId,
@@ -39,9 +43,11 @@ class KirbyUser {
     this.averageSleep,
     this.averageMealsEaten,
     this.age,
-    this.kirbyPet,
     this.preloadedTasks,
     this.notifications,
+    this.kirbyPetSkin,
+    this.kirbyPetBackground,
+    this.kirbyPetHungerGuage,
   });
 
   Map<String, dynamic> toFirestoreDoc() {
@@ -55,9 +61,11 @@ class KirbyUser {
       DocKeyUser.averageSleep.name: averageSleep,
       DocKeyUser.averageMealsEaten.name: averageMealsEaten,
       DocKeyUser.age.name: age,
-      DocKeyUser.kirbyPet.name: kirbyPet,
       DocKeyUser.preloadedTasks.name: preloadedTasks,
       DocKeyUser.notifications.name: notifications,
+      DocKeyUser.kirbyPetSkin.name: kirbyPetSkin,
+      DocKeyUser.kirbyPetBackground.name: kirbyPetBackground,
+      DocKeyUser.kirbyPetHungerGuage.name: kirbyPetHungerGuage,
     };
   }
 
@@ -75,9 +83,11 @@ class KirbyUser {
       averageSleep: doc[DocKeyUser.averageSleep.name] ??= "",
       averageMealsEaten: doc[DocKeyUser.averageMealsEaten.name] ??= "",
       age: doc[DocKeyUser.age.name] ??= "",
-      // kirbyPet: doc[DocKeyUser.kirbyPet.name] ??= "",
       preloadedTasks: doc[DocKeyUser.preloadedTasks.name] ??= false,
       notifications: doc[DocKeyUser.notifications.name] ??= false,
+      kirbyPetSkin: doc[DocKeyUser.kirbyPetSkin.name] ??= "",
+      kirbyPetBackground: doc[DocKeyUser.kirbyPetBackground.name] ??= "",
+      kirbyPetHungerGuage: doc[DocKeyUser.kirbyPetHungerGuage.name] ??= 0,
     );
   }
 
