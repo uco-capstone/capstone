@@ -1,4 +1,7 @@
+import 'package:capstone/model/shop_screen_model.dart';
 import 'package:flutter/material.dart';
+
+import '../controller/auth_controller.dart';
 
 class ShopScreen extends StatefulWidget {
   static const routeName = '/shopScreen';
@@ -13,11 +16,13 @@ class ShopScreen extends StatefulWidget {
 
 class _ShopScreen extends State<ShopScreen> {
   late _Controller con;
+  late ShopScreenModel screenModel;
 
   @override
   void initState() {
     super.initState();
     con = _Controller(this);
+    screenModel = ShopScreenModel(user: Auth.getUser());
   }
 
   void render(fn) => setState(fn);
