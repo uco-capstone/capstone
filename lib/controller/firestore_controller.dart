@@ -91,6 +91,27 @@ class FirestoreController {
         .delete();
   }
 
+  static Future<KirbyTask> getKirbyTask({
+    required String taskId,
+  }) async {
+    var doc = await FirebaseFirestore.instance
+        .collection(taskCollection)
+        .doc(taskId)
+        .get();
+    var document = doc.data() as Map<String, dynamic>;
+    return KirbyTask.fromFirestoreDoc(doc: document, taskId: taskId);
+  }
+
+  static Future<void> editKirbyTask({
+    required String taskId,
+    required Map<String, dynamic> update,
+  }) async {
+    await FirebaseFirestore.instance
+        .collection(taskCollection)
+        .doc(taskId)
+        .set(update);
+  }
+
   static Future<List<KirbyTask>> getKirbyTaskList({
     required String uid,
   }) async {
@@ -110,5 +131,4 @@ class FirestoreController {
     }
     return result;
   }
-
 }

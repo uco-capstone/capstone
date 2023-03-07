@@ -9,10 +9,12 @@ class ToDoItem extends StatefulWidget {
       {required this.task,
       required this.taskIndex,
       required this.deleteFn,
+      required this.editFn,
       Key? key})
       : super(key: key);
 
   final Function deleteFn;
+  final Function editFn;
   final KirbyTask task;
   final int taskIndex;
 
@@ -43,13 +45,8 @@ class _ToDoItemState extends State<ToDoItem> {
   }
 
   void editTask() {
-    showDialogBox(
-      context: context,
-      title: "Edit Task",
-      content: "Are you sure you want to edit this task?",
-      buttonName: "Yes",
-      fn: () {},
-    );
+    // print("got here...");
+    widget.editFn(widget.task.taskId!);
     setState(() {
       notSelected = true;
     });
@@ -90,8 +87,9 @@ class _ToDoItemState extends State<ToDoItem> {
                     if (selectedMenu == SampleItem.delete) {
                       deleteTask();
                     } else if (selectedMenu == SampleItem.edit) {
+                      // print("got here");
                       editTask();
-                    } 
+                    }
                   });
                 },
                 itemBuilder: (BuildContext context) =>
@@ -126,7 +124,6 @@ class _ToDoItemState extends State<ToDoItem> {
   String dueDate() {
     String dueDate =
         'Due: ${widget.task.dueDate!.month}/${widget.task.dueDate!.day}/${widget.task.dueDate!.year}';
-
     if (widget.task.dueDate!.hour == 0 && widget.task.dueDate!.minute == 0) {
       return dueDate;
     } else {
