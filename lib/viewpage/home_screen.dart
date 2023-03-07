@@ -3,6 +3,7 @@ import 'package:capstone/model/home_screen_model.dart';
 import 'package:capstone/viewpage/health_info_screen.dart';
 
 import 'package:capstone/viewpage/settings_screen.dart';
+import 'package:capstone/viewpage/shop_screen.dart';
 import 'package:capstone/viewpage/todo_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -85,7 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ListTile(
               leading: const Icon(Icons.store),
               title: const Text('Shop'),
-              onTap: con.storeScreen,
+              onTap: con.shopScreen,
             ),
             ListTile(
               leading: const Icon(Icons.settings),
@@ -160,8 +161,8 @@ class _Controller {
     Navigator.pushNamed(state.context, ToDoScreen.routeName);
   }
 
-  void storeScreen() {
-    //Navigate to Store Screen
+  void shopScreen() {
+    Navigator.pushNamed(state.context, ShopScreen.routeName);
   }
 
   void settingsScreen() async {
