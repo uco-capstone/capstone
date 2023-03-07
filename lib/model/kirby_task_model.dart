@@ -61,27 +61,30 @@ class KirbyTask {
   //Input Validation
 
   static String? validateTaskName(String? value) {
-    return (value == null || value.trim().length < 3) ? 'Task Name is too short.' : null;
+    return (value == null || value.trim().length < 3)
+        ? 'Task Name is too short.'
+        : null;
   }
 
   static String? validateDatePicked(String? value) {
-    if(value == null || value.trim().isEmpty) {
+    if (value == null || value.trim().isEmpty) {
       return null;
     } else {
       // var dateFormat = RegExp('\d{2}/{1}\d{2}/{1}\d{4}');
       var dateFormat = RegExp(r'([0-9]{1,2}/[0-9]{1,2}/[0-9][0-9][0-9][0-9])');
       if (dateFormat.hasMatch(value) == false) {
-        return 'Not in MM/DD/YYYY format.'; 
+        return 'Not in MM/DD/YYYY format.';
       } else {
         var dateArray = value.split('/');
+        // print(dateArray);
         int months = int.parse(dateArray[0]);
         int days = int.parse(dateArray[1]);
 
-        if(months <= 0 || months > 12) {
+        if (months <= 0 || months > 12) {
           return 'Invalid month input';
         } else if (days <= 0 || days > 31) {
           return 'Invalid day input.';
-        } else if(dateArray[2].length < 4 || dateArray[2].length > 5) {
+        } else if (dateArray[2].length < 4 || dateArray[2].length > 5) {
           return 'Invalid year input.';
         } else {
           return null;
@@ -91,27 +94,28 @@ class KirbyTask {
   }
 
   static String? validateTimePicked(String? value) {
-    if(value == null || value.trim().isEmpty) {
+    if (value == null || value.trim().isEmpty) {
       return null;
     } else {
       var timeFormat = RegExp(r'([0-9][0-9]:[0-9][0-9])');
-      if(timeFormat.hasMatch(value) == false) {
+      if (timeFormat.hasMatch(value) == false) {
         return 'Not in HH:MM format.';
       } else {
         var timeArray = value.split(':');
+        // print(timeArray);
         String hoursString = timeArray[0];
-        if(hoursString.startsWith('0')) {
+        if (hoursString.startsWith('0')) {
           hoursString.replaceFirst(RegExp(r'0'), '');
         }
         String minutesString = timeArray[1];
-        if(minutesString.startsWith('0')) {
+        if (minutesString.startsWith('0')) {
           minutesString.replaceFirst(RegExp(r'0'), '');
         }
         int hours = int.parse(hoursString);
         int minutes = int.parse(minutesString);
-        if(hours >= 24 || hours < 0) {
+        if (hours >= 24 || hours < 0) {
           return 'Invalid hour input.';
-        } else if(minutes >= 60 || minutes < 0) {
+        } else if (minutes >= 60 || minutes < 0) {
           return 'Invalid minute input.';
         } else {
           return null;

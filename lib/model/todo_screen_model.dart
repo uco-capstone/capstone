@@ -102,16 +102,11 @@ class TodoScreenModel {
   void saveDatePicked(String? value) {
     if (value != null) {
       var date = value.split("/");
-      int day = int.parse(date[0]);
-      int month = int.parse(date[1]);
+      if (date.isEmpty) return;
+      int month = int.parse(date[0]);
+      int day = int.parse(date[1]);
       int year = int.parse(date[2]);
-      tempTask.dueDate = DateTime(
-        year,
-        month,
-        day,
-        _tempTime.hour,
-        _tempTime.minute,
-      );
+      tempTask.dueDate = DateTime(year, month, day);
     } else {
       return;
     }
@@ -122,8 +117,21 @@ class TodoScreenModel {
       var time = value.split(":");
       _tempTime =
           TimeOfDay(hour: int.parse(time[0]), minute: int.parse(time[1]));
+      combineDateAndTime();
     } else {
       return;
     }
+  }
+
+  void combineDateAndTime() {
+    tempTask.dueDate ??= DateTime(DateTime.now().year);
+    DateTime newDueDate = DateTime(
+      tempTask.dueDate!.year,
+      tempTask.dueDate!.month,
+      tempTask.dueDate!.day,
+      _tempTime.hour,
+      _tempTime.minute,
+    );
+    tempTask.dueDate = newDueDate;
   }
 }
