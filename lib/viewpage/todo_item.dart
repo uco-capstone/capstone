@@ -2,6 +2,8 @@ import 'package:capstone/model/kirby_task_model.dart';
 import 'package:capstone/viewpage/view/view_util.dart';
 import 'package:flutter/material.dart';
 
+enum SampleItem { delete, edit, cancel }
+
 class ToDoItem extends StatefulWidget {
   const ToDoItem(
       {required this.task,
@@ -20,6 +22,7 @@ class ToDoItem extends StatefulWidget {
 
 class _ToDoItemState extends State<ToDoItem> {
   var notSelected = true;
+  SampleItem? selectedMenu;
   void toggleSelected() {
     setState(() {
       notSelected = !notSelected;
@@ -35,7 +38,20 @@ class _ToDoItemState extends State<ToDoItem> {
       fn: () => widget.deleteFn(widget.task.taskId!),
     );
     setState(() {
-      notSelected = !notSelected;
+      notSelected = true;
+    });
+  }
+
+  void editTask() {
+    showDialogBox(
+      context: context,
+      title: "Edit Task",
+      content: "Are you sure you want to edit this task?",
+      buttonName: "Yes",
+      fn: () {},
+    );
+    setState(() {
+      notSelected = true;
     });
   }
 
@@ -66,9 +82,33 @@ class _ToDoItemState extends State<ToDoItem> {
           borderRadius: BorderRadius.circular(5),
         ),
         child: notSelected
-            ? kirbabButton(
-                context: context,
-                fn: () => showSnackBar(context: context, message: "Hi"),
+            ? PopupMenuButton(
+                initialValue: selectedMenu,
+                onSelected: (SampleItem item) {
+                  setState(() {
+                    selectedMenu = item;
+                    if (selectedMenu == SampleItem.delete) {
+                      deleteTask();
+                    } else if (selectedMenu == SampleItem.edit) {
+                      editTask();
+                    } 
+                  });
+                },
+                itemBuilder: (BuildContext context) =>
+                    <PopupMenuEntry<SampleItem>>[
+                  const PopupMenuItem<SampleItem>(
+                    value: SampleItem.delete,
+                    child: Text('Delete'),
+                  ),
+                  const PopupMenuItem<SampleItem>(
+                    value: SampleItem.edit,
+                    child: Text('Edit'),
+                  ),
+                  const PopupMenuItem<SampleItem>(
+                    value: SampleItem.cancel,
+                    child: Text('Cancel'),
+                  ),
+                ],
               )
             : IconButton(
                 color: Colors.red,
