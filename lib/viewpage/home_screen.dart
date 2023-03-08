@@ -6,12 +6,10 @@ import 'package:capstone/viewpage/health_info_screen.dart';
 import 'package:capstone/viewpage/settings_screen.dart';
 import 'package:capstone/viewpage/shop_screen.dart';
 import 'package:capstone/viewpage/todo_screen.dart';
-import 'package:capstone/viewpage/view/view_util.dart';
 import 'package:flutter/material.dart';
 
 import '../controller/firestore_controller.dart';
 import '../model/constants.dart';
-import '../model/kirby_user_model.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -205,24 +203,5 @@ class _Controller {
 
   void signOut() {
     Auth.signOut();
-  }
-
-  void updateSkinCustomization(String customization) async {
-    if(state.screenModel.kirbyUser != null) {
-      state.screenModel.kirbyUser!.kirbyPetSkin = customization;
-    }
-    try {
-      Map<String, dynamic> update = {};
-      update[DocKeyUser.kirbyPetSkin.name] = customization;
-      await FirestoreController.updateKirbyUser(
-          userId: state.screenModel.kirbyUser!.userId!, update: update);
-    } catch (e) {
-      if (Constants.devMode) {
-        print('======================= Skin Customization Update Error: $e');
-      }
-      showSnackBar(context: state.context, message: 'Skin Update Error: $e');
-    }
-  
-    state.render(() {});
   }
 }
