@@ -1,16 +1,21 @@
+import 'package:capstone/controller/firestore_controller.dart';
 import 'package:capstone/model/kirby_task_model.dart';
 import 'package:capstone/viewpage/view/view_util.dart';
 import 'package:flutter/material.dart';
+
+enum SampleItem { delete, edit, cancel }
 
 class ToDoItem extends StatefulWidget {
   const ToDoItem(
       {required this.task,
       required this.taskIndex,
       required this.deleteFn,
+      required this.editFn,
       Key? key})
       : super(key: key);
 
   final Function deleteFn;
+  final Function editFn;
   final KirbyTask task;
   final int taskIndex;
 
@@ -19,7 +24,9 @@ class ToDoItem extends StatefulWidget {
 }
 
 class _ToDoItemState extends State<ToDoItem> {
+  void render(fn) => setState(fn);
   var notSelected = true;
+  SampleItem? selectedMenu;
   void toggleSelected() {
     setState(() {
       notSelected = !notSelected;
@@ -35,7 +42,15 @@ class _ToDoItemState extends State<ToDoItem> {
       fn: () => widget.deleteFn(widget.task.taskId!),
     );
     setState(() {
-      notSelected = !notSelected;
+      notSelected = true;
+    });
+  }
+
+  void editTask() {
+    // print("got here...");
+    widget.editFn(widget.task.taskId!);
+    setState(() {
+      notSelected = true;
     });
   }
 
@@ -48,8 +63,20 @@ class _ToDoItemState extends State<ToDoItem> {
         borderRadius: BorderRadius.circular(20),
       ),
       tileColor: Colors.white,
-      leading: const Icon(
-        Icons.check_box,
+      leading: IconButton(
+        onPressed: () async {
+          await FirestoreController.updateTaskCompletion(
+            taskId: widget.task.taskId!,
+            isCompleted: widget.task.isCompleted,
+          );
+
+          render(() {
+            widget.task.isCompleted = !widget.task.isCompleted;
+          });
+        },
+        icon: widget.task.isCompleted
+            ? const Icon(Icons.check_box)
+            : const Icon(Icons.check_box_outline_blank),
         color: Colors.blue,
       ),
       title: Text(
@@ -66,9 +93,34 @@ class _ToDoItemState extends State<ToDoItem> {
           borderRadius: BorderRadius.circular(5),
         ),
         child: notSelected
-            ? kirbabButton(
-                context: context,
-                fn: () => showSnackBar(context: context, message: "Hi"),
+            ? PopupMenuButton(
+                initialValue: selectedMenu,
+                onSelected: (SampleItem item) {
+                  setState(() {
+                    selectedMenu = item;
+                    if (selectedMenu == SampleItem.delete) {
+                      deleteTask();
+                    } else if (selectedMenu == SampleItem.edit) {
+                      // print("got here");
+                      editTask();
+                    }
+                  });
+                },
+                itemBuilder: (BuildContext context) =>
+                    <PopupMenuEntry<SampleItem>>[
+                  const PopupMenuItem<SampleItem>(
+                    value: SampleItem.delete,
+                    child: Text('Delete'),
+                  ),
+                  const PopupMenuItem<SampleItem>(
+                    value: SampleItem.edit,
+                    child: Text('Edit'),
+                  ),
+                  const PopupMenuItem<SampleItem>(
+                    value: SampleItem.cancel,
+                    child: Text('Cancel'),
+                  ),
+                ],
               )
             : IconButton(
                 color: Colors.red,
@@ -84,25 +136,32 @@ class _ToDoItemState extends State<ToDoItem> {
   }
 
   String dueDate() {
-    String dueDate =
-        'Due: ${widget.task.dueDate!.month}/${widget.task.dueDate!.day}/${widget.task.dueDate!.year}';
+    var today = DateTime.now();
+    var month = widget.task.dueDate!.month;
+    var day = widget.task.dueDate!.day;
+    var year = widget.task.dueDate!.year;
+    var hour = widget.task.dueDate!.hour;
+    var minute = widget.task.dueDate!.minute;
 
-    if (widget.task.dueDate!.hour == 0 && widget.task.dueDate!.minute == 0) {
-      return dueDate;
-    } else {
+    String dueDate = 'Due: $month/$day/$year';
+    if (month == today.month && day == today.day && year == today.year) {
+      dueDate = "Due Today";
+    }
+
+    if (!(hour == 0 && minute == 0)) {
       dueDate += ' at ';
       if (widget.task.dueDate!.hour < 10) {
-        dueDate += '0${widget.task.dueDate!.hour}:';
+        dueDate += '0$hour:';
       } else {
-        dueDate += '${widget.task.dueDate!.hour}:';
+        dueDate += '$hour:';
       }
 
       if (widget.task.dueDate!.minute < 10) {
-        dueDate += '0${widget.task.dueDate!.minute}';
+        dueDate += '0$minute';
       } else {
-        dueDate += '${widget.task.dueDate!.minute}';
+        dueDate += '$minute';
       }
-      return dueDate;
     }
+    return dueDate;
   }
 }

@@ -1,4 +1,5 @@
 import 'package:capstone/controller/firestore_controller.dart';
+import 'package:capstone/model/constants.dart';
 import 'package:capstone/model/kirby_task_model.dart';
 import 'package:capstone/model/todo_screen_model.dart';
 import 'package:capstone/viewpage/todo_item.dart';
@@ -16,6 +17,7 @@ class ToDoScreen extends StatefulWidget {
   State<StatefulWidget> createState() {
     return _ToDoScreenState();
   }
+  
 }
 
 class _ToDoScreenState extends State<ToDoScreen> {
@@ -56,27 +58,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
 
   Widget addTaskButton() {
     return FloatingActionButton(
-      onPressed: () {
-        showModalBottomSheet(
-          context: context,
-          builder: (context) {
-            return Form(
-              key: formKey,
-              child: Padding(
-                padding: EdgeInsets.only(
-                  top: 20,
-                  bottom: MediaQuery.of(context).viewInsets.bottom,
-                ),
-                child: SizedBox(
-                  height: 400,
-                  child: addTaskBody(),
-                ),
-              ),
-            );
-          },
-          isScrollControlled: true,
-        );
-      },
+      onPressed: bottonSheet,
       backgroundColor: Colors.purple[200],
       elevation: 10,
       shape: const RoundedRectangleBorder(
@@ -91,13 +73,35 @@ class _ToDoScreenState extends State<ToDoScreen> {
     );
   }
 
-  Widget addTaskBody() {
+  void bottonSheet({e = false, KirbyTask? t}) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Form(
+          key: formKey,
+          child: Padding(
+            padding: EdgeInsets.only(
+              top: 20,
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+            ),
+            child: SizedBox(
+              height: 400,
+              child: addTaskBody(e: e, t: t),
+            ),
+          ),
+        );
+      },
+      isScrollControlled: true,
+    );
+  }
+
+  Widget addTaskBody({e = false, KirbyTask? t}) {
     return Stack(
       children: [
         Column(
           children: [
             Text(
-              'Add a New Task',
+              e ? 'Edit Task' : 'Add a New Task',
               style: TextStyle(
                   fontSize: 30,
                   color: Colors.purple[300],
@@ -105,7 +109,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
             ),
             Padding(
               padding: const EdgeInsets.all(30.0),
-              child: addTaskInputs(),
+              child: addTaskInputs(e: e, t: t),
             ),
           ],
         ),
@@ -131,13 +135,13 @@ class _ToDoScreenState extends State<ToDoScreen> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 20, 30, 20),
                 child: ElevatedButton(
-                  onPressed: con.save,
+                  onPressed: () => con.save(e: e),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.purple[200],
                     elevation: 5,
                   ),
-                  child: const Text(
-                    'Add New Task',
+                  child: Text(
+                    e ? "Edit Task" : 'Add New Task',
                   ),
                 ),
               ),
@@ -148,7 +152,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
     );
   }
 
-  Widget addTaskInputs() {
+  Widget addTaskInputs({e = false, KirbyTask? t}) {
     return Column(
       children: [
         Container(
@@ -170,6 +174,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
             borderRadius: BorderRadius.circular(10),
           ),
           child: TextFormField(
+            initialValue: e ? t!.title : "",
             decoration: const InputDecoration(
               hintText: "Task Name...",
               border: InputBorder.none,
@@ -180,15 +185,15 @@ class _ToDoScreenState extends State<ToDoScreen> {
         ),
         Row(
           children: [
-            addTaskDateInput(),
-            addTaskTimeInput(),
+            addTaskDateInput(e: e, t: t),
+            addTaskTimeInput(e: e, t: t),
           ],
         ),
       ],
     );
   }
 
-  Widget addTaskDateInput() {
+  Widget addTaskDateInput({e = false, KirbyTask? t}) {
     return Expanded(
       flex: 1,
       child: Padding(
@@ -201,9 +206,8 @@ class _ToDoScreenState extends State<ToDoScreen> {
           ),
           decoration: BoxDecoration(
             color: Colors.white,
-            // ignore: prefer_const_literals_to_create_immutables
-            boxShadow: [
-              const BoxShadow(
+            boxShadow: const [
+              BoxShadow(
                 color: Colors.grey,
                 offset: Offset(0.0, 0.0),
                 blurRadius: 5.0,
@@ -217,7 +221,11 @@ class _ToDoScreenState extends State<ToDoScreen> {
               hintText: "Task Date...",
               border: InputBorder.none,
             ),
-            controller: con.datePickedController,
+            controller: e
+                ? con.datePickedController = TextEditingController(
+                    text:
+                        '${t!.dueDate!.month}/${t.dueDate!.day}/${t.dueDate!.year}')
+                : con.datePickedController,
             validator: KirbyTask.validateDatePicked,
             onSaved: screenModel.saveDatePicked,
             onTap: () async {
@@ -240,7 +248,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
     );
   }
 
-  Widget addTaskTimeInput() {
+  Widget addTaskTimeInput({e = false, KirbyTask? t}) {
     return Expanded(
       flex: 1,
       child: Padding(
@@ -253,9 +261,8 @@ class _ToDoScreenState extends State<ToDoScreen> {
           ),
           decoration: BoxDecoration(
             color: Colors.white,
-            // ignore: prefer_const_literals_to_create_immutables
-            boxShadow: [
-              const BoxShadow(
+            boxShadow: const [
+              BoxShadow(
                 color: Colors.grey,
                 offset: Offset(0.0, 0.0),
                 blurRadius: 5.0,
@@ -269,7 +276,12 @@ class _ToDoScreenState extends State<ToDoScreen> {
               hintText: "Task Time...",
               border: InputBorder.none,
             ),
-            controller: con.timePickedController,
+            controller: e
+                ? con.timePickedController = TextEditingController(
+                    text:
+                        "${(t!.dueDate!.hour < 10) ? '0${t.dueDate!.hour}' : '${t.dueDate!.hour}'}:${(t.dueDate!.minute < 10) ? '0${t.dueDate!.minute}' : '${t.dueDate!.minute}'}",
+                  )
+                : con.timePickedController,
             validator: KirbyTask.validateTimePicked,
             onSaved: screenModel.saveTimePicked,
             onTap: () async {
@@ -280,7 +292,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
               setState(() {
                 if (timePicked != null) {
                   con.timePickedController.text =
-                      "${(timePicked!.hour < 10) ? '0${timePicked!.hour}' : timePicked!.hour}:${(timePicked!.minute < 10) ? '0${timePicked!.minute}' : timePicked!.minute}";
+                      "${(timePicked!.hour) < 10 ? '0${timePicked!.hour}' : timePicked!.hour}:${(timePicked!.minute < 10) ? '0${timePicked!.minute}' : timePicked!.minute}";
                 }
               });
             },
@@ -390,6 +402,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
                         task: t,
                         taskIndex: screenModel.taskList.indexOf(t),
                         deleteFn: con.deleteTask,
+                        editFn: con.editTask,
                       ),
                     ),
                 ],
@@ -405,22 +418,43 @@ class _ToDoScreenState extends State<ToDoScreen> {
 class _Controller {
   _ToDoScreenState state;
   _Controller(this.state);
+  KirbyTask? edittedTask;
 
   //Used to edit the text on the textformfields
-  final datePickedController = TextEditingController();
-  final timePickedController = TextEditingController();
+  var datePickedController = TextEditingController();
+  var timePickedController = TextEditingController();
 
-  Future<void> save() async {
+  Future<void> save({e = false}) async {
     FormState? currentSate = state.formKey.currentState;
     if (currentSate == null || !currentSate.validate()) {
       return;
     }
     try {
       currentSate.save();
-      String docId = await FirestoreController.addKirbyTask(
-        kirbyTask: state.screenModel.tempTask,
-      );
-      state.screenModel.tempTask.taskId = docId;
+
+      if (e) {
+        Map<String, dynamic> update = {
+          DocKeyKirbyTask.userId.name: state.screenModel.tempTask.userId,
+          DocKeyKirbyTask.title.name: state.screenModel.tempTask.title,
+          DocKeyKirbyTask.dueDate.name: state.screenModel.tempTask.dueDate,
+          DocKeyKirbyTask.isCompleted.name:
+              state.screenModel.tempTask.isCompleted,
+          DocKeyKirbyTask.isPreloaded.name:
+              state.screenModel.tempTask.isPreloaded,
+          DocKeyKirbyTask.isReoccuring.name:
+              state.screenModel.tempTask.isReoccuring,
+        };
+        // state.screenModel.tempTask.dueDate =
+        await FirestoreController.editKirbyTask(
+          taskId: state.screenModel.tempTask.taskId!,
+          update: update,
+        );
+      } else {
+        String docId = await FirestoreController.addKirbyTask(
+          kirbyTask: state.screenModel.tempTask,
+        );
+        state.screenModel.tempTask.taskId = docId;
+      }
       getTaskList();
       datePickedController.clear();
       timePickedController.clear();
@@ -429,7 +463,7 @@ class _Controller {
       showSnackBar(
         context: state.context,
         seconds: 3,
-        message: 'Task Added!',
+        message: e ? 'Task Editted' : 'Task Added!',
       );
     } catch (e) {
       showSnackBar(
@@ -456,6 +490,27 @@ class _Controller {
         message: "Deleted Task",
       );
     } catch (e) {
+      if (Constants.devMode) {
+        // ignore: avoid_print
+        print("===== Delete task error: $e");
+      }
+      showSnackBar(
+        context: state.context,
+        message: "Something went wrong...\n Try again!",
+      );
+    }
+    getTaskList();
+  }
+
+  void editTask(String taskId) async {
+    try {
+      state.screenModel.tempTask = await FirestoreController.getKirbyTask(taskId: taskId);
+      state.bottonSheet(e: true, t: state.screenModel.tempTask);
+    } catch (e) {
+      if (Constants.devMode) {
+        // ignore: avoid_print
+        print("===== Edit task error: $e");
+      }
       showSnackBar(
         context: state.context,
         message: "Something went wrong...\n Try again!",

@@ -80,6 +80,17 @@ class FirestoreController {
 
   //============== KIRBY TASK ==================
 
+  static Future<void> updateTaskCompletion({
+    required String taskId,
+    required bool isCompleted,
+  }) async {
+    // Update an existing document
+    FirebaseFirestore.instance
+        .collection(taskCollection)
+        .doc(taskId)
+        .update({'isCompleted': !isCompleted});
+  }
+
   static Future<String> addKirbyTask({required KirbyTask kirbyTask}) async {
     DocumentReference ref = await FirebaseFirestore.instance
         .collection(taskCollection)
@@ -92,6 +103,27 @@ class FirestoreController {
         .collection(taskCollection)
         .doc(taskId)
         .delete();
+  }
+
+  static Future<KirbyTask> getKirbyTask({
+    required String taskId,
+  }) async {
+    var doc = await FirebaseFirestore.instance
+        .collection(taskCollection)
+        .doc(taskId)
+        .get();
+    var document = doc.data() as Map<String, dynamic>;
+    return KirbyTask.fromFirestoreDoc(doc: document, taskId: taskId);
+  }
+
+  static Future<void> editKirbyTask({
+    required String taskId,
+    required Map<String, dynamic> update,
+  }) async {
+    await FirebaseFirestore.instance
+        .collection(taskCollection)
+        .doc(taskId)
+        .set(update);
   }
 
   static Future<List<KirbyTask>> getKirbyTaskList({
@@ -113,7 +145,7 @@ class FirestoreController {
     }
     return result;
   }
-
+  
   //============== KIRBY PET ==================
   static Future<KirbyPet> getPet({
     required String userId,

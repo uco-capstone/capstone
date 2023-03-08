@@ -117,7 +117,9 @@ class _Controller {
     Map<String, dynamic> update = {};
     update[DocKeyUser.preloadedTasks.name] = value;
     await FirestoreController.updateKirbyUser(
-        userId: kUser.userId!, update: update);
+      userId: kUser.userId!,
+      update: update,
+    );
   }
 
   Future<void> setNotificationsEnabled(value) async {
@@ -126,7 +128,9 @@ class _Controller {
     Map<String, dynamic> update = {};
     update[DocKeyUser.notifications.name] = value;
     await FirestoreController.updateKirbyUser(
-        userId: kUser.userId!, update: update);
+      userId: kUser.userId!,
+      update: update,
+    );
   }
 
   void healthInfoScreen() async {
