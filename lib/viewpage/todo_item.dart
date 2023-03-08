@@ -120,5 +120,3 @@ class _ToDoItemState extends State<ToDoItem> {
     }
   }
 }
-
-class _Controller {}
