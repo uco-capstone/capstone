@@ -37,6 +37,7 @@ class TodoScreenModel {
     KirbyTask eatMeals = KirbyTask(
         userId: user.uid,
         title: "Eat $meals meals today",
+        isCompleted: false,
         isPreloaded: true,
         isReoccuring: true,
         // due midnight tonight
@@ -46,6 +47,7 @@ class TodoScreenModel {
     KirbyTask drinkWater = KirbyTask(
         userId: user.uid,
         title: "Drink ${getHalfWeight()}oz of water",
+        isCompleted: false,
         isPreloaded: true,
         isReoccuring: true,
         // due midnight tonight
@@ -55,6 +57,7 @@ class TodoScreenModel {
     KirbyTask sleep = KirbyTask(
         userId: user.uid,
         title: "Sleep for ${getSleep()} hours",
+        isCompleted:  false,
         isPreloaded: true,
         isReoccuring: true,
         // due midnight tonight
