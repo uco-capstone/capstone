@@ -2,6 +2,7 @@ import 'package:capstone/controller/firestore_controller.dart';
 import 'package:capstone/model/constants.dart';
 import 'package:capstone/model/kirby_user_model.dart';
 import 'package:capstone/model/settings_screen_model.dart';
+import 'package:capstone/viewpage/health_info_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../controller/auth_controller.dart';
@@ -74,6 +75,18 @@ class _SettingsState extends State<SettingsScreen> {
               });
             },
           ),
+          const SizedBox(
+            height: 50,
+          ),
+          Center(
+            child: SizedBox(
+              width: 180,
+              child: ElevatedButton(
+                onPressed: con.healthInfoScreen,
+                child: const Text("Update Personal Info"),
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -104,7 +117,9 @@ class _Controller {
     Map<String, dynamic> update = {};
     update[DocKeyUser.preloadedTasks.name] = value;
     await FirestoreController.updateKirbyUser(
-        userId: kUser.userId!, update: update);
+      userId: kUser.userId!,
+      update: update,
+    );
   }
 
   Future<void> setNotificationsEnabled(value) async {
@@ -113,6 +128,12 @@ class _Controller {
     Map<String, dynamic> update = {};
     update[DocKeyUser.notifications.name] = value;
     await FirestoreController.updateKirbyUser(
-        userId: kUser.userId!, update: update);
+      userId: kUser.userId!,
+      update: update,
+    );
+  }
+
+  void healthInfoScreen() async {
+    await Navigator.pushNamed(state.context, HealthInfoScreen.routeName);
   }
 }

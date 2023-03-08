@@ -3,6 +3,7 @@ import 'package:capstone/model/home_screen_model.dart';
 import 'package:capstone/viewpage/health_info_screen.dart';
 
 import 'package:capstone/viewpage/settings_screen.dart';
+import 'package:capstone/viewpage/shop_screen.dart';
 import 'package:capstone/viewpage/todo_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -73,29 +74,24 @@ class _HomeScreenState extends State<HomeScreen> {
       drawer: Drawer(
         child: ListView(
           children: [
-            const UserAccountsDrawerHeader(
+            UserAccountsDrawerHeader(
               //Default Profile, will add in actual user profile info later
-              currentAccountPicture: Icon(
+              currentAccountPicture: const Icon(
                 Icons.person,
                 size: 70,
               ),
-              accountName: Text('No Profile'),
-              accountEmail: Text('default@test.com'),
+              accountName: const Text("Some Dude"),
+              accountEmail: Text("${screenModel.user.email}"),
             ),
             ListTile(
               leading: const Icon(Icons.store),
               title: const Text('Shop'),
-              onTap: con.storeScreen,
+              onTap: con.shopScreen,
             ),
             ListTile(
               leading: const Icon(Icons.settings),
               title: const Text('Settings'),
               onTap: con.settingsScreen,
-            ),
-            ListTile(
-              leading: const Icon(Icons.healing),
-              title: const Text('Health Info'),
-              onTap: con.healthInfoScreen,
             ),
             ListTile(
               leading: const Icon(Icons.logout),
@@ -165,16 +161,12 @@ class _Controller {
     Navigator.pushNamed(state.context, ToDoScreen.routeName);
   }
 
-  void storeScreen() {
-    //Navigate to Store Screen
+  void shopScreen() {
+    Navigator.pushNamed(state.context, ShopScreen.routeName);
   }
 
   void settingsScreen() async {
     await Navigator.pushNamed(state.context, SettingsScreen.routeName);
-  }
-
-  void healthInfoScreen() async {
-    await Navigator.pushNamed(state.context, HealthInfoScreen.routeName);
   }
 
   void signOut() {
