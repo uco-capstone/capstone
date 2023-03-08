@@ -77,6 +77,17 @@ class FirestoreController {
 
   //============== KIRBY TASK ==================
 
+  static Future<void> updateTaskCompletion({
+    required String taskId,
+    required bool isCompleted,
+  }) async {
+    // Update an existing document
+    FirebaseFirestore.instance
+        .collection(taskCollection)
+        .doc(taskId)
+        .update({'isCompleted': !isCompleted});
+  }
+
   static Future<String> addKirbyTask({required KirbyTask kirbyTask}) async {
     DocumentReference ref = await FirebaseFirestore.instance
         .collection(taskCollection)
