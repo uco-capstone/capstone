@@ -51,10 +51,12 @@ Widget kirbabButton({
   required fn,
 }) {
   return GestureDetector(
-      onTap: fn,
-      child: Container(
-          decoration: const BoxDecoration(
+    onTap: fn,
+    child: Container(
+      decoration: const BoxDecoration(
         image: DecorationImage(
             image: AssetImage("images/kirbab-icon.png"), fit: BoxFit.fitHeight),
-      )));
+      ),
+    ),
+  );
 }
