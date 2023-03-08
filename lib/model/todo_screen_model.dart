@@ -56,7 +56,20 @@ class TodoScreenModel {
   }
 
   void combineDateAndTime() {
-    tempTask.dueDate ??= DateTime(DateTime.now().year);
+    if (tempTask.dueDate == null &&
+        !(_tempTime.hour == 0 && _tempTime.minute == 0)) {
+      var day = DateTime.now().day;
+      var month = DateTime.now().month;
+      var year = DateTime.now().year;
+      tempTask.dueDate = DateTime(
+        year,
+        month,
+        day,
+        _tempTime.hour,
+        _tempTime.minute,
+      );
+      return;
+    }
     DateTime newDueDate = DateTime(
       tempTask.dueDate!.year,
       tempTask.dueDate!.month,
