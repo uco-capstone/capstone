@@ -9,6 +9,7 @@ class TodoScreenModel {
   String? loadingErrorMessage;
   KirbyUser? kirbyUser;
   bool loading = false;
+  
 
   TodoScreenModel({required this.user});
 
