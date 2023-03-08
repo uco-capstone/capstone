@@ -505,8 +505,8 @@ class _Controller {
 
   void editTask(String taskId) async {
     try {
-      KirbyTask task = await FirestoreController.getKirbyTask(taskId: taskId);
-      state.bottonSheet(e: true, t: task);
+      state.screenModel.tempTask = await FirestoreController.getKirbyTask(taskId: taskId);
+      state.bottonSheet(e: true, t: state.screenModel.tempTask);
     } catch (e) {
       if (Constants.devMode) {
         // ignore: avoid_print
