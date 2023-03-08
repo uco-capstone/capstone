@@ -110,15 +110,21 @@ class _HomeScreenState extends State<HomeScreen> {
         body: Stack(
           children: [
             Container(
-              //Background is currently a sample image, to change background, change the asset image
-              decoration: const BoxDecoration(
+              //Background, if there is no configured background, then it'll show a default image
+              decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage('images/sample-background.png'),
                   fit: BoxFit.cover,
+                  image: screenModel.kirbyPet == null 
+                    ? const AssetImage('images/backgrounds/default-background.png') 
+                    : screenModel.kirbyPet!.background == "" 
+                      ? const AssetImage('images/backgrounds/default-background.png') 
+                      : AssetImage(screenModel.kirbyPet!.background!)
                 ),
               ),
             ),
-            Center(
+            Positioned(
+              top: 210,
+              left: 55,
               //Pet, if there is no configured Kirby Pet, then it'll show a default image
               child: SizedBox(
                   height: 300,
