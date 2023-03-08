@@ -46,7 +46,14 @@ class KirbyPet {
 
 //Array of all skin customization paths
   var skinCustomizations = [
-    'images/default-kirby.png',
-    'images/blue-kirby.png',
-    'images/yellow-kirby.png'
+    'images/skins/default-kirby.png',
+    'images/skins/blue-kirby.png',
+    'images/skins/yellow-kirby.png'
+  ];
+
+//Array of all background customization paths
+  var backgroundCustomizations = [
+    'images/backgrounds/default-background.png',
+    'images/backgrounds/cloud-background.png',
+    'images/backgrounds/outside-background.png'
   ];
