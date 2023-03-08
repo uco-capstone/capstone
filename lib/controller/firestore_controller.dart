@@ -2,9 +2,12 @@ import 'package:capstone/model/kirby_task_model.dart';
 import 'package:capstone/model/kirby_user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../model/kirby_pet_model.dart';
+
 class FirestoreController {
   static const taskCollection = 'task_collection';
   static const kirbyUserCollection = 'kirby_user_collection';
+  static const petCollection = 'pet_collection';
 
   //============== USER INFO ==================
 
@@ -111,4 +114,58 @@ class FirestoreController {
     return result;
   }
 
+  //============== KIRBY PET ==================
+  static Future<KirbyPet> getPet({
+    required String userId,
+  }) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(petCollection)
+        .where(DocKeyPet.userId.name, isEqualTo: userId)
+        .get();
+
+    if (querySnapshot.docs.length != 1) {
+      return KirbyPet(userId: userId);
+    }
+    return KirbyPet.fromFirestoreDoc(
+        doc: querySnapshot.docs[0].data() as Map<String, dynamic>,
+        petId: querySnapshot.docs[0].id,
+      );
+  }
+
+  static Future<void> updatePet({
+    required String userId,
+    required Map<String, dynamic> update,
+  }) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(petCollection)
+        .where(DocKeyPet.userId.name, isEqualTo: userId)
+        .get();
+
+    await FirebaseFirestore.instance
+        .collection(petCollection)
+        .doc(querySnapshot.docs[0].id)
+        .update(update);
+  }
+
+  static Future<bool> hasPet(String userId) async {
+    try {
+      // Get reference to Firestore collection
+      QuerySnapshot snapshot = await FirebaseFirestore.instance
+          .collection(petCollection)
+          .where(DocKeyUser.userId.name, isEqualTo: userId)
+          .get();
+      return snapshot.docs.isNotEmpty;
+    } catch (e) {
+      // ignore: avoid_print
+      print(e);
+    }
+    return false;
+  }
+
+  static Future<String> addPet({required KirbyPet kirbyPet}) async {
+    DocumentReference ref = await FirebaseFirestore.instance
+        .collection(petCollection)
+        .add(kirbyPet.toFirestoreDoc());
+    return ref.id;
+  }
 }
