@@ -142,52 +142,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-<<<<<<< HEAD
-=======
-      body: Stack(
-        children: [
-          Container(
-            //Background is currently a sample image, to change background, change the asset image
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('images/sample-background.png'),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-          Center(
-            //Pet, if there is no configured Kirby Pet, then it'll show a default image
-            child: SizedBox(
-                height: 300,
-                child: screenModel.kirbyUser == null
-                    ? Image.asset('images/default-kirby.png')
-                    : screenModel.kirbyUser!.kirbyPetSkin == null
-                        ? Image.asset('images/default-kirby.png')
-                        : Image.asset(screenModel.kirbyUser!.kirbyPetSkin!)),
-          ),
-          Positioned(
-            //Sample Hunger Gauge Area
-            top: 30,
-            left: 50,
-            child: Container(
-              color: Colors.white,
-              height: 40,
-              width: 300,
-              child: const Center(child: Text('Hunger Gauge')),
-            ),
-          ),
-          Column(
-            children: [
-              for (int i = 0; i < skinCustomizations.length; i++)
-                ElevatedButton(
-                    onPressed: () =>
-                        con.updateSkinCustomization(skinCustomizations[i]),
-                    child: Text(skinCustomizations[i]))
-            ],
-          ),
-        ],
-      ),
->>>>>>> 5e7c8fb99fb7f8041fad0c6ef6e866d64bc8f6d8
     );
   }
 }
