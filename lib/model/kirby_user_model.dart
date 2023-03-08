@@ -10,6 +10,9 @@ enum DocKeyUser {
   age,
   preloadedTasks,
   notifications,
+  kirbyPetSkin,
+  kirbyPetBackground,
+  kirbyPetHungerGuage,
 }
 
 class KirbyUser {
@@ -24,6 +27,11 @@ class KirbyUser {
   int? age;
   bool? preloadedTasks;
   bool? notifications;
+  //KibryPet Stuff
+  String? kirbyPetSkin;
+  String? kirbyPetBackground;
+  int? kirbyPetHungerGuage;
+
 
 
   KirbyUser({
@@ -38,6 +46,9 @@ class KirbyUser {
     this.age,
     this.preloadedTasks,
     this.notifications,
+    this.kirbyPetSkin,
+    this.kirbyPetBackground,
+    this.kirbyPetHungerGuage,
   });
 
   Map<String, dynamic> toFirestoreDoc() {
@@ -53,6 +64,9 @@ class KirbyUser {
       DocKeyUser.age.name: age,
       DocKeyUser.preloadedTasks.name: preloadedTasks,
       DocKeyUser.notifications.name: notifications,
+      DocKeyUser.kirbyPetSkin.name: kirbyPetSkin,
+      DocKeyUser.kirbyPetBackground.name: kirbyPetBackground,
+      DocKeyUser.kirbyPetHungerGuage.name: kirbyPetHungerGuage,
     };
   }
 
@@ -72,6 +86,9 @@ class KirbyUser {
       age: doc[DocKeyUser.age.name] ??= "",
       preloadedTasks: doc[DocKeyUser.preloadedTasks.name] ??= false,
       notifications: doc[DocKeyUser.notifications.name] ??= false,
+      kirbyPetSkin: doc[DocKeyUser.kirbyPetSkin.name] ??= "",
+      kirbyPetBackground: doc[DocKeyUser.kirbyPetBackground.name] ??= "",
+      kirbyPetHungerGuage: doc[DocKeyUser.kirbyPetHungerGuage.name] ??= 0,
     );
   }
 
