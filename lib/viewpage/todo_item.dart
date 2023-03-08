@@ -165,5 +165,3 @@ class _ToDoItemState extends State<ToDoItem> {
     return dueDate;
   }
 }
-
-class _Controller {}
