@@ -122,24 +122,32 @@ class _ToDoItemState extends State<ToDoItem> {
   }
 
   String dueDate() {
-    String dueDate =
-        'Due: ${widget.task.dueDate!.month}/${widget.task.dueDate!.day}/${widget.task.dueDate!.year}';
-    if (widget.task.dueDate!.hour == 0 && widget.task.dueDate!.minute == 0) {
-      return dueDate;
-    } else {
+    var today = DateTime.now();
+    var month = widget.task.dueDate!.month;
+    var day = widget.task.dueDate!.day;
+    var year = widget.task.dueDate!.year;
+    var hour = widget.task.dueDate!.hour;
+    var minute = widget.task.dueDate!.minute;
+
+    String dueDate = 'Due: $month/$day/$year';
+    if (month == today.month && day == today.day && year == today.year) {
+      dueDate = "Due Today";
+    }
+
+    if (!(hour == 0 && minute == 0)) {
       dueDate += ' at ';
       if (widget.task.dueDate!.hour < 10) {
-        dueDate += '0${widget.task.dueDate!.hour}:';
+        dueDate += '0$hour:';
       } else {
-        dueDate += '${widget.task.dueDate!.hour}:';
+        dueDate += '$hour:';
       }
 
       if (widget.task.dueDate!.minute < 10) {
-        dueDate += '0${widget.task.dueDate!.minute}';
+        dueDate += '0$minute';
       } else {
-        dueDate += '${widget.task.dueDate!.minute}';
+        dueDate += '$minute';
       }
-      return dueDate;
     }
+    return dueDate;
   }
 }
