@@ -23,7 +23,6 @@ class KirbyPet {
 
   Map<String, dynamic> toFirestoreDoc() {
     return {
-      DocKeyPet.petId.name: petId,
       DocKeyPet.userId.name: userId,
       DocKeyPet.kirbySkin.name: kirbySkin,
       DocKeyPet.background.name: background,
