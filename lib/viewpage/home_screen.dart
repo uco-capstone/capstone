@@ -124,9 +124,9 @@ class _HomeScreenState extends State<HomeScreen> {
               child: SizedBox(
                   height: 300,
                   child: screenModel.kirbyPet == null
-                      ? Image.asset('images/default-kirby.png')
+                      ? Image.asset('images/skins/default-kirby.png')
                       : screenModel.kirbyPet!.kirbySkin == ""
-                          ? Image.asset('images/default-kirby.png')
+                          ? Image.asset('images/skins/default-kirby.png')
                           : Image.asset(screenModel.kirbyPet!.kirbySkin!)),
             ),
             Positioned(

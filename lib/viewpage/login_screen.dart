@@ -39,6 +39,7 @@ class _StartState extends State<LoginScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text("Log In"),
+          automaticallyImplyLeading: false,
         ),
         body: screenModel.isSignInUnderway
             ? const Center(
