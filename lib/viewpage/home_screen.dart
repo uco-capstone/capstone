@@ -5,6 +5,7 @@ import 'package:capstone/viewpage/health_info_screen.dart';
 
 import 'package:capstone/viewpage/settings_screen.dart';
 import 'package:capstone/viewpage/shop_screen.dart';
+import 'package:capstone/viewpage/start_dispatcher.dart';
 import 'package:capstone/viewpage/todo_screen.dart';
 import 'package:capstone/viewpage/view/view_util.dart';
 import 'package:flutter/material.dart';
@@ -169,8 +170,7 @@ class _Controller {
 
   Future<void> loadKirbyPet() async {
     try {
-      bool hasPet =
-          await FirestoreController.hasPet(Auth.getUser().uid);
+      bool hasPet = await FirestoreController.hasPet(Auth.getUser().uid);
       if (hasPet == false) {
         KirbyPet tempPet = KirbyPet(userId: Auth.getUser().uid);
         await FirestoreController.addPet(kirbyPet: tempPet);
@@ -190,19 +190,29 @@ class _Controller {
   }
 
   void shopScreen() {
-    Navigator.pushNamed(state.context, ShopScreen.routeName).then((value) => state.render(() {}));
+    Navigator.pushNamed(state.context, ShopScreen.routeName)
+        .then((value) => state.render(() {}));
   }
 
   void settingsScreen() async {
     await Navigator.pushNamed(state.context, SettingsScreen.routeName);
   }
 
-  void signOut() {
-    Auth.signOut();
+  Future<void> signOut() async {
+    try {
+      await Auth.signOut();
+    } catch (e) {
+      // ignore: avoid_print
+      if (Constants.devMode) print('****************** Sign Out Error: $e');
+      showSnackBar(
+          context: state.context, seconds: 20, message: 'Sign Out Error: $e');
+    }
+    if (!state.mounted) return;
+    Navigator.pushNamed(state.context, StartDispatcher.routeName);
   }
 
   void updateSkinCustomization(String customization) async {
-    if(state.screenModel.kirbyUser != null) {
+    if (state.screenModel.kirbyUser != null) {
       state.screenModel.kirbyUser!.kirbyPetSkin = customization;
     }
     try {
@@ -216,7 +226,7 @@ class _Controller {
       }
       showSnackBar(context: state.context, message: 'Skin Update Error: $e');
     }
-  
+
     state.render(() {});
   }
 }
