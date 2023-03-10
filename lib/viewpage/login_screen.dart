@@ -36,7 +36,7 @@ class _StartState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Kirby's Planner"),
+        title: const Text("Login Page"),
         centerTitle: true,
         flexibleSpace: Container(
           decoration: const BoxDecoration(
@@ -47,8 +47,15 @@ class _StartState extends State<LoginScreen> {
         ),
       ),
       body: screenModel.isSignInUnderway
-          ? const Center(
-              child: CircularProgressIndicator(),
+          ? const DecoratedBox(
+              decoration: BoxDecoration(
+                // Image set to background of the body
+                image: DecorationImage(
+                    image: AssetImage('/images/kirby2.jpg'), fit: BoxFit.cover),
+              ),
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
             )
           : loginForm(),
     );
@@ -62,43 +69,65 @@ class _StartState extends State<LoginScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Text("Please Log In",
-                  style: Theme.of(context).textTheme.displaySmall),
-              TextFormField(
-                decoration: const InputDecoration(hintText: "Email address"),
-                keyboardType: TextInputType.emailAddress,
-                autocorrect: false,
-                validator: screenModel.validateEmail,
-                onSaved: screenModel.saveEmail,
+              Padding(
+                padding: const EdgeInsets.only(top: 90.0),
+                child: Text("Kirbyz Planz",
+                    style: Theme.of(context).textTheme.displaySmall),
               ),
-              TextFormField(
-                decoration: InputDecoration(
-                  hintText: "Password",
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      screenModel.passwordVisible
-                          ? Icons.visibility
-                          : Icons
-                              .visibility_off, //change icon based on boolean value
-                      color: Theme.of(context).primaryColorDark,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        screenModel.passwordVisible =
-                            !screenModel.passwordVisible; //change boolean value
-                      });
-                    },
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                // padding: const EdgeInsets.all(8.0),
+                child: TextFormField(
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Email',
+                    hintText: 'Enter email such as: 1@test.com',
                   ),
+                  keyboardType: TextInputType.emailAddress,
+                  autocorrect: false,
+                  validator: screenModel.validateEmail,
+                  onSaved: screenModel.saveEmail,
                 ),
-                autocorrect: false,
-                obscureText: !screenModel.passwordVisible,
-                validator: screenModel.validatePassword,
-                onSaved: screenModel.savePassword,
               ),
-              ElevatedButton(
-                onPressed: con.signin,
-                child: Text("Sign In",
-                    style: Theme.of(context).textTheme.labelLarge),
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: 15.0, right: 15.0, top: 15, bottom: 0),
+                // padding: const EdgeInsets.all(8.0),
+                child: TextFormField(
+                  // obscureText: true,
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    labelText: 'Password',
+                    hintText: "Enter secure password",
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        screenModel.passwordVisible
+                            ? Icons.visibility
+                            : Icons
+                                .visibility_off, //change icon based on boolean value
+                        color: Theme.of(context).primaryColorDark,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          screenModel.passwordVisible = !screenModel
+                              .passwordVisible; //change boolean value
+                        });
+                      },
+                    ),
+                  ),
+                  autocorrect: false,
+                  obscureText: !screenModel.passwordVisible,
+                  validator: screenModel.validatePassword,
+                  onSaved: screenModel.savePassword,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 30.0),
+                child: ElevatedButton(
+                  onPressed: con.signin,
+                  child: Text("Sign In",
+                      style: Theme.of(context).textTheme.labelLarge),
+                ),
               ),
               const SizedBox(
                 height: 24,
