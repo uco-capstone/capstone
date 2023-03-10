@@ -32,14 +32,44 @@ class _StartState extends State<LoginScreen> {
 
   void render(fn) => setState(fn);
 
+  // @override
+  // Widget build(BuildContext context) {
+  //   return Scaffold(
+  //     appBar: AppBar(
+  //       title: const Text("Login Page"),
+  //       centerTitle: true,
+  //       flexibleSpace: Container(
+  //         decoration: const BoxDecoration(
+  //           gradient: LinearGradient(
+  //             colors: [Colors.purple, Color.fromARGB(255, 18, 18, 208)],
+  //           ),
+  //         ),
+  //       ),
+  //     ),
+  //     body: screenModel.isSignInUnderway
+  //         ? const Center(
+  //             child: CircularProgressIndicator(),
+  //           )
+  //         : loginForm(),
+  //   );
+  // }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("Log In"),
+          title: const Text("Login Page"),
+          centerTitle: true,
           automaticallyImplyLeading: false,
+          flexibleSpace: Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.purple, Color.fromARGB(255, 18, 18, 208)],
+              ),
+            ),
+          ),
         ),
         body: screenModel.isSignInUnderway
             ? const Center(
@@ -58,52 +88,113 @@ class _StartState extends State<LoginScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Text("Pet To-Do App",
-                  style: Theme.of(context).textTheme.displaySmall),
-              TextFormField(
-                decoration: const InputDecoration(hintText: "Email address"),
-                keyboardType: TextInputType.emailAddress,
-                autocorrect: false,
-                validator: screenModel.validateEmail,
-                onSaved: screenModel.saveEmail,
-              ),
-              TextFormField(
-                decoration: InputDecoration(
-                  hintText: "Password",
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      screenModel.passwordVisible
-                          ? Icons.visibility
-                          : Icons
-                              .visibility_off, //change icon based on boolean value
-                      color: Theme.of(context).primaryColorDark,
+              DecoratedBox(
+                decoration: const BoxDecoration(
+                  // Image set to background of the body
+                  image: DecorationImage(
+                      image: AssetImage("images/kirby-wand.png"),
+                      fit: BoxFit.cover),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 90.0),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Stack(
+                      children: <Widget>[
+                        Text(
+                          'Kirbyz, Plan-et!',
+                          style: TextStyle(
+                            fontSize: 40,
+                            foreground: Paint()
+                              ..style = PaintingStyle.stroke
+                              ..strokeWidth = 6
+                              ..color = Colors.black!,
+                          ),
+                        ),
+                        // Solid text as fill.
+                        Text(
+                          'Kirbyz, Plan-et!',
+                          style: TextStyle(
+                            fontSize: 40,
+                            color: Colors.grey[300],
+                          ),
+                        ),
+                      ],
                     ),
-                    onPressed: () {
-                      setState(() {
-                        screenModel.passwordVisible =
-                            !screenModel.passwordVisible; //change boolean value
-                      });
-                    },
                   ),
                 ),
-                autocorrect: false,
-                obscureText: !screenModel.passwordVisible,
-                validator: screenModel.validatePassword,
-                onSaved: screenModel.savePassword,
               ),
-              ElevatedButton(
-                onPressed: con.signin,
-                child: Text("Sign In",
-                    style: Theme.of(context).textTheme.labelLarge),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                // padding: const EdgeInsets.all(8.0),
+                child: TextFormField(
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Email',
+                    hintText: 'Enter email such as: 1@test.com',
+                  ),
+                  keyboardType: TextInputType.emailAddress,
+                  autocorrect: false,
+                  validator: screenModel.validateEmail,
+                  onSaved: screenModel.saveEmail,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: 15.0, right: 15.0, top: 15, bottom: 0),
+                // padding: const EdgeInsets.all(8.0),
+                child: TextFormField(
+                  // obscureText: true,
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    labelText: 'Password',
+                    hintText: "Enter secure password",
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        screenModel.passwordVisible
+                            ? Icons.visibility
+                            : Icons
+                                .visibility_off, //change icon based on boolean value
+                        color: Theme.of(context).primaryColorDark,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          screenModel.passwordVisible = !screenModel
+                              .passwordVisible; //change boolean value
+                        });
+                      },
+                    ),
+                  ),
+                  autocorrect: false,
+                  obscureText: !screenModel.passwordVisible,
+                  validator: screenModel.validatePassword,
+                  onSaved: screenModel.savePassword,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 30.0),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blueAccent[100],
+                    foregroundColor: Colors.white,
+                  ),
+                  onPressed: con.signin,
+                  child: Text("Sign In",
+                      style: Theme.of(context).textTheme.labelLarge),
+                ),
               ),
               const SizedBox(
                 height: 24,
               ),
               OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.black,
+                  side: const BorderSide(color: Colors.blueAccent, width: 5),
+                ),
                 onPressed: con.createAccount,
-                child: Text(
+                child: const Text(
                   "Create a new account",
-                  style: Theme.of(context).textTheme.labelLarge,
                 ),
               ),
             ],
