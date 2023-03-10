@@ -34,15 +34,19 @@ class _StartState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Log In"),
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text("Log In"),
+          automaticallyImplyLeading: false,
+        ),
+        body: screenModel.isSignInUnderway
+            ? const Center(
+                child: CircularProgressIndicator(),
+              )
+            : loginForm(),
       ),
-      body: screenModel.isSignInUnderway
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : loginForm(),
     );
   }
 
