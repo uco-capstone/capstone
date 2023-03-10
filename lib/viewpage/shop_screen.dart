@@ -239,7 +239,7 @@ class _Controller {
       }
       showSnackBar(context: state.context, message: 'Skin Update Error: $e');
     }
-  
+
     state.render(() {});
     // ignore: use_build_context_synchronously
     showSnackBar(context: state.context, message: 'Successfully Customized Kirby!');
