@@ -67,7 +67,9 @@ flutter:
     - images/sample-kirby.png
     - images/kirby-happy-jumping.png
     - images/kirby-login.jpg
+    - images/kirby-wand.png
     - images/kirby-welcome.jpg
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

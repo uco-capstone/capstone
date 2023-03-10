@@ -32,25 +32,51 @@ class _StartState extends State<LoginScreen> {
 
   void render(fn) => setState(fn);
 
+  // @override
+  // Widget build(BuildContext context) {
+  //   return Scaffold(
+  //     appBar: AppBar(
+  //       title: const Text("Login Page"),
+  //       centerTitle: true,
+  //       flexibleSpace: Container(
+  //         decoration: const BoxDecoration(
+  //           gradient: LinearGradient(
+  //             colors: [Colors.purple, Color.fromARGB(255, 18, 18, 208)],
+  //           ),
+  //         ),
+  //       ),
+  //     ),
+  //     body: screenModel.isSignInUnderway
+  //         ? const Center(
+  //             child: CircularProgressIndicator(),
+  //           )
+  //         : loginForm(),
+  //   );
+  // }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Login Page"),
-        centerTitle: true,
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.purple, Color.fromARGB(255, 18, 18, 208)],
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text("Login Page"),
+          centerTitle: true,
+          automaticallyImplyLeading: false,
+          flexibleSpace: Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.purple, Color.fromARGB(255, 18, 18, 208)],
+              ),
             ),
           ),
         ),
+        body: screenModel.isSignInUnderway
+            ? const Center(
+                child: CircularProgressIndicator(),
+              )
+            : loginForm(),
       ),
-      body: screenModel.isSignInUnderway
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : loginForm(),
     );
   }
 
@@ -66,15 +92,35 @@ class _StartState extends State<LoginScreen> {
                 decoration: const BoxDecoration(
                   // Image set to background of the body
                   image: DecorationImage(
-                      image: AssetImage("images/kirby-login.jpg"),
+                      image: AssetImage("images/kirby-wand.png"),
                       fit: BoxFit.cover),
                 ),
                 child: Padding(
                   padding: const EdgeInsets.only(top: 90.0),
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Text("Kirbyz Planner",
-                        style: Theme.of(context).textTheme.displaySmall),
+                    child: Stack(
+                      children: <Widget>[
+                        Text(
+                          'Kirbyz, Plan-et!',
+                          style: TextStyle(
+                            fontSize: 40,
+                            foreground: Paint()
+                              ..style = PaintingStyle.stroke
+                              ..strokeWidth = 6
+                              ..color = Colors.black!,
+                          ),
+                        ),
+                        // Solid text as fill.
+                        Text(
+                          'Kirbyz, Plan-et!',
+                          style: TextStyle(
+                            fontSize: 40,
+                            color: Colors.grey[300],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -129,7 +175,7 @@ class _StartState extends State<LoginScreen> {
                 padding: const EdgeInsets.only(top: 30.0),
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 108, 57, 219),
+                    backgroundColor: Colors.blueAccent[100],
                     foregroundColor: Colors.white,
                   ),
                   onPressed: con.signin,
@@ -141,10 +187,14 @@ class _StartState extends State<LoginScreen> {
                 height: 24,
               ),
               OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.black,
+                  side: const BorderSide(color: Colors.blueAccent, width: 5),
+                ),
                 onPressed: con.createAccount,
-                child: Text(
+                child: const Text(
                   "Create a new account",
-                  style: Theme.of(context).textTheme.labelLarge,
                 ),
               ),
             ],
