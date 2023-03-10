@@ -7,6 +7,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:capstone/viewpage/create_account_screen.dart';
 import 'firebase_options.dart';
+import 'viewpage/home_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,6 +26,7 @@ class CapstoneApp extends StatelessWidget {
       title: 'Pet Planner',
       initialRoute: StartDispatcher.routeName,
       routes: {
+        HomeScreen.routeName: (context) => const HomeScreen(),
         ToDoScreen.routeName: (context) => const ToDoScreen(),
         ShopScreen.routeName: (context) => const ShopScreen(),
         StartDispatcher.routeName: (context) => const StartDispatcher(),

@@ -7,7 +7,6 @@ import 'package:capstone/viewpage/view/view_util.dart';
 import 'package:flutter/material.dart';
 
 import '../controller/auth_controller.dart';
-import '../model/constants.dart';
 
 class ToDoScreen extends StatefulWidget {
   static const routeName = '/todoScreen';
