@@ -6,6 +6,7 @@ import 'kirby_user_model.dart';
 class HomeScreenModel {
   User user;
   String? loadingErrorMessage;
+  bool loading = false;
   KirbyUser? kirbyUser;
   KirbyPet? kirbyPet;
 

@@ -35,8 +35,9 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     con = _Controller(this);
     screenModel = HomeScreenModel(user: Auth.user!);
-    con.loadKirbyUser();
-    con.loadKirbyPet();
+    con.initScreen();
+    // con.loadKirbyUser();
+    // con.loadKirbyPet();
   }
 
   @override
@@ -108,46 +109,53 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
         ),
-        body: Stack(
-          children: [
-            Container(
-              //Background, if there is no configured background, then it'll show a default image
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: screenModel.kirbyPet == null 
-                    ? const AssetImage('images/backgrounds/default-background.png') 
-                    : screenModel.kirbyPet!.background == "" 
-                      ? const AssetImage('images/backgrounds/default-background.png') 
-                      : AssetImage(screenModel.kirbyPet!.background!)
-                ),
+        body: screenModel.loading
+            ? const Center(
+                child: CircularProgressIndicator(),
+              )
+            : Stack(
+                children: [
+                  Container(
+                    //Background, if there is no configured background, then it'll show a default image
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: screenModel.kirbyPet == null
+                              ? const AssetImage(
+                                  'images/backgrounds/default-background.png')
+                              : screenModel.kirbyPet!.background == ""
+                                  ? const AssetImage(
+                                      'images/backgrounds/default-background.png')
+                                  : AssetImage(
+                                      screenModel.kirbyPet!.background!)),
+                    ),
+                  ),
+                  Positioned(
+                    top: 210,
+                    left: 55,
+                    //Pet, if there is no configured Kirby Pet, then it'll show a default image
+                    child: SizedBox(
+                        height: 300,
+                        child: screenModel.kirbyPet == null
+                            ? Image.asset('images/skins/default-kirby.png')
+                            : screenModel.kirbyPet!.kirbySkin == ""
+                                ? Image.asset('images/skins/default-kirby.png')
+                                : Image.asset(
+                                    screenModel.kirbyPet!.kirbySkin!)),
+                  ),
+                  Positioned(
+                    //Sample Hunger Gauge Area
+                    top: 30,
+                    left: 50,
+                    child: Container(
+                      color: Colors.white,
+                      height: 40,
+                      width: 300,
+                      child: const Center(child: Text('Hunger Gauge')),
+                    ),
+                  ),
+                ],
               ),
-            ),
-            Positioned(
-              top: 210,
-              left: 55,
-              //Pet, if there is no configured Kirby Pet, then it'll show a default image
-              child: SizedBox(
-                  height: 300,
-                  child: screenModel.kirbyPet == null
-                      ? Image.asset('images/skins/default-kirby.png')
-                      : screenModel.kirbyPet!.kirbySkin == ""
-                          ? Image.asset('images/skins/default-kirby.png')
-                          : Image.asset(screenModel.kirbyPet!.kirbySkin!)),
-            ),
-            Positioned(
-              //Sample Hunger Gauge Area
-              top: 30,
-              left: 50,
-              child: Container(
-                color: Colors.white,
-                height: 40,
-                width: 300,
-                child: const Center(child: Text('Hunger Gauge')),
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }
@@ -156,6 +164,13 @@ class _HomeScreenState extends State<HomeScreen> {
 class _Controller {
   _HomeScreenState state;
   _Controller(this.state);
+
+  void initScreen() async {
+    state.screenModel.loading = true;
+    await loadKirbyUser();
+    await loadKirbyPet();
+    state.screenModel.loading = false;
+  }
 
   Future<void> loadKirbyUser() async {
     try {
@@ -180,9 +195,11 @@ class _Controller {
       if (hasPet == false) {
         KirbyPet tempPet = KirbyPet(userId: Auth.getUser().uid);
         await FirestoreController.addPet(kirbyPet: tempPet);
+        // state.screenModel.kirbyPet = tempPet;
       }
       state.screenModel.kirbyPet =
           await FirestoreController.getPet(userId: Auth.getUser().uid);
+
       state.render(() {});
     } catch (e) {
       // ignore: avoid_print

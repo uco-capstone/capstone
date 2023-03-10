@@ -1,6 +1,7 @@
 import 'package:capstone/controller/firestore_controller.dart';
 import 'package:capstone/model/health_info_screen_model.dart';
 import 'package:capstone/model/kirby_user_model.dart';
+import 'package:capstone/viewpage/start_dispatcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -199,7 +200,7 @@ class _Controller {
       await FirestoreController.addHealthInfo(kirbyUser: tempKirbyUser);
       state.showSnackBar("Success!");
       if (state.mounted) {
-        Navigator.of(state.context).pop();
+        Navigator.pushNamed(state.context, StartDispatcher.routeName);
       }
     } catch (e) {
       state.showSnackBar("Error: $e");
