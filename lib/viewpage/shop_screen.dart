@@ -54,36 +54,22 @@ class _ShopScreen extends State<ShopScreen> {
           ),
           itemCount: 3,
         );
-      case 1: //Backgrounds
-        // return ListView.separated(
-        //   controller: _homeController,
-        //   itemBuilder: (BuildContext context, int index) {
-        //     return ListTile(
-        //       title: Text(
-        //         skinCustomizations[index],
-        //       ),
-        //       onTap: () => con.updateSkinCustomization(skinCustomizations[index]),
-        //     );
-        //   },
-        //   separatorBuilder: (BuildContext context, int index) => const Divider(
-        //         thickness: 5,
-        //       ),
-        //   itemCount: skinCustomizations.length,
-        // );
+      case 1:  //Backgrounds
         return ListView.separated(
-            controller: _homeController,
-            itemBuilder: (BuildContext context, int index) {
-              return Center(
-                child: Text(
-                  'Item $index',
-                ),
-              );
-            },
-            separatorBuilder: (BuildContext context, int index) =>
-                const Divider(
-                  thickness: 5,
-                ),
-            itemCount: 26);
+          controller: _homeController,
+          itemBuilder: (BuildContext context, int index) {
+            return ListTile(
+              title: Text(
+                backgroundCustomizations[index],
+              ),
+              onTap: () => con.updateBackgroundCustomization(backgroundCustomizations[index]),
+            );
+          },
+          separatorBuilder: (BuildContext context, int index) => const Divider(
+                thickness: 5,
+              ),
+          itemCount: 3,
+        );
       case 2: //Accessories
         return ListView.separated(
             controller: _homeController,
@@ -188,7 +174,6 @@ class _ShopScreen extends State<ShopScreen> {
                   duration: const Duration(milliseconds: 500),
                   curve: Curves.easeOut,
                 );
-                con.skinsList();
               } else {
                 _onItemTapped(index);
               }
@@ -256,9 +241,30 @@ class _Controller {
     }
 
     state.render(() {});
-    if (!state.mounted) return;
-    showSnackBar(
-        context: state.context, message: 'Successfully Customized Kirby!');
+    // ignore: use_build_context_synchronously
+    showSnackBar(context: state.context, message: 'Successfully Customized Kirby!');
+  }
+  
+  void updateBackgroundCustomization(String customization) async {
+    if(state.screenModel.kirbyPet != null) {
+      state.screenModel.kirbyPet!.background = customization;
+    }
+    try {
+      Map<String, dynamic> update = {};
+      update[DocKeyPet.background.name] = customization;
+      await FirestoreController.updatePet(
+          userId: Auth.getUser().uid, update: update);
+    } catch (e) {
+      if (Constants.devMode) {
+        // ignore: avoid_print
+        print('======================= Background Customization Update Error: $e');
+      }
+      showSnackBar(context: state.context, message: 'Background Update Error: $e');
+    }
+  
+    state.render(() {});
+    // ignore: use_build_context_synchronously
+    showSnackBar(context: state.context, message: 'Successfully Customized Background!');
   }
 
   void skinsList() {}

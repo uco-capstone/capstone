@@ -1,6 +1,7 @@
 import 'package:capstone/controller/auth_controller.dart';
 import 'package:capstone/model/home_screen_model.dart';
 import 'package:capstone/model/kirby_pet_model.dart';
+import 'package:capstone/model/kirby_user_model.dart';
 import 'package:capstone/viewpage/health_info_screen.dart';
 
 import 'package:capstone/viewpage/settings_screen.dart';
@@ -12,7 +13,6 @@ import 'package:flutter/material.dart';
 
 import '../controller/firestore_controller.dart';
 import '../model/constants.dart';
-import '../model/kirby_user_model.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -111,15 +111,21 @@ class _HomeScreenState extends State<HomeScreen> {
         body: Stack(
           children: [
             Container(
-              //Background is currently a sample image, to change background, change the asset image
-              decoration: const BoxDecoration(
+              //Background, if there is no configured background, then it'll show a default image
+              decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage('images/sample-background.png'),
                   fit: BoxFit.cover,
+                  image: screenModel.kirbyPet == null 
+                    ? const AssetImage('images/backgrounds/default-background.png') 
+                    : screenModel.kirbyPet!.background == "" 
+                      ? const AssetImage('images/backgrounds/default-background.png') 
+                      : AssetImage(screenModel.kirbyPet!.background!)
                 ),
               ),
             ),
-            Center(
+            Positioned(
+              top: 210,
+              left: 55,
               //Pet, if there is no configured Kirby Pet, then it'll show a default image
               child: SizedBox(
                   height: 300,

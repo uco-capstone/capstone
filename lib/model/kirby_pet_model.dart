@@ -50,3 +50,10 @@ class KirbyPet {
     'images/skins/blue-kirby.png',
     'images/skins/yellow-kirby.png'
   ];
+
+//Array of all background customization paths
+  var backgroundCustomizations = [
+    'images/backgrounds/default-background.png',
+    'images/backgrounds/cloud-background.png',
+    'images/backgrounds/outside-background.png'
+  ];
