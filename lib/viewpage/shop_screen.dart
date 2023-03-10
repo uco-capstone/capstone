@@ -36,7 +36,7 @@ class _ShopScreen extends State<ShopScreen> {
   final ScrollController _homeController = ScrollController();
 
   Widget _listViewBody(int menuOption) {
-    switch(menuOption) {
+    switch (menuOption) {
       case 0: //Skins
         return ListView.separated(
           controller: _homeController,
@@ -45,15 +45,16 @@ class _ShopScreen extends State<ShopScreen> {
               title: Text(
                 skinCustomizations[index],
               ),
-              onTap: () => con.updateSkinCustomization(skinCustomizations[index]),
+              onTap: () =>
+                  con.updateSkinCustomization(skinCustomizations[index]),
             );
           },
           separatorBuilder: (BuildContext context, int index) => const Divider(
-                thickness: 5,
-              ),
+            thickness: 5,
+          ),
           itemCount: 3,
         );
-      case 1:  //Backgrounds
+      case 1: //Backgrounds
         // return ListView.separated(
         //   controller: _homeController,
         //   itemBuilder: (BuildContext context, int index) {
@@ -70,64 +71,64 @@ class _ShopScreen extends State<ShopScreen> {
         //   itemCount: skinCustomizations.length,
         // );
         return ListView.separated(
-          controller: _homeController,
-          itemBuilder: (BuildContext context, int index) {
-            return Center(
-              child: Text(
-                'Item $index',
-              ),
-            );
-          },
-          separatorBuilder: (BuildContext context, int index) => const Divider(
-                thickness: 5,
-              ),
-          itemCount: 26
-        );
+            controller: _homeController,
+            itemBuilder: (BuildContext context, int index) {
+              return Center(
+                child: Text(
+                  'Item $index',
+                ),
+              );
+            },
+            separatorBuilder: (BuildContext context, int index) =>
+                const Divider(
+                  thickness: 5,
+                ),
+            itemCount: 26);
       case 2: //Accessories
         return ListView.separated(
-          controller: _homeController,
-          itemBuilder: (BuildContext context, int index) {
-            return Center(
-              child: Text(
-                'Item $index',
-              ),
-            );
-          },
-          separatorBuilder: (BuildContext context, int index) => const Divider(
-                thickness: 5,
-              ),
-          itemCount: 26
-        );
+            controller: _homeController,
+            itemBuilder: (BuildContext context, int index) {
+              return Center(
+                child: Text(
+                  'Item $index',
+                ),
+              );
+            },
+            separatorBuilder: (BuildContext context, int index) =>
+                const Divider(
+                  thickness: 5,
+                ),
+            itemCount: 26);
       case 3: //Misc
         return ListView.separated(
-          controller: _homeController,
-          itemBuilder: (BuildContext context, int index) {
-            return Center(
-              child: Text(
-                'Item $index',
-              ),
-            );
-          },
-          separatorBuilder: (BuildContext context, int index) => const Divider(
-                thickness: 5,
-              ),
-          itemCount: 26
-        );
-      default: 
+            controller: _homeController,
+            itemBuilder: (BuildContext context, int index) {
+              return Center(
+                child: Text(
+                  'Item $index',
+                ),
+              );
+            },
+            separatorBuilder: (BuildContext context, int index) =>
+                const Divider(
+                  thickness: 5,
+                ),
+            itemCount: 26);
+      default:
         return ListView.separated(
-          controller: _homeController,
-          itemBuilder: (BuildContext context, int index) {
-            return Center(
-              child: Text(
-                'Item $index',
-              ),
-            );
-          },
-          separatorBuilder: (BuildContext context, int index) => const Divider(
-                thickness: 5,
-              ),
-          itemCount: 26
-        );
+            controller: _homeController,
+            itemBuilder: (BuildContext context, int index) {
+              return Center(
+                child: Text(
+                  'Item $index',
+                ),
+              );
+            },
+            separatorBuilder: (BuildContext context, int index) =>
+                const Divider(
+                  thickness: 5,
+                ),
+            itemCount: 26);
     }
   }
 
@@ -142,9 +143,12 @@ class _ShopScreen extends State<ShopScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Store Screen'),
-        leading: IconButton(icon: const Icon(Icons.arrow_back), onPressed: () {
-          Navigator.pushNamed(context, HomeScreen.routeName);
-        },),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pushNamed(context, HomeScreen.routeName);
+          },
+        ),
       ),
       body: Center(
         child: _listViewBody(_selectedIndex),
@@ -184,7 +188,7 @@ class _ShopScreen extends State<ShopScreen> {
                   duration: const Duration(milliseconds: 500),
                   curve: Curves.easeOut,
                 );
-              con.skinsList();
+                con.skinsList();
               } else {
                 _onItemTapped(index);
               }
@@ -235,7 +239,7 @@ class _Controller {
   }
 
   void updateSkinCustomization(String customization) async {
-    if(state.screenModel.kirbyPet != null) {
+    if (state.screenModel.kirbyPet != null) {
       state.screenModel.kirbyPet!.kirbySkin = customization;
     }
     try {
@@ -245,16 +249,17 @@ class _Controller {
           userId: Auth.getUser().uid, update: update);
     } catch (e) {
       if (Constants.devMode) {
+        // ignore: avoid_print
         print('======================= Skin Customization Update Error: $e');
       }
       showSnackBar(context: state.context, message: 'Skin Update Error: $e');
     }
-  
-    state.render(() {});
-    showSnackBar(context: state.context, message: 'Successfully Customized Kirby!');
-  }
-  
-  void skinsList() {
 
+    state.render(() {});
+    if (!state.mounted) return;
+    showSnackBar(
+        context: state.context, message: 'Successfully Customized Kirby!');
   }
+
+  void skinsList() {}
 }
