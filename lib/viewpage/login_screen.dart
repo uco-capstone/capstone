@@ -41,21 +41,14 @@ class _StartState extends State<LoginScreen> {
         flexibleSpace: Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
-              colors: [Colors.purple, Colors.pink],
+              colors: [Colors.purple, Color.fromARGB(255, 18, 18, 208)],
             ),
           ),
         ),
       ),
       body: screenModel.isSignInUnderway
-          ? const DecoratedBox(
-              decoration: BoxDecoration(
-                // Image set to background of the body
-                image: DecorationImage(
-                    image: AssetImage('/images/kirby2.jpg'), fit: BoxFit.cover),
-              ),
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
+          ? const Center(
+              child: CircularProgressIndicator(),
             )
           : loginForm(),
     );
@@ -69,10 +62,21 @@ class _StartState extends State<LoginScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 90.0),
-                child: Text("Kirbyz Planz",
-                    style: Theme.of(context).textTheme.displaySmall),
+              DecoratedBox(
+                decoration: const BoxDecoration(
+                  // Image set to background of the body
+                  image: DecorationImage(
+                      image: AssetImage("images/kirby-login.jpg"),
+                      fit: BoxFit.cover),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 90.0),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text("Kirbyz Planner",
+                        style: Theme.of(context).textTheme.displaySmall),
+                  ),
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -124,6 +128,10 @@ class _StartState extends State<LoginScreen> {
               Padding(
                 padding: const EdgeInsets.only(top: 30.0),
                 child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color.fromARGB(255, 108, 57, 219),
+                    foregroundColor: Colors.white,
+                  ),
                   onPressed: con.signin,
                   child: Text("Sign In",
                       style: Theme.of(context).textTheme.labelLarge),
