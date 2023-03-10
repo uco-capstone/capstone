@@ -1,9 +1,9 @@
 import 'package:capstone/model/shop_screen_model.dart';
-import 'package:capstone/viewpage/home_screen.dart';
-import 'package:capstone/viewpage/view/view_util.dart';
 import 'package:flutter/material.dart';
 
 import '../controller/auth_controller.dart';
+import 'package:capstone/viewpage/home_screen.dart';
+import 'package:capstone/viewpage/view/view_util.dart';
 import '../controller/firestore_controller.dart';
 import '../model/constants.dart';
 import '../model/kirby_pet_model.dart';

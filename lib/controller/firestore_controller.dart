@@ -145,6 +145,50 @@ class FirestoreController {
     }
     return result;
   }
+
+  static Future<List<KirbyTask>> getPreloadedTaskList({
+    required String uid,
+  }) async {
+    var result = <KirbyTask>[];
+
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(taskCollection)
+        .where(DocKeyKirbyTask.userId.name, isEqualTo: uid)
+        .where(DocKeyKirbyTask.isPreloaded.name, isEqualTo: true)
+        .get();
+
+    for (var doc in querySnapshot.docs) {
+      if (doc.data() != null) {
+        var document = doc.data() as Map<String, dynamic>;
+        var t = KirbyTask.fromFirestoreDoc(doc: document, taskId: doc.id);
+        result.add(t);
+      }
+    }
+
+    return result;
+  }
+
+  static Future<List<KirbyTask>> getNonPreloadedTaskList({
+    required String uid,
+  }) async {
+    var result = <KirbyTask>[];
+
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(taskCollection)
+        .where(DocKeyKirbyTask.userId.name, isEqualTo: uid)
+        .where(DocKeyKirbyTask.isPreloaded.name, isEqualTo: false)
+        .get();
+
+    for (var doc in querySnapshot.docs) {
+      if (doc.data() != null) {
+        var document = doc.data() as Map<String, dynamic>;
+        var t = KirbyTask.fromFirestoreDoc(doc: document, taskId: doc.id);
+        result.add(t);
+      }
+    }
+
+    return result;
+  }
   
   //============== KIRBY PET ==================
   static Future<KirbyPet> getPet({
