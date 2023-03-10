@@ -32,28 +32,6 @@ class _StartState extends State<LoginScreen> {
 
   void render(fn) => setState(fn);
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //     appBar: AppBar(
-  //       title: const Text("Login Page"),
-  //       centerTitle: true,
-  //       flexibleSpace: Container(
-  //         decoration: const BoxDecoration(
-  //           gradient: LinearGradient(
-  //             colors: [Colors.purple, Color.fromARGB(255, 18, 18, 208)],
-  //           ),
-  //         ),
-  //       ),
-  //     ),
-  //     body: screenModel.isSignInUnderway
-  //         ? const Center(
-  //             child: CircularProgressIndicator(),
-  //           )
-  //         : loginForm(),
-  //   );
-  // }
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -108,7 +86,7 @@ class _StartState extends State<LoginScreen> {
                             foreground: Paint()
                               ..style = PaintingStyle.stroke
                               ..strokeWidth = 6
-                              ..color = Colors.black!,
+                              ..color = Colors.black,
                           ),
                         ),
                         // Solid text as fill.
