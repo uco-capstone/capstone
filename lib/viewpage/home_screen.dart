@@ -228,6 +228,7 @@ class _Controller {
           userId: state.screenModel.kirbyUser!.userId!, update: update);
     } catch (e) {
       if (Constants.devMode) {
+        // ignore: avoid_print
         print('======================= Skin Customization Update Error: $e');
       }
       showSnackBar(context: state.context, message: 'Skin Update Error: $e');
