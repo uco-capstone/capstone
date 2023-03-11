@@ -495,20 +495,13 @@ class _Controller {
         uid: Auth.getUser().uid,
       );
       if (results.isEmpty) {
-        results = await state.screenModel.addPreloadedTasks();
+        await state.screenModel.addPreloadedTasks();
       }
-      state.screenModel.taskList = results;
     }
 
-    var results = await FirestoreController.getKirbyTaskList(
+    state.screenModel.taskList = await FirestoreController.getKirbyTaskList(
       uid: Auth.getUser().uid,
     );
-    for (var result in results) {
-      result.isPreloaded ??= false;
-      if (!result.isPreloaded!) {
-        state.screenModel.taskList.add(result);
-      }
-    }
     state.render(() {});
   }
 
