@@ -36,8 +36,6 @@ class _HomeScreenState extends State<HomeScreen> {
     con = _Controller(this);
     screenModel = HomeScreenModel(user: Auth.user!);
     con.initScreen();
-    // con.loadKirbyUser();
-    // con.loadKirbyPet();
   }
 
   @override
