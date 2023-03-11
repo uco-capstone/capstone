@@ -114,13 +114,15 @@ class _HomeScreenState extends State<HomeScreen> {
               //Background, if there is no configured background, then it'll show a default image
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: screenModel.kirbyPet == null 
-                    ? const AssetImage('images/backgrounds/default-background.png') 
-                    : screenModel.kirbyPet!.background == "" 
-                      ? const AssetImage('images/backgrounds/default-background.png') 
-                      : AssetImage(screenModel.kirbyPet!.background!)
-                ),
+                    fit: BoxFit.cover,
+                    image: screenModel.kirbyPet == null
+                        ? const AssetImage(
+                            'images/backgrounds/default-background.png')
+                        : screenModel.kirbyPet!.background == "" ||
+                                screenModel.kirbyPet!.background == null
+                            ? const AssetImage(
+                                'images/backgrounds/default-background.png')
+                            : AssetImage(screenModel.kirbyPet!.background!)),
               ),
             ),
             Positioned(
@@ -131,7 +133,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   height: 300,
                   child: screenModel.kirbyPet == null
                       ? Image.asset('images/skins/default-kirby.png')
-                      : screenModel.kirbyPet!.kirbySkin == ""
+                      : screenModel.kirbyPet!.kirbySkin == "" ||
+                              screenModel.kirbyPet!.kirbySkin == null
                           ? Image.asset('images/skins/default-kirby.png')
                           : Image.asset(screenModel.kirbyPet!.kirbySkin!)),
             ),
