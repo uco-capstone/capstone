@@ -252,7 +252,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
       return DateTime(0000, 0, 0);
     }
 
-    return DateTime(t!.dueDate!.year,t.dueDate!.month, t.dueDate!.day);
+    return DateTime(t!.dueDate!.year, t.dueDate!.month, t.dueDate!.day);
   }
 
   Widget addTaskTimeInput({e = false, KirbyTask? t}) {
@@ -534,6 +534,7 @@ class _Controller {
         context: state.context,
         message: "Deleted Task",
       );
+      state.screenModel.taskList.removeWhere((task) => task.taskId == taskId);
     } catch (e) {
       if (Constants.devMode) {
         // ignore: avoid_print
@@ -544,7 +545,7 @@ class _Controller {
         message: "Something went wrong...\n Try again!",
       );
     }
-    getTaskList();
+    state.render(() {});
   }
 
   void editTask(String taskId) async {
@@ -562,6 +563,10 @@ class _Controller {
         message: "Something went wrong...\n Try again!",
       );
     }
-    getTaskList();
+  }
+
+  void load() async {
+    Navigator.of(state.context).pop();
+    Navigator.pushNamed(state.context, ToDoScreen.routeName);
   }
 }
