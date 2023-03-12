@@ -226,8 +226,9 @@ class _ToDoScreenState extends State<ToDoScreen> {
             ),
             controller: e
                 ? con.datePickedController = TextEditingController(
-                    text:
-                        '${t!.dueDate!.month}/${t.dueDate!.day}/${t.dueDate!.year}')
+                    text: getDueDate(t),
+                  )
+                // '${t!.dueDate!.month}/${t.dueDate!.day}/${t.dueDate!.year}')
                 : con.datePickedController,
             validator: KirbyTask.validateDatePicked,
             onSaved: screenModel.saveDatePicked,
@@ -249,6 +250,18 @@ class _ToDoScreenState extends State<ToDoScreen> {
         ),
       ),
     );
+  }
+
+  String getDueDate(KirbyTask? t) {
+    if (t?.dueDate == null) {
+      return '00/00/0000';
+    }
+
+    String month = '${t!.dueDate!.month}';
+    String day = '${t.dueDate!.day}';
+    String year = '${t.dueDate!.year}';
+
+    return '$month/$day/$year';
   }
 
   Widget addTaskTimeInput({e = false, KirbyTask? t}) {
@@ -281,8 +294,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
             ),
             controller: e
                 ? con.timePickedController = TextEditingController(
-                    text:
-                        "${(t!.dueDate!.hour < 10) ? '0${t.dueDate!.hour}' : '${t.dueDate!.hour}'}:${(t.dueDate!.minute < 10) ? '0${t.dueDate!.minute}' : '${t.dueDate!.minute}'}",
+                    text: getDueTime(t),
                   )
                 : con.timePickedController,
             validator: KirbyTask.validateTimePicked,
@@ -303,6 +315,25 @@ class _ToDoScreenState extends State<ToDoScreen> {
         ),
       ),
     );
+  }
+
+  String getDueTime(KirbyTask? t) {
+    if (t?.dueDate == null) {
+      return '00:00';
+    }
+
+    if (t!.dueDate?.hour == null || t.dueDate?.minute == null) {
+      return '00:00';
+    }
+
+    String hour = t.dueDate!.hour < 10 
+        ? '0${t.dueDate!.hour}' 
+        : '${t.dueDate!.hour}';
+    String minute = t.dueDate!.minute < 10
+        ? '0${t.dueDate!.minute}'
+        : '${t.dueDate!.minute}';
+
+    return '$hour:$minute';
   }
 
   Widget body() {
