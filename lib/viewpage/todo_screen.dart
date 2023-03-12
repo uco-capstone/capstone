@@ -61,7 +61,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
 
   Widget addTaskButton() {
     return FloatingActionButton(
-      onPressed: bottonSheet,
+      onPressed: bottomSheet,
       backgroundColor: Colors.purple[200],
       elevation: 10,
       shape: const RoundedRectangleBorder(
@@ -76,7 +76,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
     );
   }
 
-  void bottonSheet({e = false, KirbyTask? t}) {
+  void bottomSheet({e = false, KirbyTask? t}) {
     showModalBottomSheet(
       context: context,
       builder: (context) {
@@ -224,18 +224,13 @@ class _ToDoScreenState extends State<ToDoScreen> {
               hintText: "Task Date...",
               border: InputBorder.none,
             ),
-            controller: e
-                ? con.datePickedController = TextEditingController(
-                    text: getDueDate(t),
-                  )
-                // '${t!.dueDate!.month}/${t.dueDate!.day}/${t.dueDate!.year}')
-                : con.datePickedController,
+            controller: con.datePickedController,
             validator: KirbyTask.validateDatePicked,
             onSaved: screenModel.saveDatePicked,
             onTap: () async {
               datePicked = await showDatePicker(
                 context: context,
-                initialDate: DateTime.now(),
+                initialDate: e ? getDueDate(t) : DateTime.now(),
                 firstDate: DateTime.now(),
                 lastDate: DateTime(3000),
               );
@@ -252,17 +247,25 @@ class _ToDoScreenState extends State<ToDoScreen> {
     );
   }
 
-  String getDueDate(KirbyTask? t) {
+  DateTime getDueDate(KirbyTask? t) {
     if (t?.dueDate == null) {
-      return '00/00/0000';
+      return DateTime(0000, 0, 0);
     }
 
-    String month = '${t!.dueDate!.month}';
-    String day = '${t.dueDate!.day}';
-    String year = '${t.dueDate!.year}';
-
-    return '$month/$day/$year';
+    return DateTime(t!.dueDate!.year,t.dueDate!.month, t.dueDate!.day);
   }
+
+  // String getDueDate(KirbyTask? t) {
+  //   if (t?.dueDate == null) {
+  //     return '00/00/0000';
+  //   }
+
+  //   String month = '${t!.dueDate!.month}';
+  //   String day = '${t.dueDate!.day}';
+  //   String year = '${t.dueDate!.year}';
+
+  //   return '$month/$day/$year';
+  // }
 
   Widget addTaskTimeInput({e = false, KirbyTask? t}) {
     return Expanded(
@@ -292,17 +295,13 @@ class _ToDoScreenState extends State<ToDoScreen> {
               hintText: "Task Time...",
               border: InputBorder.none,
             ),
-            controller: e
-                ? con.timePickedController = TextEditingController(
-                    text: getDueTime(t),
-                  )
-                : con.timePickedController,
+            controller: con.timePickedController,
             validator: KirbyTask.validateTimePicked,
             onSaved: screenModel.saveTimePicked,
             onTap: () async {
               timePicked = await showTimePicker(
                 context: context,
-                initialTime: TimeOfDay.now(),
+                initialTime: e ? getDueTime(t) : TimeOfDay.now(),
               );
               setState(() {
                 if (timePicked != null) {
@@ -317,23 +316,32 @@ class _ToDoScreenState extends State<ToDoScreen> {
     );
   }
 
-  String getDueTime(KirbyTask? t) {
-    if (t?.dueDate == null) {
-      return '00:00';
+  TimeOfDay getDueTime(KirbyTask? t) {
+    if (t?.dueDate == null ||
+        t!.dueDate?.hour == null ||
+        t.dueDate?.minute == null) {
+      return const TimeOfDay(hour: 0, minute: 0);
     }
-
-    if (t!.dueDate?.hour == null || t.dueDate?.minute == null) {
-      return '00:00';
-    }
-
-    String hour =
-        t.dueDate!.hour < 10 ? '0${t.dueDate!.hour}' : '${t.dueDate!.hour}';
-    String minute = t.dueDate!.minute < 10
-        ? '0${t.dueDate!.minute}'
-        : '${t.dueDate!.minute}';
-
-    return '$hour:$minute';
+    return TimeOfDay(hour: t.dueDate!.hour, minute: t.dueDate!.minute);
   }
+
+  // String getDueTime(KirbyTask? t) {
+  //   if (t?.dueDate == null) {
+  //     return '00:00';
+  //   }
+
+  //   if (t!.dueDate?.hour == null || t.dueDate?.minute == null) {
+  //     return '00:00';
+  //   }
+
+  //   String hour =
+  //       t.dueDate!.hour < 10 ? '0${t.dueDate!.hour}' : '${t.dueDate!.hour}';
+  //   String minute = t.dueDate!.minute < 10
+  //       ? '0${t.dueDate!.minute}'
+  //       : '${t.dueDate!.minute}';
+
+  //   return '$hour:$minute';
+  // }
 
   Widget body() {
     return SingleChildScrollView(
@@ -511,11 +519,11 @@ class _Controller {
   void initScreen() async {
     state.screenModel.loading = true;
     await loadKirbyUser();
-    await getTaskList();
+    getTaskList();
     state.screenModel.loading = false;
   }
 
-  Future<void> getTaskList() async {
+  void getTaskList() async {
     if (state.screenModel.kirbyUser!.preloadedTasks!) {
       var results = await FirestoreController.getPreloadedTaskList(
         uid: Auth.getUser().uid,
@@ -573,7 +581,7 @@ class _Controller {
     try {
       state.screenModel.tempTask =
           await FirestoreController.getKirbyTask(taskId: taskId);
-      state.bottonSheet(e: true, t: state.screenModel.tempTask);
+      state.bottomSheet(e: true, t: state.screenModel.tempTask);
     } catch (e) {
       if (Constants.devMode) {
         // ignore: avoid_print
