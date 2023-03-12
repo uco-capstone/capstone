@@ -76,16 +76,6 @@ class TodoScreenModel {
     return taskList;
   }
 
-  // Future<List<KirbyTask>> getPreloadedTaskList() async {
-  //   var result = await FirestoreController.getPreloadedTaskList(uid: user.uid);
-  //   if (result.isEmpty) {
-  //     // add preloaded tasks to firebase
-  //     await addPreloadedTasks();
-  //     result = await FirestoreController.getPreloadedTaskList(uid: user.uid);
-  //   }
-  //   return result;
-  // }
-
   String getHalfWeight() {
     if (kirbyUser?.weight != null) {
       return (kirbyUser!.weight! * 8).round().toString();

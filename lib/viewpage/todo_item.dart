@@ -48,7 +48,6 @@ class _ToDoItemState extends State<ToDoItem> {
   }
 
   void editTask() {
-    // print("got here...");
     widget.editFn(widget.task.taskId!);
     setState(() {
       notSelected = true;
