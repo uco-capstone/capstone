@@ -27,57 +27,53 @@ class TodoScreenModel {
     _tempTime = const TimeOfDay(hour: 0, minute: 0);
   }
 
-  Future<void> addPreloadedTasks() async {
+  Future<List<KirbyTask>> addPreloadedTasks() async {
     List<KirbyTask> taskList = [];
     DateTime now = DateTime.now();
+    DateTime today = DateTime(now.year, now.month, now.day);
     String meals = kirbyUser?.averageMealsEaten.toString() == ""
         ? "4"
         : kirbyUser!.averageMealsEaten.toString();
 
     KirbyTask eatMeals = KirbyTask(
-        userId: user.uid,
-        title: "Eat $meals meals today",
-        isCompleted: false,
-        isPreloaded: true,
-        isReoccuring: true,
-        // due midnight tonight
-        dueDate: DateTime(now.year, now.month, now.day, 24));
+      userId: user.uid,
+      title: "Eat $meals meals today",
+      isCompleted: false,
+      isPreloaded: true,
+      isReoccuring: true,
+      // due midnight tonight
+      dueDate: today,
+    );
     taskList.add(eatMeals);
 
     KirbyTask drinkWater = KirbyTask(
-        userId: user.uid,
-        title: "Drink ${getHalfWeight()}oz of water",
-        isCompleted: false,
-        isPreloaded: true,
-        isReoccuring: true,
-        // due midnight tonight
-        dueDate: DateTime(now.year, now.month, now.day, 24));
+      userId: user.uid,
+      title: "Drink ${getHalfWeight()}oz of water",
+      isCompleted: false,
+      isPreloaded: true,
+      isReoccuring: true,
+      // due midnight tonight
+      dueDate: today,
+    );
     taskList.add(drinkWater);
 
     KirbyTask sleep = KirbyTask(
-        userId: user.uid,
-        title: "Sleep for ${getSleep()} hours",
-        isCompleted:  false,
-        isPreloaded: true,
-        isReoccuring: true,
-        // due midnight tonight
-        dueDate: DateTime(now.year, now.month, now.day, 24));
+      userId: user.uid,
+      title: "Sleep for ${getSleep()} hours",
+      isCompleted: false,
+      isPreloaded: true,
+      isReoccuring: true,
+      // due midnight tonight
+      dueDate: today,
+    );
     taskList.add(sleep);
 
     // add to firebase
     for (var element in taskList) {
-      await FirestoreController.addKirbyTask(kirbyTask: element);
+      var ref = await FirestoreController.addKirbyTask(kirbyTask: element);
+      element.taskId = ref;
     }
-  }
-
-  Future<List<KirbyTask>> getPreloadedTaskList() async {
-    var result = await FirestoreController.getPreloadedTaskList(uid: user.uid);
-    if (result.isEmpty) {
-      // add preloaded tasks to firebase
-      await addPreloadedTasks();
-      result = await FirestoreController.getPreloadedTaskList(uid: user.uid);
-    }
-    return result;
+    return taskList;
   }
 
   String getHalfWeight() {

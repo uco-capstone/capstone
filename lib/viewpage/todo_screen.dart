@@ -17,7 +17,6 @@ class ToDoScreen extends StatefulWidget {
   State<StatefulWidget> createState() {
     return _ToDoScreenState();
   }
-  
 }
 
 class _ToDoScreenState extends State<ToDoScreen> {
@@ -34,10 +33,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
     super.initState();
     con = _Controller(this);
     screenModel = TodoScreenModel(user: Auth.getUser());
-    con.loadKirbyUserAndPreloads();
-    con.getNonPreloadedTaskList();
-    //con.getKirbyUser();
-    // con.getTaskList();
+    con.initScreen();
   }
 
   @override
@@ -55,13 +51,17 @@ class _ToDoScreenState extends State<ToDoScreen> {
         ],
       ),
       floatingActionButton: addTaskButton(),
-      body: body(),
+      body: screenModel.loading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : body(),
     );
   }
 
   Widget addTaskButton() {
     return FloatingActionButton(
-      onPressed: bottonSheet,
+      onPressed: bottomSheet,
       backgroundColor: Colors.purple[200],
       elevation: 10,
       shape: const RoundedRectangleBorder(
@@ -76,7 +76,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
     );
   }
 
-  void bottonSheet({e = false, KirbyTask? t}) {
+  void bottomSheet({e = false, KirbyTask? t}) {
     showModalBottomSheet(
       context: context,
       builder: (context) {
@@ -224,17 +224,13 @@ class _ToDoScreenState extends State<ToDoScreen> {
               hintText: "Task Date...",
               border: InputBorder.none,
             ),
-            controller: e
-                ? con.datePickedController = TextEditingController(
-                    text:
-                        '${t!.dueDate!.month}/${t.dueDate!.day}/${t.dueDate!.year}')
-                : con.datePickedController,
+            controller: con.datePickedController,
             validator: KirbyTask.validateDatePicked,
             onSaved: screenModel.saveDatePicked,
             onTap: () async {
               datePicked = await showDatePicker(
                 context: context,
-                initialDate: DateTime.now(),
+                initialDate: e ? getDueDate(t) : DateTime.now(),
                 firstDate: DateTime.now(),
                 lastDate: DateTime(3000),
               );
@@ -249,6 +245,14 @@ class _ToDoScreenState extends State<ToDoScreen> {
         ),
       ),
     );
+  }
+
+  DateTime getDueDate(KirbyTask? t) {
+    if (t?.dueDate == null) {
+      return DateTime(0000, 0, 0);
+    }
+
+    return DateTime(t!.dueDate!.year, t.dueDate!.month, t.dueDate!.day);
   }
 
   Widget addTaskTimeInput({e = false, KirbyTask? t}) {
@@ -279,18 +283,13 @@ class _ToDoScreenState extends State<ToDoScreen> {
               hintText: "Task Time...",
               border: InputBorder.none,
             ),
-            controller: e
-                ? con.timePickedController = TextEditingController(
-                    text:
-                        "${(t!.dueDate!.hour < 10) ? '0${t.dueDate!.hour}' : '${t.dueDate!.hour}'}:${(t.dueDate!.minute < 10) ? '0${t.dueDate!.minute}' : '${t.dueDate!.minute}'}",
-                  )
-                : con.timePickedController,
+            controller: con.timePickedController,
             validator: KirbyTask.validateTimePicked,
             onSaved: screenModel.saveTimePicked,
             onTap: () async {
               timePicked = await showTimePicker(
                 context: context,
-                initialTime: TimeOfDay.now(),
+                initialTime: e ? getDueTime(t) : TimeOfDay.now(),
               );
               setState(() {
                 if (timePicked != null) {
@@ -303,6 +302,15 @@ class _ToDoScreenState extends State<ToDoScreen> {
         ),
       ),
     );
+  }
+
+  TimeOfDay getDueTime(KirbyTask? t) {
+    if (t?.dueDate == null ||
+        t!.dueDate?.hour == null ||
+        t.dueDate?.minute == null) {
+      return const TimeOfDay(hour: 0, minute: 0);
+    }
+    return TimeOfDay(hour: t.dueDate!.hour, minute: t.dueDate!.minute);
   }
 
   Widget body() {
@@ -457,8 +465,14 @@ class _Controller {
           kirbyTask: state.screenModel.tempTask,
         );
         state.screenModel.tempTask.taskId = docId;
+        state.screenModel.taskList.add(state.screenModel.tempTask);
       }
-      getTaskList();
+
+      state.screenModel.tempTask = KirbyTask(
+        userId: Auth.getUser().uid,
+        isCompleted: false,
+      );
+
       datePickedController.clear();
       timePickedController.clear();
       if (!state.mounted) return;
@@ -468,6 +482,8 @@ class _Controller {
         seconds: 3,
         message: e ? 'Task Editted' : 'Task Added!',
       );
+
+      state.render(() {});
     } catch (e) {
       showSnackBar(
         context: state.context,
@@ -478,40 +494,38 @@ class _Controller {
     }
   }
 
+  void initScreen() async {
+    state.screenModel.loading = true;
+    await loadKirbyUser();
+    getTaskList();
+    state.screenModel.loading = false;
+  }
+
   void getTaskList() async {
-    state.screenModel.taskList =
-        await FirestoreController.getKirbyTaskList(uid: Auth.getUser().uid);
-    for (var element in state.screenModel.taskList) {
-      state.screenModel.taskList.add(element);
-    }
-    state.render(() {});
-  }
-
-  void getNonPreloadedTaskList() async {
-    List<KirbyTask> tasks = await FirestoreController.getNonPreloadedTaskList(
-        uid: Auth.getUser().uid);
-    for (var element in tasks) {
-      state.screenModel.taskList.add(element);
-    }
-    state.render(() {});
-  }
-
-  Future<void> loadPreloadedTaskList() async {
-    if (state.screenModel.kirbyUser?.preloadedTasks == true) {
-      // if preloaded task are enabled, load them
-      List<KirbyTask> preloadedTasks =
-          await state.screenModel.getPreloadedTaskList();
-      // add preloaded tasks to tasklist
-      for (var element in preloadedTasks) {
-        state.screenModel.taskList.add(element);
+    if (state.screenModel.kirbyUser!.preloadedTasks!) {
+      var results = await FirestoreController.getPreloadedTaskList(
+        uid: Auth.getUser().uid,
+      );
+      if (results.isEmpty) {
+        state.screenModel.taskList =
+            await state.screenModel.addPreloadedTasks();
+      } else {
+        state.screenModel.taskList = results;
       }
-      state.render(() {});
     }
+
+    var results = await FirestoreController.getKirbyTaskList(
+      uid: Auth.getUser().uid,
+    );
+    for (var result in results) {
+      result.isPreloaded ??= false;
+      if (!result.isPreloaded!) state.screenModel.taskList.add(result);
+    }
+    state.render(() {});
   }
 
   Future<void> loadKirbyUser() async {
     try {
-      // state.screenModel.loading = true;
       state.screenModel.kirbyUser =
           await FirestoreController.getKirbyUser(userId: Auth.getUser().uid);
       state.render(() {});
@@ -520,12 +534,6 @@ class _Controller {
       if (Constants.devMode) print(" ==== loading error $e");
       state.render(() => state.screenModel.loadingErrorMessage = "$e");
     }
-    state.screenModel.loading = false;
-  }
-
-  Future<void> loadKirbyUserAndPreloads() async {
-    await loadKirbyUser();
-    await loadPreloadedTaskList();
   }
 
   void deleteTask(String taskId) async {
@@ -536,6 +544,7 @@ class _Controller {
         context: state.context,
         message: "Deleted Task",
       );
+      state.screenModel.taskList.removeWhere((task) => task.taskId == taskId);
     } catch (e) {
       if (Constants.devMode) {
         // ignore: avoid_print
@@ -546,13 +555,16 @@ class _Controller {
         message: "Something went wrong...\n Try again!",
       );
     }
-    getTaskList();
+    state.render(() {});
   }
 
   void editTask(String taskId) async {
     try {
-      state.screenModel.tempTask = await FirestoreController.getKirbyTask(taskId: taskId);
-      state.bottonSheet(e: true, t: state.screenModel.tempTask);
+      state.screenModel.tempTask =
+          await FirestoreController.getKirbyTask(taskId: taskId);
+      state.bottomSheet(e: true, t: state.screenModel.tempTask);
+      state.screenModel.taskList.removeWhere((task) => task.taskId == taskId);
+      state.screenModel.taskList.add(state.screenModel.tempTask);
     } catch (e) {
       if (Constants.devMode) {
         // ignore: avoid_print
@@ -563,6 +575,6 @@ class _Controller {
         message: "Something went wrong...\n Try again!",
       );
     }
-    getTaskList();
+    state.render(() {});
   }
 }

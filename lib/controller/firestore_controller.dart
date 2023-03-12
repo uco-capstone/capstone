@@ -132,7 +132,7 @@ class FirestoreController {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection(taskCollection)
         .where(DocKeyKirbyTask.userId.name, isEqualTo: uid)
-        //.orderBy(DocKeyKirbyTask.dueDate, descending: false)
+        .orderBy(DocKeyKirbyTask.dueDate.name, descending: false)
         .get();
 
     var result = <KirbyTask>[];

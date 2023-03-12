@@ -37,8 +37,8 @@ class KirbyPet {
     return KirbyPet(
       petId: petId,
       userId: doc[DocKeyPet.userId.name] ??= "",
-      kirbySkin: doc[DocKeyPet.kirbySkin.name] ??= "",
-      background: doc[DocKeyPet.background.name] ??= "",
+      kirbySkin: doc[DocKeyPet.kirbySkin.name] ??= skinCustomizations[0],
+      background: doc[DocKeyPet.background.name] ??= backgroundCustomizations[0],
       hungerGauge: doc[DocKeyPet.hungerGauge.name] ??= 0,
     );
   }
