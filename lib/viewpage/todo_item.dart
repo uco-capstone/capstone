@@ -3,7 +3,7 @@ import 'package:capstone/model/kirby_task_model.dart';
 import 'package:capstone/viewpage/view/view_util.dart';
 import 'package:flutter/material.dart';
 
-enum SampleItem { delete, edit, cancel }
+enum TaskActions { delete, edit, cancel }
 
 class ToDoItem extends StatefulWidget {
   const ToDoItem(
@@ -26,7 +26,8 @@ class ToDoItem extends StatefulWidget {
 class _ToDoItemState extends State<ToDoItem> {
   void render(fn) => setState(fn);
   var notSelected = true;
-  SampleItem? selectedMenu;
+  TaskActions? taskActionMenu;
+
   void toggleSelected() {
     setState(() {
       notSelected = !notSelected;
@@ -56,6 +57,8 @@ class _ToDoItemState extends State<ToDoItem> {
 
   @override
   Widget build(BuildContext context) {
+    widget.task.isPreloaded ??= false;
+
     return ListTile(
       onLongPress: toggleSelected,
       onTap: () => notSelected ? () {} : setState(() => notSelected = true),
@@ -94,30 +97,30 @@ class _ToDoItemState extends State<ToDoItem> {
         ),
         child: notSelected
             ? PopupMenuButton(
-                initialValue: selectedMenu,
-                onSelected: (SampleItem item) {
+                initialValue: taskActionMenu,
+                onSelected: (TaskActions item) {
                   setState(() {
-                    selectedMenu = item;
-                    if (selectedMenu == SampleItem.delete) {
+                    taskActionMenu = item;
+                    if (taskActionMenu == TaskActions.delete) {
                       deleteTask();
-                    } else if (selectedMenu == SampleItem.edit) {
-                      // print("got here");
+                    } else if (taskActionMenu == TaskActions.edit) {
                       editTask();
                     }
                   });
                 },
                 itemBuilder: (BuildContext context) =>
-                    <PopupMenuEntry<SampleItem>>[
-                  const PopupMenuItem<SampleItem>(
-                    value: SampleItem.delete,
+                    <PopupMenuEntry<TaskActions>>[
+                  const PopupMenuItem<TaskActions>(
+                    value: TaskActions.delete,
                     child: Text('Delete'),
                   ),
-                  const PopupMenuItem<SampleItem>(
-                    value: SampleItem.edit,
-                    child: Text('Edit'),
+                  PopupMenuItem<TaskActions>(
+                    value: TaskActions.edit,
+                    enabled: !widget.task.isPreloaded!,
+                    child: const Text('Edit'),
                   ),
-                  const PopupMenuItem<SampleItem>(
-                    value: SampleItem.cancel,
+                  const PopupMenuItem<TaskActions>(
+                    value: TaskActions.cancel,
                     child: Text('Cancel'),
                   ),
                 ],
