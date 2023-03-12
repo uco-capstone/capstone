@@ -465,8 +465,14 @@ class _Controller {
           kirbyTask: state.screenModel.tempTask,
         );
         state.screenModel.tempTask.taskId = docId;
+        state.screenModel.taskList.add(state.screenModel.tempTask);
       }
-      getTaskList();
+
+      state.screenModel.tempTask = KirbyTask(
+        userId: Auth.getUser().uid,
+        isCompleted: false,
+      );
+
       datePickedController.clear();
       timePickedController.clear();
       if (!state.mounted) return;
@@ -476,6 +482,8 @@ class _Controller {
         seconds: 3,
         message: e ? 'Task Editted' : 'Task Added!',
       );
+
+      state.render(() {});
     } catch (e) {
       showSnackBar(
         context: state.context,
@@ -553,6 +561,8 @@ class _Controller {
       state.screenModel.tempTask =
           await FirestoreController.getKirbyTask(taskId: taskId);
       state.bottomSheet(e: true, t: state.screenModel.tempTask);
+      state.screenModel.taskList.removeWhere((task) => task.taskId == taskId);
+      state.screenModel.taskList.add(state.screenModel.tempTask);
     } catch (e) {
       if (Constants.devMode) {
         // ignore: avoid_print
@@ -563,10 +573,6 @@ class _Controller {
         message: "Something went wrong...\n Try again!",
       );
     }
-  }
-
-  void load() async {
-    Navigator.of(state.context).pop();
-    Navigator.pushNamed(state.context, ToDoScreen.routeName);
+    state.render(() {});
   }
 }
