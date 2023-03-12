@@ -509,6 +509,8 @@ class _Controller {
       if (results.isEmpty) {
         state.screenModel.taskList =
             await state.screenModel.addPreloadedTasks();
+      } else {
+        state.screenModel.taskList = results;
       }
     }
 
