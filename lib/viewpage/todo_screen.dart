@@ -34,7 +34,6 @@ class _ToDoScreenState extends State<ToDoScreen> {
     con = _Controller(this);
     screenModel = TodoScreenModel(user: Auth.getUser());
     con.initScreen();
-    
   }
 
   @override
@@ -327,9 +326,8 @@ class _ToDoScreenState extends State<ToDoScreen> {
       return '00:00';
     }
 
-    String hour = t.dueDate!.hour < 10 
-        ? '0${t.dueDate!.hour}' 
-        : '${t.dueDate!.hour}';
+    String hour =
+        t.dueDate!.hour < 10 ? '0${t.dueDate!.hour}' : '${t.dueDate!.hour}';
     String minute = t.dueDate!.minute < 10
         ? '0${t.dueDate!.minute}'
         : '${t.dueDate!.minute}';
@@ -523,13 +521,18 @@ class _Controller {
         uid: Auth.getUser().uid,
       );
       if (results.isEmpty) {
-        await state.screenModel.addPreloadedTasks();
+        state.screenModel.taskList =
+            await state.screenModel.addPreloadedTasks();
       }
     }
 
-    state.screenModel.taskList = await FirestoreController.getKirbyTaskList(
+    var results = await FirestoreController.getKirbyTaskList(
       uid: Auth.getUser().uid,
     );
+    for (var result in results) {
+      result.isPreloaded ??= false;
+      if (!result.isPreloaded!) state.screenModel.taskList.add(result);
+    }
     state.render(() {});
   }
 
