@@ -34,6 +34,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
     con = _Controller(this);
     screenModel = TodoScreenModel(user: Auth.getUser());
     con.initScreen();
+    
   }
 
   @override
