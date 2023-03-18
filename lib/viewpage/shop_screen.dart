@@ -6,6 +6,7 @@ import 'package:capstone/viewpage/home_screen.dart';
 import 'package:capstone/viewpage/view/view_util.dart';
 import '../controller/firestore_controller.dart';
 import '../model/constants.dart';
+import '../model/customization_model.dart';
 import '../model/kirby_pet_model.dart';
 
 class ShopScreen extends StatefulWidget {
@@ -28,6 +29,7 @@ class _ShopScreen extends State<ShopScreen> {
     super.initState();
     con = _Controller(this);
     screenModel = ShopScreenModel(user: Auth.getUser());
+    con.getPet();
   }
 
   void render(fn) => setState(fn);
@@ -38,21 +40,83 @@ class _ShopScreen extends State<ShopScreen> {
   Widget _listViewBody(int menuOption) {
     switch (menuOption) {
       case 0: //Skins
-        return ListView.separated(
+        return GridView.builder(
           controller: _homeController,
           itemBuilder: (BuildContext context, int index) {
-            return ListTile(
-              title: Text(
-                skinCustomizations[index],
+            return Align(
+              child: SizedBox(
+                height: MediaQuery.of(context).size.width * 0.45,
+                width: MediaQuery.of(context).size.width * 0.45,
+                child: Card(
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+                  child: Stack(
+                    children: [
+                      ListTile(
+                        title: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Center(
+                              child: SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.28,
+                                child: Image(
+                                  image: AssetImage(skinCustomizations[index].filepath),
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              bottom: 10,
+                              child: Text(skinCustomizations[index].label)
+                            ),
+                            Positioned(
+                              right: 0,
+                              top: 5,
+                              child: Container(
+                                width: MediaQuery.of(context).size.width * 0.15,
+                                height: MediaQuery.of(context).size.width * 0.08,
+                                decoration: BoxDecoration(
+                                    color: Colors.grey[100],
+                                    shape: BoxShape.rectangle,
+                                    borderRadius: const BorderRadius.all(Radius.circular(25)),
+                                    //border: Border.all(color: Colors.deepPurple, width: 2)
+                                  ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    //Sample number of coins
+                                    Text('${skinCustomizations[index].price} '),
+                                    Icon(
+                                      Icons.monetization_on,
+                                      color: Colors.orangeAccent,
+                                      size: MediaQuery.of(context).size.width * 0.05,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        onTap: () =>
+                            con.updateSkinCustomization(skinCustomizations[index].filepath),
+                      ),
+                      if (skinCustomizations[index].filepath == screenModel.kirbyPet!.kirbySkin)
+                        Container(
+                          height: double.maxFinite,
+                          width: double.maxFinite,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16.0),
+                            color: Colors.black.withOpacity(0.2),
+                          ),
+                          child: const Image(
+                            image: AssetImage('images/selected-stamp.png'),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
               ),
-              onTap: () =>
-                  con.updateSkinCustomization(skinCustomizations[index]),
             );
           },
-          separatorBuilder: (BuildContext context, int index) => const Divider(
-            thickness: 5,
-          ),
-          itemCount: 3,
+          itemCount: skinCustomizations.length, gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
         );
       case 1:  //Backgrounds
         return ListView.separated(
@@ -60,15 +124,15 @@ class _ShopScreen extends State<ShopScreen> {
           itemBuilder: (BuildContext context, int index) {
             return ListTile(
               title: Text(
-                backgroundCustomizations[index],
+                backgroundCustomizations[index].label,
               ),
-              onTap: () => con.updateBackgroundCustomization(backgroundCustomizations[index]),
+              onTap: () => con.updateBackgroundCustomization(backgroundCustomizations[index].filepath),
             );
           },
           separatorBuilder: (BuildContext context, int index) => const Divider(
                 thickness: 5,
               ),
-          itemCount: 3,
+          itemCount: backgroundCustomizations.length,
         );
       case 2: //Accessories
         return ListView.separated(
@@ -135,6 +199,34 @@ class _ShopScreen extends State<ShopScreen> {
             Navigator.pushNamed(context, HomeScreen.routeName);
           },
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              width: 75,
+              decoration: const BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.rectangle,
+                  borderRadius: BorderRadius.all(Radius.circular(25))),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  //Sample number of coins
+                  Text(
+                    '0',
+                    style: TextStyle(
+                        color: Colors.black, fontWeight: FontWeight.bold),
+                  ),
+                  Icon(
+                    Icons.monetization_on,
+                    color: Colors.orangeAccent,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+        
       ),
       body: Center(
         child: _listViewBody(_selectedIndex),

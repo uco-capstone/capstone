@@ -70,10 +70,13 @@ flutter:
     - images/skins/default-kirby.png
     - images/skins/blue-kirby.png
     - images/skins/yellow-kirby.png
+    - images/skins/green-kirby.png
     - images/backgrounds/default-background.png
     - images/backgrounds/outside-background.png
     - images/backgrounds/cloud-background.png
+    - images/backgrounds/city-background.png
     - images/kirby-wand.png
+    - images/selected-stamp.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
