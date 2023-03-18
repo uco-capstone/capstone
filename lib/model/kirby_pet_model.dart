@@ -1,3 +1,5 @@
+import 'customization_model.dart';
+
 enum DocKeyPet {
   petId,
   userId,
@@ -37,23 +39,9 @@ class KirbyPet {
     return KirbyPet(
       petId: petId,
       userId: doc[DocKeyPet.userId.name] ??= "",
-      kirbySkin: doc[DocKeyPet.kirbySkin.name] ??= skinCustomizations[0],
-      background: doc[DocKeyPet.background.name] ??= backgroundCustomizations[0],
+      kirbySkin: doc[DocKeyPet.kirbySkin.name] ??= skinCustomizations[0].filepath,
+      background: doc[DocKeyPet.background.name] ??= backgroundCustomizations[0].filepath,
       hungerGauge: doc[DocKeyPet.hungerGauge.name] ??= 0,
     );
   }
 }
-
-//Array of all skin customization paths
-  var skinCustomizations = [
-    'images/skins/default-kirby.png',
-    'images/skins/blue-kirby.png',
-    'images/skins/yellow-kirby.png'
-  ];
-
-//Array of all background customization paths
-  var backgroundCustomizations = [
-    'images/backgrounds/default-background.png',
-    'images/backgrounds/cloud-background.png',
-    'images/backgrounds/outside-background.png'
-  ];
