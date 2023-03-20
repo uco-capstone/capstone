@@ -456,8 +456,8 @@ class _Controller {
               state.screenModel.tempTask.isReoccuring,
           DocKeyKirbyTask.isPastDue.name:
               state.screenModel.tempTask.isPastDue,
-          DocKeyKirbyTask.completeDate.name:
-              state.screenModel.tempTask.completeDate,
+          // DocKeyKirbyTask.completeDate.name:
+          //     state.screenModel.tempTask.completeDate,
         };
         // state.screenModel.tempTask.dueDate =
         await FirestoreController.editKirbyTask(
@@ -475,6 +475,7 @@ class _Controller {
       state.screenModel.tempTask = KirbyTask(
         userId: Auth.getUser().uid,
         isCompleted: false,
+        completeDate: null,
       );
 
       datePickedController.clear();

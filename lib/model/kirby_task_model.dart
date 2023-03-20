@@ -64,7 +64,11 @@ class KirbyTask {
       isPreloaded: doc[DocKeyKirbyTask.isPreloaded.name] ??= false,
       isReoccuring: doc[DocKeyKirbyTask.isReoccuring.name] ??= false,
       isPastDue: doc[DocKeyKirbyTask.isPastDue.name] ??= false,
-      completeDate: doc[DocKeyKirbyTask.completeDate.name],
+      completeDate: doc[DocKeyKirbyTask.completeDate.name] != null
+          ? DateTime.fromMillisecondsSinceEpoch(
+              doc[DocKeyKirbyTask.completeDate.name].millisecondsSinceEpoch,
+            )
+          : null,
     );
   }
 

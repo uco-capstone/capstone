@@ -43,6 +43,7 @@ class TodoScreenModel {
       isCompleted: false,
       isPreloaded: true,
       isReoccuring: true,
+      isPastDue: false,
       // due midnight tonight
       dueDate: today,
     );
@@ -54,6 +55,7 @@ class TodoScreenModel {
       isCompleted: false,
       isPreloaded: true,
       isReoccuring: true,
+      isPastDue: false,
       // due midnight tonight
       dueDate: today,
     );
@@ -65,6 +67,7 @@ class TodoScreenModel {
       isCompleted: false,
       isPreloaded: true,
       isReoccuring: true,
+      isPastDue: false,
       // due midnight tonight
       dueDate: today,
     );
