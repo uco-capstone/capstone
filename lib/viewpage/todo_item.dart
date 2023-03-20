@@ -70,6 +70,11 @@ class _ToDoItemState extends State<ToDoItem> {
           await FirestoreController.updateTaskCompletion(
             taskId: widget.task.taskId!,
             isCompleted: widget.task.isCompleted,
+            completeDate: DateTime(
+              DateTime.now().year,
+              DateTime.now().month,
+              DateTime.now().day,
+            ),
           );
 
           render(() {

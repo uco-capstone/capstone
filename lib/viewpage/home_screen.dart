@@ -1,7 +1,6 @@
 import 'package:capstone/controller/auth_controller.dart';
 import 'package:capstone/model/home_screen_model.dart';
 import 'package:capstone/model/kirby_pet_model.dart';
-import 'package:capstone/model/kirby_user_model.dart';
 import 'package:capstone/viewpage/health_info_screen.dart';
 
 import 'package:capstone/viewpage/settings_screen.dart';
@@ -233,12 +232,12 @@ class _Controller {
   }
 
   void updateSkinCustomization(String customization) async {
-    if (state.screenModel.kirbyUser != null) {
-      state.screenModel.kirbyUser!.kirbyPetSkin = customization;
+    if (state.screenModel.kirbyPet != null) {
+      state.screenModel.kirbyPet!.kirbySkin = customization;
     }
     try {
       Map<String, dynamic> update = {};
-      update[DocKeyUser.kirbyPetSkin.name] = customization;
+      update[DocKeyPet.kirbySkin.name] = customization;
       await FirestoreController.updateKirbyUser(
           userId: state.screenModel.kirbyUser!.userId!, update: update);
     } catch (e) {

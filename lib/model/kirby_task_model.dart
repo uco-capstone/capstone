@@ -7,6 +7,8 @@ enum DocKeyKirbyTask {
   isCompleted,
   isPreloaded,
   isReoccuring,
+  isPastDue,
+  completeDate,
 }
 
 class KirbyTask {
@@ -17,6 +19,8 @@ class KirbyTask {
   bool isCompleted;
   bool? isPreloaded;
   bool? isReoccuring;
+  bool? isPastDue;
+  DateTime? completeDate;
 
   KirbyTask({
     this.taskId,
@@ -26,6 +30,8 @@ class KirbyTask {
     required this.isCompleted,
     this.isPreloaded,
     this.isReoccuring,
+    this.isPastDue,
+    this.completeDate,
   });
 
   Map<String, dynamic> toFirestoreDoc() {
@@ -36,6 +42,8 @@ class KirbyTask {
       DocKeyKirbyTask.isCompleted.name: isCompleted,
       DocKeyKirbyTask.isPreloaded.name: isPreloaded,
       DocKeyKirbyTask.isReoccuring.name: isReoccuring,
+      DocKeyKirbyTask.isPastDue.name: isPastDue,
+      DocKeyKirbyTask.completeDate.name: completeDate,
     };
   }
 
@@ -55,6 +63,12 @@ class KirbyTask {
       isCompleted: doc[DocKeyKirbyTask.isCompleted.name] ??= false,
       isPreloaded: doc[DocKeyKirbyTask.isPreloaded.name] ??= false,
       isReoccuring: doc[DocKeyKirbyTask.isReoccuring.name] ??= false,
+      isPastDue: doc[DocKeyKirbyTask.isPastDue.name] ??= false,
+      completeDate: doc[DocKeyKirbyTask.completeDate.name] != null
+          ? DateTime.fromMillisecondsSinceEpoch(
+              doc[DocKeyKirbyTask.completeDate.name].millisecondsSinceEpoch,
+            )
+          : null,
     );
   }
 
