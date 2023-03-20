@@ -23,6 +23,8 @@ class TodoScreenModel {
       isCompleted: false,
       isPreloaded: false,
       isReoccuring: false,
+      isPastDue: false,
+      completeDate: null,
     );
     _tempTime = const TimeOfDay(hour: 0, minute: 0);
   }
