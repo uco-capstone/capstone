@@ -161,23 +161,35 @@ class _HomeScreenState extends State<HomeScreen> {
 class _Controller {
   _HomeScreenState state;
   _Controller(this.state);
+  late String currentUserID;
 
   void initScreen() async {
     state.screenModel.loading = true;
+    await getUID();
     await loadKirbyUser();
     await loadKirbyPet();
     state.screenModel.loading = false;
   }
 
+  Future<void> getUID() async {
+    try {
+      currentUserID = Auth.getUser().uid;
+    } catch (e) {
+      // ignore: avoid_print
+      if (Constants.devMode) print("==== couldn't load user");
+      state.render(() => state.screenModel.loadingErrorMessage = "$e");
+    }
+  }
+
   Future<void> loadKirbyUser() async {
     try {
       bool hasKirbyUser =
-          await FirestoreController.hasKirbyUser(Auth.getUser().uid);
+          await FirestoreController.hasKirbyUser(currentUserID);
       if (hasKirbyUser && state.mounted) {
         Navigator.pushNamed(state.context, HealthInfoScreen.routeName);
       }
       state.screenModel.kirbyUser =
-          await FirestoreController.getKirbyUser(userId: Auth.getUser().uid);
+          await FirestoreController.getKirbyUser(userId: currentUserID);
       state.render(() {});
     } catch (e) {
       // ignore: avoid_print
@@ -188,14 +200,15 @@ class _Controller {
 
   Future<void> loadKirbyPet() async {
     try {
-      bool hasPet = await FirestoreController.hasPet(Auth.getUser().uid);
+      bool hasPet = await FirestoreController.hasPet(currentUserID);
       if (hasPet == false) {
-        KirbyPet tempPet = KirbyPet(userId: Auth.getUser().uid);
+        KirbyPet tempPet = KirbyPet(userId: currentUserID);
         state.screenModel.kirbyPet = tempPet;
         await FirestoreController.addPet(kirbyPet: tempPet);
+      } else {
+        state.screenModel.kirbyPet =
+            await FirestoreController.getPet(userId: currentUserID); 
       }
-      state.screenModel.kirbyPet =
-          await FirestoreController.getPet(userId: Auth.getUser().uid);
 
       state.render(() {});
     } catch (e) {
