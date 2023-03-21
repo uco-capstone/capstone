@@ -191,8 +191,8 @@ class _Controller {
       bool hasPet = await FirestoreController.hasPet(Auth.getUser().uid);
       if (hasPet == false) {
         KirbyPet tempPet = KirbyPet(userId: Auth.getUser().uid);
-        await FirestoreController.addPet(kirbyPet: tempPet);
         state.screenModel.kirbyPet = tempPet;
+        await FirestoreController.addPet(kirbyPet: tempPet);
       }
       state.screenModel.kirbyPet =
           await FirestoreController.getPet(userId: Auth.getUser().uid);
