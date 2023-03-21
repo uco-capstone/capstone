@@ -1,3 +1,4 @@
+import 'package:capstone/viewpage/achievement_screen.dart';
 import 'package:capstone/viewpage/health_info_screen.dart';
 import 'package:capstone/viewpage/settings_screen.dart';
 import 'package:capstone/viewpage/start_dispatcher.dart';
@@ -29,6 +30,7 @@ class CapstoneApp extends StatelessWidget {
         HomeScreen.routeName: (context) => const HomeScreen(),
         ToDoScreen.routeName: (context) => const ToDoScreen(),
         ShopScreen.routeName: (context) => const ShopScreen(),
+        AchievementScreen.routeName: (context) => const AchievementScreen(),
         StartDispatcher.routeName: (context) => const StartDispatcher(),
         CreateAccountScreen.routeName: (context) => const CreateAccountScreen(),
         HealthInfoScreen.routeName: (context) => const HealthInfoScreen(),
