@@ -365,6 +365,4 @@ class _Controller {
     // ignore: use_build_context_synchronously
     showSnackBar(context: state.context, message: 'Successfully Customized Background!');
   }
-
-  void skinsList() {}
 }
