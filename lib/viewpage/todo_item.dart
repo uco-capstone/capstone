@@ -137,7 +137,10 @@ class _ToDoItemState extends State<ToDoItem> {
               ),
       ),
       subtitle: widget.task.dueDate != null
-          ? Text(dueDate())
+          ? Text(
+            dueDate(),
+            style: widget.task.isPastDue! ? TextStyle(color: Colors.red) : TextStyle(color: Colors.grey)
+            )
           : const SizedBox.shrink(),
     );
   }
