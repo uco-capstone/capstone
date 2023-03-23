@@ -113,6 +113,14 @@ class TodoScreenModel {
     }
   }
 
+  Future<void> updateDrinkTask() async {
+    String title = "Drink ${getHalfWeight()}oz of water";
+    String taskID = await getDrinkTaskID() as String;
+    Map<String, dynamic> update = {DocKeyKirbyTask.title.name: title};
+    await FirestoreController.editKirbyTaskField(
+        taskId: taskID, update: update);
+  }
+
   void saveTaskName(String? value) {
     if (value != null) {
       tempTask.title = value;

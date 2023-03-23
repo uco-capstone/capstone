@@ -516,7 +516,7 @@ class _Controller {
             await state.screenModel.addPreloadedTasks();
       } else {
         // update preloaded tasks
-        state.screenModel.getDrinkTaskID();
+        state.screenModel.updateDrinkTask();
         state.screenModel.taskList = results;
       }
     }
