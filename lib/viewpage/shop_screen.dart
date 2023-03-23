@@ -226,7 +226,6 @@ class _ShopScreen extends State<ShopScreen> {
             ),
           ),
         ],
-        
       ),
       body: Center(
         child: screenModel.loading
