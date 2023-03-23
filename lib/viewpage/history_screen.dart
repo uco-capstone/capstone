@@ -48,46 +48,15 @@ class _HistoryState extends State<HistoryScreen> {
           ? const Center(
               child: CircularProgressIndicator(),
             )
-          : HistoryScreenBody(),
+          : historyScreenBody(),
     );
   }
 
-  Widget HistoryScreenBody() {
+  Widget historyScreenBody() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ListView(
-        children: [
-          SwitchListTile(
-            title: const Text('Preloaded Tasks'),
-            value: screenModel.kirbyUser!.preloadedTasks!,
-            onChanged: (value) {
-              setState(() {
-                con.setPreloadedTasksEnabled(value);
-              });
-            },
-          ),
-          SwitchListTile(
-            title: const Text('Notifications'),
-            value: screenModel.kirbyUser!.notifications!,
-            onChanged: (value) {
-              setState(() {
-                con.setNotificationsEnabled(value);
-              });
-            },
-          ),
-          const SizedBox(
-            height: 50,
-          ),
-          Center(
-            child: SizedBox(
-              width: 180,
-              child: ElevatedButton(
-                onPressed: con.healthInfoScreen,
-                child: const Text("Update Personal Info"),
-              ),
-            ),
-          ),
-        ],
+        children: [],
       ),
     );
   }
@@ -109,31 +78,5 @@ class _Controller {
       state.render(() => state.screenModel.loadingErrorMessage = "$e");
     }
     state.screenModel.loading = false;
-  }
-
-  Future<void> setPreloadedTasksEnabled(value) async {
-    var kUser = state.screenModel.kirbyUser;
-    kUser!.preloadedTasks = value;
-    Map<String, dynamic> update = {};
-    update[DocKeyUser.preloadedTasks.name] = value;
-    await FirestoreController.updateKirbyUser(
-      userId: kUser.userId!,
-      update: update,
-    );
-  }
-
-  Future<void> setNotificationsEnabled(value) async {
-    var kUser = state.screenModel.kirbyUser;
-    kUser!.notifications = value;
-    Map<String, dynamic> update = {};
-    update[DocKeyUser.notifications.name] = value;
-    await FirestoreController.updateKirbyUser(
-      userId: kUser.userId!,
-      update: update,
-    );
-  }
-
-  void healthInfoScreen() async {
-    await Navigator.pushNamed(state.context, HealthInfoScreen.routeName);
   }
 }
