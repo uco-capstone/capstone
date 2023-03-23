@@ -8,6 +8,7 @@ class ShopScreenModel {
   String? loadingErrorMessage;
   KirbyUser? kirbyUser;
   KirbyPet? kirbyPet;
+  bool loading = false;
 
   ShopScreenModel({required this.user});
 }

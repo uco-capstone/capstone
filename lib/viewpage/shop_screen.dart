@@ -29,7 +29,7 @@ class _ShopScreen extends State<ShopScreen> {
     super.initState();
     con = _Controller(this);
     screenModel = ShopScreenModel(user: Auth.getUser());
-    con.getPet();
+    con.initScreen();
   }
 
   void render(fn) => setState(fn);
@@ -229,7 +229,9 @@ class _ShopScreen extends State<ShopScreen> {
         
       ),
       body: Center(
-        child: _listViewBody(_selectedIndex),
+        child: screenModel.loading
+        ? const CircularProgressIndicator()
+        : _listViewBody(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
@@ -290,6 +292,12 @@ class _ShopScreen extends State<ShopScreen> {
 class _Controller {
   _ShopScreen state;
   _Controller(this.state);
+
+  void initScreen() async {
+    state.screenModel.loading = true;
+    await getPet();
+    state.screenModel.loading = false;
+  }
 
   Future<void> getKirbyUser() async {
     try {
