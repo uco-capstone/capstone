@@ -97,6 +97,22 @@ class TodoScreenModel {
     }
   }
 
+  Future<String?> getDrinkTaskID() async {
+    String target = "Drink";
+    // get all preloaded tasks
+    var allPreloadedTasks =
+        await FirestoreController.getPreloadedTaskList(uid: user.uid);
+
+    // parse tasks to get Drink task
+    for (var task in allPreloadedTasks) {
+      if (task.title!.contains(target)) {
+        // get drink task ID
+        print(task.taskId);
+        return task.taskId;
+      }
+    }
+  }
+
   void saveTaskName(String? value) {
     if (value != null) {
       tempTask.title = value;

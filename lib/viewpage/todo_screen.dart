@@ -454,8 +454,7 @@ class _Controller {
               state.screenModel.tempTask.isPreloaded,
           DocKeyKirbyTask.isReoccuring.name:
               state.screenModel.tempTask.isReoccuring,
-          DocKeyKirbyTask.isPastDue.name:
-              state.screenModel.tempTask.isPastDue,
+          DocKeyKirbyTask.isPastDue.name: state.screenModel.tempTask.isPastDue,
           // DocKeyKirbyTask.completeDate.name:
           //     state.screenModel.tempTask.completeDate,
         };
@@ -512,9 +511,12 @@ class _Controller {
         uid: Auth.getUser().uid,
       );
       if (results.isEmpty) {
+        // make new preloaded tasks
         state.screenModel.taskList =
             await state.screenModel.addPreloadedTasks();
       } else {
+        // update preloaded tasks
+        state.screenModel.getDrinkTaskID();
         state.screenModel.taskList = results;
       }
     }
