@@ -517,6 +517,7 @@ class _Controller {
       } else {
         // update preloaded tasks
         await state.screenModel.updateDrinkTask();
+        await state.screenModel.updateSleepTask();
 
         // fetch updated preloaded tasks
         results = await FirestoreController.getPreloadedTaskList(

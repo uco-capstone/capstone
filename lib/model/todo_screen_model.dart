@@ -120,6 +120,29 @@ class TodoScreenModel {
         taskId: taskID, update: update);
   }
 
+  Future<String?> getSleepTaskID() async {
+    String target = "Sleep";
+    // get all preloaded tasks
+    var allPreloadedTasks =
+        await FirestoreController.getPreloadedTaskList(uid: user.uid);
+
+    // parse tasks to get Sleep task
+    for (var task in allPreloadedTasks) {
+      if (task.title!.contains(target)) {
+        // get Sleep task ID
+        return task.taskId;
+      }
+    }
+  }
+
+  Future<void> updateSleepTask() async {
+    String title = "Sleep for ${getSleep()} hours";
+    String taskID = await getSleepTaskID() as String;
+    Map<String, dynamic> update = {DocKeyKirbyTask.title.name: title};
+    await FirestoreController.editKirbyTaskField(
+        taskId: taskID, update: update);
+  }
+
   void saveTaskName(String? value) {
     if (value != null) {
       tempTask.title = value;
