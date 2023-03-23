@@ -516,7 +516,12 @@ class _Controller {
             await state.screenModel.addPreloadedTasks();
       } else {
         // update preloaded tasks
-        state.screenModel.updateDrinkTask();
+        await state.screenModel.updateDrinkTask();
+
+        // fetch updated preloaded tasks
+        results = await FirestoreController.getPreloadedTaskList(
+          uid: Auth.getUser().uid,
+        );
         state.screenModel.taskList = results;
       }
     }

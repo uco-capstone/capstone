@@ -107,7 +107,6 @@ class TodoScreenModel {
     for (var task in allPreloadedTasks) {
       if (task.title!.contains(target)) {
         // get drink task ID
-        print(task.taskId);
         return task.taskId;
       }
     }
