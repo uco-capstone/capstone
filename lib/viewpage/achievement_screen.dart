@@ -58,7 +58,7 @@ class _AchievementScreenState extends State<AchievementScreen> {
         padding: const EdgeInsets.all(20),
         crossAxisSpacing: 10,
         mainAxisSpacing: 10,
-        crossAxisCount: 3,
+        crossAxisCount: 2,
         children: <Widget>[
           Card(
             child: InkWell(
@@ -75,14 +75,15 @@ class _AchievementScreenState extends State<AchievementScreen> {
                 height: 300,
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15.0),
+                  color: Colors.orange[200],
+                  //borderRadius: BorderRadius.circular(20.0),
                   image: const DecorationImage(
                     fit: BoxFit.fill,
                     image: AssetImage('images/crown.png'),
                   ),
                 ),
                 child: const Text(
-                  'Eat 3x a day',
+                  'Complete 1 Task',
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -90,118 +91,38 @@ class _AchievementScreenState extends State<AchievementScreen> {
           ),
           Container(
             padding: const EdgeInsets.all(8),
-            color: Colors.orange[50],
-            child: const Text("Eat 9x a day"),
-          ),
-          Container(
-            padding: const EdgeInsets.all(8),
-            color: Colors.orange[50],
-            child: const Text("Eat 12x a day"),
-          ),
-          Container(
-            padding: const EdgeInsets.all(8),
-            color: Colors.orange[100],
-            child: const Text('Spent 10 coins'),
-          ),
-          Container(
-            padding: const EdgeInsets.all(8),
-            color: Colors.orange[100],
-            child: const Text('Spent 50 coins'),
-          ),
-          Container(
-            padding: const EdgeInsets.all(8),
-            color: Colors.orange[100],
-            child: const Text('Spent 100 coins'),
-          ),
-          Container(
-            padding: const EdgeInsets.all(8),
             color: Colors.orange[200],
-            child: const Text('Went for a walk 3x time'),
-          ),
-          Container(
-            padding: const EdgeInsets.all(8),
-            color: Colors.orange[200],
-            child: const Text('Went for a walk 6x time'),
-          ),
-          Container(
-            padding: const EdgeInsets.all(8),
-            color: Colors.orange[200],
-            child: const Text('Went for a walk 9x time'),
-          ),
-          Container(
-            padding: const EdgeInsets.all(8),
-            color: Colors.orange[300],
-            child: const Text('Drink 6oz of Water'),
-          ),
-          Container(
-            padding: const EdgeInsets.all(8),
-            color: Colors.orange[300],
-            child: const Text('Drank 32oz of Water'),
-          ),
-          Container(
-            padding: const EdgeInsets.all(8),
-            color: Colors.orange[300],
-            child: const Text('Drink 62oz of Water'),
-          ),
-          Container(
-            padding: const EdgeInsets.all(8),
-            color: Colors.orange[400],
-            child: const Text('Accomplishments'),
-          ),
-          Container(
-            padding: const EdgeInsets.all(8),
-            color: Colors.orange[400],
-            child: const Text('Accomplishments'),
-          ),
-          Container(
-            padding: const EdgeInsets.all(8),
-            color: Colors.orange[400],
-            child: const Text('Drink 62oz of Water'),
+            child: const Text("Complete 5 Task"),
           ),
           Container(
             padding: const EdgeInsets.all(8),
             color: Colors.orange[500],
-            child: const Text('Accomplishments'),
+            child: const Text("Complete 10 Task"),
           ),
           Container(
             padding: const EdgeInsets.all(8),
             color: Colors.orange[500],
-            child: const Text('Accomplishments'),
-          ),
-          Container(
-            padding: const EdgeInsets.all(8),
-            color: Colors.orange[500],
-            child: const Text('Accomplishments'),
+            child: const Text("Complete 20 Task"),
           ),
           Container(
             padding: const EdgeInsets.all(8),
             color: Colors.orange[600],
-            child: const Text('Accomplishments'),
+            child: const Text('Drink 4oz of Water'),
           ),
           Container(
             padding: const EdgeInsets.all(8),
             color: Colors.orange[600],
-            child: const Text('Accomplishments'),
-          ),
-          Container(
-            padding: const EdgeInsets.all(8),
-            color: Colors.orange[600],
-            child: const Text('Accomplishments'),
+            child: const Text('Drank 6oz of Water'),
           ),
           Container(
             padding: const EdgeInsets.all(8),
             color: Colors.orange[800],
-            child: const Text('Accomplishments'),
+            child: const Text('Drink 12oz of Water'),
           ),
           Container(
             padding: const EdgeInsets.all(8),
             color: Colors.orange[800],
-            child: const Text('Accomplishments'),
-          ),
-          Container(
-            padding: const EdgeInsets.all(8),
-            color: Colors.orange[800],
-            child: const Text('Accomplishments'),
+            child: const Text('Drink 32oz of Water'),
           ),
         ],
       ),
