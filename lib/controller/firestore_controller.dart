@@ -127,6 +127,16 @@ class FirestoreController {
         .set(update);
   }
 
+  static Future<void> updateKirbyTask({
+    required String taskId,
+    required Map<String, dynamic> update,
+  }) async {
+    await FirebaseFirestore.instance
+        .collection(taskCollection)
+        .doc(taskId)
+        .update(update);
+  }
+
   static Future<List<KirbyTask>> getKirbyTaskList({
     required String uid,
   }) async {
@@ -190,7 +200,7 @@ class FirestoreController {
 
     return result;
   }
-  
+
   //============== KIRBY PET ==================
   static Future<KirbyPet> getPet({
     required String userId,
@@ -204,9 +214,9 @@ class FirestoreController {
       return KirbyPet(userId: userId);
     }
     return KirbyPet.fromFirestoreDoc(
-        doc: querySnapshot.docs[0].data() as Map<String, dynamic>,
-        petId: querySnapshot.docs[0].id,
-      );
+      doc: querySnapshot.docs[0].data() as Map<String, dynamic>,
+      petId: querySnapshot.docs[0].id,
+    );
   }
 
   static Future<void> updatePet({
