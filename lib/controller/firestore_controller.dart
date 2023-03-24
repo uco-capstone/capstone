@@ -1,3 +1,4 @@
+import 'package:capstone/controller/auth_controller.dart';
 import 'package:capstone/model/kirby_task_model.dart';
 import 'package:capstone/model/kirby_user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -44,8 +45,9 @@ class FirestoreController {
       return KirbyUser(userId: userId, firstName: "");
     }
     return KirbyUser.fromFirestoreDoc(
-        doc: querySnapshot.docs[0].data() as Map<String, dynamic>,
-        userId: userId);
+      doc: querySnapshot.docs[0].data() as Map<String, dynamic>,
+      userId: userId,
+    );
   }
 
   static Future<bool> hasKirbyUser(String userId) async {
@@ -90,6 +92,35 @@ class FirestoreController {
         .collection(taskCollection)
         .doc(taskId)
         .update({'isCompleted': !isCompleted, 'completeDate': completeDate});
+
+    // Reward if complete task
+    if (!isCompleted) {
+      // Increase currency
+      updateKirbyUser(
+        userId: Auth.user!.uid,
+        update: {'currency': FieldValue.increment(100)},
+      );
+
+      // Increase hunger
+      FirebaseFirestore.instance.runTransaction((transaction) async {
+        QuerySnapshot petSnapshot = await FirebaseFirestore.instance
+            .collection(petCollection)
+            .where(DocKeyPet.userId.name, isEqualTo: Auth.user!.uid)
+            .get();
+
+        final snapshot = await transaction.get(petSnapshot.docs[0].reference);
+
+        // Increase if less than 10
+        if (snapshot.get("hungerGauge") < 10) {
+          transaction.update(
+            petSnapshot.docs[0].reference,
+            {
+              'hungerGauge': FieldValue.increment(1),
+            },
+          );
+        }
+      });
+    }
   }
 
   static Future<String> addKirbyTask({required KirbyTask kirbyTask}) async {
@@ -190,7 +221,7 @@ class FirestoreController {
 
     return result;
   }
-  
+
   //============== KIRBY PET ==================
   static Future<KirbyPet> getPet({
     required String userId,
@@ -204,9 +235,9 @@ class FirestoreController {
       return KirbyPet(userId: userId);
     }
     return KirbyPet.fromFirestoreDoc(
-        doc: querySnapshot.docs[0].data() as Map<String, dynamic>,
-        petId: querySnapshot.docs[0].id,
-      );
+      doc: querySnapshot.docs[0].data() as Map<String, dynamic>,
+      petId: querySnapshot.docs[0].id,
+    );
   }
 
   static Future<void> updatePet({
