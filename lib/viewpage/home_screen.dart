@@ -1,8 +1,10 @@
 import 'package:capstone/controller/auth_controller.dart';
 import 'package:capstone/model/home_screen_model.dart';
 import 'package:capstone/model/kirby_pet_model.dart';
+import 'package:capstone/model/kirby_task_model.dart';
 import 'package:capstone/viewpage/health_info_screen.dart';
 import 'package:capstone/viewpage/history_screen.dart';
+import 'dart:async';
 
 import 'package:capstone/viewpage/settings_screen.dart';
 import 'package:capstone/viewpage/shop_screen.dart';
@@ -147,16 +149,40 @@ class _HomeScreenState extends State<HomeScreen> {
                                     screenModel.kirbyPet!.kirbySkin!)),
                   ),
                   Positioned(
-                    //Sample Hunger Gauge Area
+                    //Hunger gauge border
                     top: 30,
                     left: 50,
                     child: Container(
                       color: Colors.white,
                       height: 40,
                       width: 300,
-                      child: const Center(child: Text('Hunger Gauge')),
                     ),
                   ),
+                  Positioned(
+                    //Hunger gauge body
+                    top: 32,
+                    left: 52,
+                    child: Container(
+                      //Change color and size based off of percentage
+                      color: screenModel.kirbyPet!.hungerGauge! > 7
+                          ? Colors.green
+                          : screenModel.kirbyPet!.hungerGauge! > 3
+                              ? Colors.yellow
+                              : Colors.red,
+                      height: 36,
+                      width: (296 * screenModel.kirbyPet!.hungerGauge! * .1),
+                    ),
+                  ),
+                  Positioned(
+                      top: 30,
+                      left: 50,
+                      child: SizedBox(
+                        height: 40,
+                        width: 300,
+                        child: Center(
+                            child: Text(
+                                'Hunger Gauge (${screenModel.kirbyPet!.hungerGauge! * 10}%)')),
+                      )),
                 ],
               ),
       ),
@@ -168,12 +194,15 @@ class _Controller {
   _HomeScreenState state;
   _Controller(this.state);
   late String currentUserID;
+  Timer? timer;
 
   void initScreen() async {
     state.screenModel.loading = true;
     await getUID();
     await loadKirbyUser();
     await loadKirbyPet();
+    timer =
+        Timer.periodic(Duration(seconds: 10), (Timer t) => checkPastDueTasks());
     state.screenModel.loading = false;
   }
 
@@ -271,5 +300,36 @@ class _Controller {
     }
 
     state.render(() {});
+  }
+
+  /*
+  This function goes through the task list, marks task that are past due,
+  takes away from the hunger gauge if a task is past due, updates the Firestore,
+  and reloads the pet.
+  */
+  void checkPastDueTasks() async {
+    var taskList =
+        await FirestoreController.getKirbyTaskList(uid: currentUserID);
+    var userPet = state.screenModel.kirbyPet;
+    DateTime currTime = DateTime.now();
+    //Goes through the task list and marks past due tasks
+    for (var task in taskList) {
+      //If a task is past due, hunger gauge goes down
+      if (!task.isPastDue! && task.dueDate!.compareTo(currTime) < 0) {
+        Map<String, dynamic> updateTask = {};
+        updateTask[DocKeyKirbyTask.isPastDue.name] = true;
+        Map<String, dynamic> updatePet = {};
+        if (userPet!.hungerGauge! > 0) {
+          updatePet[DocKeyPet.hungerGauge.name] = userPet.hungerGauge! - 1;
+        }
+        //update Firestore
+        await FirestoreController.updateKirbyTask(
+            taskId: task.taskId!, update: updateTask);
+        await FirestoreController.updatePet(
+            userId: currentUserID, update: updatePet);
+      }
+    }
+    //Reload pet
+    await loadKirbyPet();
   }
 }

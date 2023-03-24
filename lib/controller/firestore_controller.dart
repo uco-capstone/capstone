@@ -159,8 +159,7 @@ class FirestoreController {
         .set(update);
   }
 
-// Overrides specfic fields
-  static Future<void> editKirbyTaskField({
+  static Future<void> updateKirbyTask({
     required String taskId,
     required Map<String, dynamic> update,
   }) async {

@@ -41,7 +41,7 @@ class KirbyPet {
       userId: doc[DocKeyPet.userId.name] ??= "",
       kirbySkin: doc[DocKeyPet.kirbySkin.name] ??= skinCustomizations[0].filepath,
       background: doc[DocKeyPet.background.name] ??= backgroundCustomizations[0].filepath,
-      hungerGauge: doc[DocKeyPet.hungerGauge.name] ??= 0,
+      hungerGauge: doc[DocKeyPet.hungerGauge.name] ??= 10,
     );
   }
 }
