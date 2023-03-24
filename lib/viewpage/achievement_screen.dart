@@ -1,5 +1,4 @@
 import 'package:capstone/viewpage/home_screen.dart';
-import 'package:capstone/viewpage/view/view_util.dart';
 import 'package:flutter/material.dart';
 
 class AchievementScreen extends StatefulWidget {
@@ -61,15 +60,38 @@ class _AchievementScreenState extends State<AchievementScreen> {
         mainAxisSpacing: 10,
         crossAxisCount: 3,
         children: <Widget>[
-          Container(
-            padding: const EdgeInsets.all(8),
-            color: Colors.orange[50],
-            child: const Text("Eat 3x a day"),
+          Card(
+            child: InkWell(
+              splashColor: Colors.blue.withAlpha(30),
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => const AlertDialog(
+                    title: Text('Statistics'),
+                  ),
+                );
+              },
+              child: Container(
+                height: 300,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15.0),
+                  image: const DecorationImage(
+                    fit: BoxFit.fill,
+                    image: AssetImage('images/crown.png'),
+                  ),
+                ),
+                child: const Text(
+                  'Eat 3x a day',
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
           ),
           Container(
             padding: const EdgeInsets.all(8),
             color: Colors.orange[50],
-            child: const Text('Eat 9x a day'),
+            child: const Text("Eat 9x a day"),
           ),
           Container(
             padding: const EdgeInsets.all(8),
@@ -183,9 +205,6 @@ class _AchievementScreenState extends State<AchievementScreen> {
           ),
         ],
       ),
-      // ],
-      // ),
-      // ),
     );
   }
 }
