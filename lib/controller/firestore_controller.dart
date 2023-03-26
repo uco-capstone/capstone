@@ -150,24 +150,17 @@ class FirestoreController {
   // get all tasks for a given day
   static Future<List<KirbyTask>> getDayTasks({
     required String uid,
-    // required int dateInMilli, // midnight of date in millisecondsSinceEpoch
     required DateTime day,
   }) async {
-    // const int msPerDay = 86400000; // 86,400,000 milliseconds/day
     DateTime nextDay = day.add(Duration(days: 1));
 
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection(taskCollection)
         .where(DocKeyKirbyTask.userId.name, isEqualTo: uid)
-        // .where(DocKeyKirbyTask.dueDate.name,
-        //     isGreaterThanOrEqualTo: dateInMilli) // midnight of day
-        // .where(DocKeyKirbyTask.dueDate.name,
-        //     isLessThan: (dateInMilli + msPerDay)) // midnight of next day
         .where(DocKeyKirbyTask.dueDate.name,
             isGreaterThanOrEqualTo: day) // midnight of day
         .where(DocKeyKirbyTask.dueDate.name,
             isLessThan: nextDay) // midnight of next day
-        // .orderBy(DocKeyKirbyTask.dueDate.name, descending: false)
         .get();
 
     var result = <KirbyTask>[];
