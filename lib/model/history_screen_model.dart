@@ -9,6 +9,8 @@ class HistoryScreenModel {
   KirbyUser? kirbyUser;
   bool loading = false;
   late double todayRate;
+  int scale = 5;
+  List<double> data = [];
 
   HistoryScreenModel({required this.user});
 
@@ -59,8 +61,32 @@ class HistoryScreenModel {
       for (var result in results) {
         if (result.isCompleted == true) completed++;
       }
-      double rating = completed / results.length;
+      double rating = completed * scale / results.length;
       todayRate = rating;
     }
+  }
+
+// rates the completion rate from 0-5 for the given date
+  Future<double> getRating(DateTime day) async {
+    // get all tasks for that day
+    var results = await FirestoreController.getDayTasks(
+        uid: user.uid,
+        // dateInMilli: getMidnightToday(),
+        day: day);
+    if (results.isEmpty) {
+      return 0;
+    } else {
+      // calculate percent complete
+      int completed = 0;
+      for (var result in results) {
+        if (result.isCompleted == true) completed++;
+      }
+      double rating = completed * scale / results.length;
+      return rating;
+    }
+  }
+
+  void setData() {
+    data = [0, 1, 2, 3, 4, 5, todayRate];
   }
 }

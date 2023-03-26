@@ -31,7 +31,7 @@ class _HistoryState extends State<HistoryScreen> {
     screenModel = HistoryScreenModel(user: Auth.user!);
     con.getKirbyUser();
     con.initScreen();
-    screenModel.setCompletionRating();
+    // screenModel.setCompletionRating();
   }
 
   void render(fn) => setState(fn);
@@ -68,7 +68,8 @@ class _HistoryState extends State<HistoryScreen> {
         //   border: Border.all(color: Theme.of(context).primaryColor),
         // ),
         child: BarChart(
-          data: [0, 1, 2, 3, 4, 5, screenModel.todayRate],
+          // data: [0, 1, 2, 3, 4, 5, screenModel.todayRate],
+          data: screenModel.data,
           // labels: ["Su", "M", "Tu", "W", "Th", "F", "Sa"],
           labels: screenModel.getDays(),
           displayValue: true,
@@ -101,6 +102,10 @@ class _Controller {
   void initScreen() async {
     state.screenModel.loading = true;
     await state.screenModel.setCompletionRating();
+    state.setState(() {
+      state.screenModel.setData();
+    });
+
     state.screenModel.loading = false;
   }
 
