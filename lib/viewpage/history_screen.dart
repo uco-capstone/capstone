@@ -69,7 +69,7 @@ class _HistoryState extends State<HistoryScreen> {
         // ),
         child: BarChart(
           // data: [0, 1, 2, 3, 4, 5, screenModel.todayRate],
-          data: screenModel.data,
+          data: screenModel.completionRatings,
           // labels: ["Su", "M", "Tu", "W", "Th", "F", "Sa"],
           labels: screenModel.getDays(),
           displayValue: true,
@@ -101,9 +101,9 @@ class _Controller {
 
   void initScreen() async {
     state.screenModel.loading = true;
-    await state.screenModel.setCompletionRating();
+    await state.screenModel.setCompletionRatings();
     state.setState(() {
-      state.screenModel.setData();
+      // state.screenModel.setData();
     });
 
     state.screenModel.loading = false;

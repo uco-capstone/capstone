@@ -10,7 +10,7 @@ class HistoryScreenModel {
   bool loading = false;
   late double todayRate;
   int scale = 5;
-  List<double> data = [];
+  List<double> completionRatings = [];
 
   HistoryScreenModel({required this.user});
 
@@ -46,47 +46,48 @@ class HistoryScreenModel {
     return date;
   }
 
-// rates the completion rate from 0-5
-  Future<void> setCompletionRating() async {
-    // get all tasks for that day
-    var results = await FirestoreController.getDayTasks(
-        uid: user.uid,
-        // dateInMilli: getMidnightToday(),
-        day: getTodayDate());
-    if (results.isEmpty) {
-      todayRate = 0;
-    } else {
-      // calculate percent complete
-      int completed = 0;
-      for (var result in results) {
-        if (result.isCompleted == true) completed++;
+// sets the completion ratings for the week
+  Future<void> setCompletionRatings() async {
+    for (int i = 6; i >= 0; i--) {
+      // get all tasks from the given day
+      var results = await FirestoreController.getDayTasks(
+          uid: user.uid, day: getTodayDate().subtract(Duration(days: i)));
+      if (results.isEmpty) {
+        completionRatings.add(0);
+      } else {
+        // calculate percent complete
+        int completed = 0;
+        for (var result in results) {
+          if (result.isCompleted == true) completed++;
+        }
+        double rating = completed * scale / results.length;
+        completionRatings.add(rating);
       }
-      double rating = completed * scale / results.length;
-      todayRate = rating;
     }
   }
 
-// rates the completion rate from 0-5 for the given date
-  Future<double> getRating(DateTime day) async {
-    // get all tasks for that day
-    var results = await FirestoreController.getDayTasks(
-        uid: user.uid,
-        // dateInMilli: getMidnightToday(),
-        day: day);
-    if (results.isEmpty) {
-      return 0;
-    } else {
-      // calculate percent complete
-      int completed = 0;
-      for (var result in results) {
-        if (result.isCompleted == true) completed++;
-      }
-      double rating = completed * scale / results.length;
-      return rating;
-    }
-  }
+// // rates the completion rate from 0-5 for the given date
+//   Future<double> getRating(DateTime day) async {
+//     // get all tasks for that day
+//     var results = await FirestoreController.getDayTasks(
+//         uid: user.uid,
+//         // dateInMilli: getMidnightToday(),
+//         day: day);
+//     if (results.isEmpty) {
+//       return 0;
+//     } else {
+//       // calculate percent complete
+//       int completed = 0;
+//       for (var result in results) {
+//         if (result.isCompleted == true) completed++;
+//       }
+//       double rating = completed * scale / results.length;
+//       return rating;
+//     }
+//   }
 
-  void setData() {
-    data = [0, 1, 2, 3, 4, 5, todayRate];
-  }
+//   Future<void> setData() async {
+//     double rating = await getRating(getTodayDate());
+//     data = [0, 1, 2, 3, 4, rating, todayRate];
+//   }
 }
