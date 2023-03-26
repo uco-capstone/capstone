@@ -48,12 +48,13 @@ class HistoryScreenModel {
 
 // sets the completion ratings for the week
   Future<void> setCompletionRatings() async {
+    List<double> data = [];
     for (int i = 6; i >= 0; i--) {
       // get all tasks from the given day
       var results = await FirestoreController.getDayTasks(
           uid: user.uid, day: getTodayDate().subtract(Duration(days: i)));
       if (results.isEmpty) {
-        completionRatings.add(0);
+        data.add(0);
       } else {
         // calculate percent complete
         int completed = 0;
@@ -61,9 +62,10 @@ class HistoryScreenModel {
           if (result.isCompleted == true) completed++;
         }
         double rating = completed * scale / results.length;
-        completionRatings.add(rating);
+        data.add(rating);
       }
     }
+    completionRatings = data;
   }
 
 // // rates the completion rate from 0-5 for the given date
