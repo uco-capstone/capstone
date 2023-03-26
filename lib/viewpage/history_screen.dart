@@ -65,7 +65,8 @@ class _HistoryState extends State<HistoryScreen> {
         // ),
         child: BarChart(
           data: [0, 1, 2, 3, 4, 5, 4],
-          labels: ["Su", "M", "Tu", "W", "Th", "F", "Sa"],
+          // labels: ["Su", "M", "Tu", "W", "Th", "F", "Sa"],
+          labels: con.getDays(),
           displayValue: true,
           // labelStyle: TextStyle(fontSize: 18),
           // valueStyle: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
@@ -92,6 +93,24 @@ class _Controller {
   _HistoryState state;
   _Controller(this.state);
 
+  // gets the days of the week, starting with the oldest, ending with today
+  List<String> getDays() {
+    List<String> week = ["M", "Tu", "W", "Th", "F", "Sa", "Su"];
+
+    int weekday = DateTime.now().weekday; // monday = 1; sunday = 7
+
+    // set today as the last day of the list & reorder
+    if (weekday == 7) {
+      return week;
+    } else {
+      List<String> frontList = week.sublist(weekday);
+      List<String> backList = week.sublist(0, weekday);
+      week = frontList + backList;
+      return week;
+    }
+  }
+
+  // gets user info
   Future<void> getKirbyUser() async {
     try {
       state.screenModel.loading = true;
@@ -106,6 +125,7 @@ class _Controller {
     state.screenModel.loading = false;
   }
 
+  // assigns color of bars
   Color getColor(double value) {
     if (value < 2) {
       return Colors.amber.shade300;
@@ -115,6 +135,7 @@ class _Controller {
       return Colors.amber.shade900;
   }
 
+  // returns star fill grades
   Icon getIcon(double value) {
     if (value < 1) {
       return Icon(
