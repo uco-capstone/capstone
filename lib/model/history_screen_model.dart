@@ -62,7 +62,7 @@ class HistoryScreenModel {
           if (result.isCompleted == true) completed++;
         }
         double rating = completed * scale / results.length;
-        data.add(rating);
+        data.add(double.parse((rating).toStringAsFixed(1)));
       }
     }
     completionRatings = data;
