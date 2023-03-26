@@ -1,5 +1,7 @@
 import 'package:capstone/controller/firestore_controller.dart';
 import 'package:capstone/model/constants.dart';
+import 'package:capstone/model/home_screen_model.dart';
+import 'package:capstone/model/kirby_task_model.dart';
 import 'package:capstone/model/kirby_user_model.dart';
 import 'package:chart_components/chart_components.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +30,8 @@ class _HistoryState extends State<HistoryScreen> {
     con = _Controller(this);
     screenModel = HistoryScreenModel(user: Auth.user!);
     con.getKirbyUser();
+    con.initScreen();
+    screenModel.setCompletionRating();
   }
 
   void render(fn) => setState(fn);
@@ -64,9 +68,9 @@ class _HistoryState extends State<HistoryScreen> {
         //   border: Border.all(color: Theme.of(context).primaryColor),
         // ),
         child: BarChart(
-          data: [0, 1, 2, 3, 4, 5, 4],
+          data: [0, 1, 2, 3, 4, 5, screenModel.todayRate],
           // labels: ["Su", "M", "Tu", "W", "Th", "F", "Sa"],
-          labels: con.getDays(),
+          labels: screenModel.getDays(),
           displayValue: true,
           // labelStyle: TextStyle(fontSize: 18),
           // valueStyle: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
@@ -92,23 +96,59 @@ class _HistoryState extends State<HistoryScreen> {
 class _Controller {
   _HistoryState state;
   _Controller(this.state);
+  // late double _todayRate;
 
-  // gets the days of the week, starting with the oldest, ending with today
-  List<String> getDays() {
-    List<String> week = ["M", "Tu", "W", "Th", "F", "Sa", "Su"];
-
-    int weekday = DateTime.now().weekday; // monday = 1; sunday = 7
-
-    // set today as the last day of the list & reorder
-    if (weekday == 7) {
-      return week;
-    } else {
-      List<String> frontList = week.sublist(weekday);
-      List<String> backList = week.sublist(0, weekday);
-      week = frontList + backList;
-      return week;
-    }
+  void initScreen() async {
+    state.screenModel.loading = true;
+    await state.screenModel.setCompletionRating();
+    state.screenModel.loading = false;
   }
+
+  // // gets the days of the week, starting with the oldest, ending with today
+  // List<String> getDays() {
+  //   List<String> week = ["M", "Tu", "W", "Th", "F", "Sa", "Su"];
+
+  //   int weekday = DateTime.now().weekday; // monday = 1; sunday = 7
+
+  //   // set today as the last day of the list & reorder
+  //   if (weekday == 7) {
+  //     return week;
+  //   } else {
+  //     List<String> frontList = week.sublist(weekday);
+  //     List<String> backList = week.sublist(0, weekday);
+  //     week = frontList + backList;
+  //     return week;
+  //   }
+  // }
+
+  // // get the 1st millisecondsSinceEpoch of the day
+  // int getMidnightToday() {
+  //   const int msPerDay = 86400000; // 86,400,000 milliseconds/day
+  //   int now = DateTime.now().millisecondsSinceEpoch;
+  //   // get the 1st millisecondsSinceEpoch of the day
+  //   int midnight = now % msPerDay;
+  //   return midnight;
+  // }
+
+  // // rates the completion rate from 0-5
+  // void setCompletionRating() async {
+  //   // get all tasks for that day
+  //   var results = await FirestoreController.getDayTasks(
+  //     uid: Auth.getUser().uid,
+  //     dateInMilli: getMidnightToday(),
+  //   );
+  //   if (results.isEmpty) {
+  //     _todayRate = 0;
+  //   } else {
+  //     // calculate percent complete
+  //     int completed = 0;
+  //     for (var result in results) {
+  //       if (result.isCompleted == true) completed++;
+  //     }
+  //     double rating = completed / results.length;
+  //     _todayRate = rating;
+  //   }
+  // }
 
   // gets user info
   Future<void> getKirbyUser() async {
@@ -143,7 +183,7 @@ class _Controller {
         size: 24,
         color: getColor(value),
       );
-    } else if (value < 2) {
+    } else if (value < 3) {
       return Icon(
         Icons.star_half,
         size: 24,

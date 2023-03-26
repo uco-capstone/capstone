@@ -147,6 +147,40 @@ class FirestoreController {
     return result;
   }
 
+  // get all tasks for a given day
+  static Future<List<KirbyTask>> getDayTasks({
+    required String uid,
+    // required int dateInMilli, // midnight of date in millisecondsSinceEpoch
+    required DateTime day,
+  }) async {
+    // const int msPerDay = 86400000; // 86,400,000 milliseconds/day
+    DateTime nextDay = day.add(Duration(days: 1));
+
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(taskCollection)
+        .where(DocKeyKirbyTask.userId.name, isEqualTo: uid)
+        // .where(DocKeyKirbyTask.dueDate.name,
+        //     isGreaterThanOrEqualTo: dateInMilli) // midnight of day
+        // .where(DocKeyKirbyTask.dueDate.name,
+        //     isLessThan: (dateInMilli + msPerDay)) // midnight of next day
+        .where(DocKeyKirbyTask.dueDate.name,
+            isGreaterThanOrEqualTo: day) // midnight of day
+        .where(DocKeyKirbyTask.dueDate.name,
+            isLessThan: nextDay) // midnight of next day
+        // .orderBy(DocKeyKirbyTask.dueDate.name, descending: false)
+        .get();
+
+    var result = <KirbyTask>[];
+    for (var doc in querySnapshot.docs) {
+      if (doc.data() != null) {
+        var document = doc.data() as Map<String, dynamic>;
+        var t = KirbyTask.fromFirestoreDoc(doc: document, taskId: doc.id);
+        result.add(t);
+      }
+    }
+    return result;
+  }
+
   static Future<List<KirbyTask>> getPreloadedTaskList({
     required String uid,
   }) async {
@@ -190,7 +224,7 @@ class FirestoreController {
 
     return result;
   }
-  
+
   //============== KIRBY PET ==================
   static Future<KirbyPet> getPet({
     required String userId,
@@ -204,9 +238,9 @@ class FirestoreController {
       return KirbyPet(userId: userId);
     }
     return KirbyPet.fromFirestoreDoc(
-        doc: querySnapshot.docs[0].data() as Map<String, dynamic>,
-        petId: querySnapshot.docs[0].id,
-      );
+      doc: querySnapshot.docs[0].data() as Map<String, dynamic>,
+      petId: querySnapshot.docs[0].id,
+    );
   }
 
   static Future<void> updatePet({
