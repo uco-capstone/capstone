@@ -199,33 +199,26 @@ class _ToDoScreenState extends State<ToDoScreen> {
   }
 
   Widget addReoccuringCheckBox({e = false, KirbyTask? t}) {
-    return Row(
-      children: [
-        const Text("Reoccuring"),
-        e
-            ? Checkbox(
-                value: t!.isReoccuring,
-                onChanged: (bool? value) {
-                  render(() {
-                    t.isReoccuring = !t.isReoccuring!;
-                    // ignore: avoid_print
-                    print("===== reoccuring: ${t.isReoccuring}");
-                  });
-                },
-              )
-            : Checkbox(
-                value: screenModel.tempTask.isReoccuring,
-                onChanged: (bool? value) {
-                  setState(() {
-                    screenModel.tempTask.isReoccuring =
-                        !screenModel.tempTask.isReoccuring!;
-                    // ignore: avoid_print
-                    print(
-                        "===== reoccuring: ${screenModel.tempTask.isReoccuring}");
-                  });
-                },
-              ),
-      ],
+    return StatefulBuilder(
+      builder: (context, setInnerState) => e
+          ? CheckboxListTile(
+              title: const Text("Reoccuring"),
+              value: t!.isReoccuring,
+              onChanged: (newValue) {
+                setInnerState(() {
+                  t.isReoccuring = newValue;
+                });
+              },
+            )
+          : CheckboxListTile(
+              title: const Text("Reoccuring"),
+              value: screenModel.tempTask.isReoccuring,
+              onChanged: (newValue) {
+                setInnerState(() {
+                  screenModel.tempTask.isReoccuring = newValue;
+                });
+              },
+            ),
     );
   }
 
