@@ -91,6 +91,7 @@ class FirestoreController {
         .doc(taskId)
         .update({'isCompleted': !isCompleted, 'completeDate': completeDate});
     var task = await getKirbyTask(taskId: taskId);
+    // ignore: avoid_print
     print("==== reoccuring: ${task.reocurringDuration}");
     if (task.isCompleted && task.isReoccuring!) {
       var tempTask = KirbyTask(
