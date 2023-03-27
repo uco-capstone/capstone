@@ -23,6 +23,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
   late _Controller con;
   DateTime? datePicked;
   TimeOfDay? timePicked;
+  bool isReoccuringTask = false;
   var formKey = GlobalKey<FormState>();
   late TodoScreenModel screenModel;
 
@@ -192,6 +193,38 @@ class _ToDoScreenState extends State<ToDoScreen> {
             addTaskTimeInput(e: e, t: t),
           ],
         ),
+        addReoccuringCheckBox(e: e, t: t),
+      ],
+    );
+  }
+
+  Widget addReoccuringCheckBox({e = false, KirbyTask? t}) {
+    return Row(
+      children: [
+        const Text("Reoccuring"),
+        e
+            ? Checkbox(
+                value: t!.isReoccuring,
+                onChanged: (bool? value) {
+                  render(() {
+                    t.isReoccuring = !t.isReoccuring!;
+                    // ignore: avoid_print
+                    print("===== reoccuring: ${t.isReoccuring}");
+                  });
+                },
+              )
+            : Checkbox(
+                value: screenModel.tempTask.isReoccuring,
+                onChanged: (bool? value) {
+                  setState(() {
+                    screenModel.tempTask.isReoccuring =
+                        !screenModel.tempTask.isReoccuring!;
+                    // ignore: avoid_print
+                    print(
+                        "===== reoccuring: ${screenModel.tempTask.isReoccuring}");
+                  });
+                },
+              ),
       ],
     );
   }
@@ -454,8 +487,7 @@ class _Controller {
               state.screenModel.tempTask.isPreloaded,
           DocKeyKirbyTask.isReoccuring.name:
               state.screenModel.tempTask.isReoccuring,
-          DocKeyKirbyTask.isPastDue.name:
-              state.screenModel.tempTask.isPastDue,
+          DocKeyKirbyTask.isPastDue.name: state.screenModel.tempTask.isPastDue,
           // DocKeyKirbyTask.completeDate.name:
           //     state.screenModel.tempTask.completeDate,
         };

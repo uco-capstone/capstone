@@ -6,13 +6,13 @@ import 'package:flutter/material.dart';
 enum TaskActions { delete, edit, cancel }
 
 class ToDoItem extends StatefulWidget {
-  const ToDoItem(
-      {required this.task,
-      required this.taskIndex,
-      required this.deleteFn,
-      required this.editFn,
-      Key? key})
-      : super(key: key);
+  const ToDoItem({
+    required this.task,
+    required this.taskIndex,
+    required this.deleteFn,
+    required this.editFn,
+    Key? key,
+  }) : super(key: key);
 
   final Function deleteFn;
   final Function editFn;
