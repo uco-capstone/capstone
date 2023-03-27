@@ -9,6 +9,7 @@ enum DocKeyKirbyTask {
   isReoccuring,
   isPastDue,
   completeDate,
+  reocurringDuration,
 }
 
 class KirbyTask {
@@ -21,6 +22,7 @@ class KirbyTask {
   bool? isReoccuring;
   bool? isPastDue;
   DateTime? completeDate;
+  int? reocurringDuration;
 
   KirbyTask({
     this.taskId,
@@ -32,6 +34,7 @@ class KirbyTask {
     required this.isReoccuring,
     this.isPastDue,
     this.completeDate,
+    this.reocurringDuration,
   });
 
   Map<String, dynamic> toFirestoreDoc() {
@@ -44,6 +47,7 @@ class KirbyTask {
       DocKeyKirbyTask.isReoccuring.name: isReoccuring,
       DocKeyKirbyTask.isPastDue.name: isPastDue,
       DocKeyKirbyTask.completeDate.name: completeDate,
+      DocKeyKirbyTask.reocurringDuration.name: reocurringDuration,
     };
   }
 
@@ -69,6 +73,7 @@ class KirbyTask {
               doc[DocKeyKirbyTask.completeDate.name].millisecondsSinceEpoch,
             )
           : null,
+      reocurringDuration: doc[DocKeyKirbyTask.reocurringDuration.name] ??= 0,
     );
   }
 

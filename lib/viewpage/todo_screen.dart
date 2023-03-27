@@ -9,14 +9,14 @@ import 'package:flutter/material.dart';
 import '../controller/auth_controller.dart';
 
 enum DurationLabel {
-  none('None', Duration()),
-  daily('Daily', Duration(days: 1)),
-  weekly('Weekly', Duration(days: 7)),
-  monthly('Monthly', Duration(days: 30));
+  none('None', 0),
+  daily('Daily', 1),
+  weekly('Weekly', 7),
+  monthly('Monthly', 30);
 
   const DurationLabel(this.label, this.duration);
   final String label;
-  final Duration duration;
+  final int duration;
 }
 
 class ToDoScreen extends StatefulWidget {
@@ -224,7 +224,6 @@ class _ToDoScreenState extends State<ToDoScreen> {
         ),
       );
     }
-
     var durationController = TextEditingController();
 
     return SizedBox(
@@ -276,9 +275,9 @@ class _ToDoScreenState extends State<ToDoScreen> {
               padding: const EdgeInsets.only(top: 15),
               child: SizedBox(
                 width: 130,
-                child: DropdownMenu(
+                child: DropdownMenu<DurationLabel>(
                   initialSelection: screenModel.tempTask.isReoccuring!
-                      ? DurationLabel.daily
+                      ? getDurationEnum(screenModel.tempTask.reocurringDuration ??= 1)
                       : DurationLabel.none,
                   controller: durationController,
                   enabled: screenModel.tempTask.isReoccuring!,
@@ -291,7 +290,8 @@ class _ToDoScreenState extends State<ToDoScreen> {
                   label: const Text('Duration'),
                   onSelected: (DurationLabel? duration) {
                     setInnerState(() {
-                      con.selectedDuration = duration;
+                      screenModel.tempTask.reocurringDuration =
+                          duration!.duration;
                     });
                   },
                 ),
@@ -301,6 +301,15 @@ class _ToDoScreenState extends State<ToDoScreen> {
         ),
       ),
     );
+  }
+
+  DurationLabel getDurationEnum(int d) {
+    for (DurationLabel durartion in DurationLabel.values) {
+      if (durartion.duration == d) {
+        return durartion;
+      }
+    }
+    return DurationLabel.none;
   }
 
   Widget addTaskDateInput({e = false, KirbyTask? t}) {
@@ -540,7 +549,6 @@ class _Controller {
   //Used to edit the text on the textformfields
   var datePickedController = TextEditingController();
   var timePickedController = TextEditingController();
-  DurationLabel? selectedDuration;
 
   Future<void> save({e = false}) async {
     FormState? currentSate = state.formKey.currentState;
@@ -564,6 +572,8 @@ class _Controller {
           DocKeyKirbyTask.isPastDue.name: state.screenModel.tempTask.isPastDue,
           DocKeyKirbyTask.completeDate.name:
               state.screenModel.tempTask.completeDate,
+          DocKeyKirbyTask.reocurringDuration.name:
+              state.screenModel.tempTask.reocurringDuration,
         };
         // state.screenModel.tempTask.dueDate =
         await FirestoreController.editKirbyTask(
@@ -587,7 +597,6 @@ class _Controller {
 
       datePickedController.clear();
       timePickedController.clear();
-      selectedDuration = DurationLabel.none;
       if (!state.mounted) return;
       Navigator.pop(state.context);
       showSnackBar(
