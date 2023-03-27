@@ -66,7 +66,7 @@ class _ToDoItemState extends State<ToDoItem> {
       ),
       tileColor: Colors.white,
       leading: IconButton(
-        onPressed: () async {
+        onPressed: widget.task.isCompleted ? null : () async {
           await FirestoreController.updateTaskCompletion(
             taskId: widget.task.taskId!,
             isCompleted: widget.task.isCompleted,

@@ -23,7 +23,6 @@ class _ToDoScreenState extends State<ToDoScreen> {
   late _Controller con;
   DateTime? datePicked;
   TimeOfDay? timePicked;
-  bool isReoccuringTask = false;
   var formKey = GlobalKey<FormState>();
   late TodoScreenModel screenModel;
 
@@ -128,6 +127,11 @@ class _ToDoScreenState extends State<ToDoScreen> {
                   onPressed: () {
                     con.datePickedController.clear();
                     con.timePickedController.clear();
+                    screenModel.tempTask = KirbyTask(
+                      userId: screenModel.user.uid,
+                      isCompleted: false,
+                      isReoccuring: false,
+                    );
                     Navigator.pop(context);
                   },
                   child: Text(
@@ -455,7 +459,6 @@ class _ToDoScreenState extends State<ToDoScreen> {
 class _Controller {
   _ToDoScreenState state;
   _Controller(this.state);
-  KirbyTask? edittedTask;
 
   //Used to edit the text on the textformfields
   var datePickedController = TextEditingController();
@@ -481,8 +484,8 @@ class _Controller {
           DocKeyKirbyTask.isReoccuring.name:
               state.screenModel.tempTask.isReoccuring,
           DocKeyKirbyTask.isPastDue.name: state.screenModel.tempTask.isPastDue,
-          // DocKeyKirbyTask.completeDate.name:
-          //     state.screenModel.tempTask.completeDate,
+          DocKeyKirbyTask.completeDate.name:
+              state.screenModel.tempTask.completeDate,
         };
         // state.screenModel.tempTask.dueDate =
         await FirestoreController.editKirbyTask(
@@ -501,6 +504,7 @@ class _Controller {
         userId: Auth.getUser().uid,
         isCompleted: false,
         completeDate: null,
+        isReoccuring: false,
       );
 
       datePickedController.clear();

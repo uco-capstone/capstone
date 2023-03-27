@@ -29,7 +29,7 @@ class KirbyTask {
     this.dueDate,
     required this.isCompleted,
     this.isPreloaded,
-    this.isReoccuring,
+    required this.isReoccuring,
     this.isPastDue,
     this.completeDate,
   });

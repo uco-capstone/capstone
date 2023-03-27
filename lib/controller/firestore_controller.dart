@@ -90,6 +90,21 @@ class FirestoreController {
         .collection(taskCollection)
         .doc(taskId)
         .update({'isCompleted': !isCompleted, 'completeDate': completeDate});
+    var task = await getKirbyTask(taskId: taskId);
+    print("===== completed: ${task.isCompleted}");
+    print("===== reoccuring: ${task.isReoccuring}");
+    if (task.isCompleted && task.isReoccuring!) {
+      print("===== is reoccuring and complete");
+      var tempTask = KirbyTask(
+          userId: task.userId,
+          title: task.title,
+          isCompleted: false,
+          dueDate: task.dueDate?.add(const Duration(days: 1)),
+          isReoccuring: true,
+          isPreloaded: task.isPreloaded);
+      print(tempTask);
+      await addKirbyTask(kirbyTask: tempTask);
+    }
   }
 
   static Future<String> addKirbyTask({required KirbyTask kirbyTask}) async {
@@ -141,7 +156,9 @@ class FirestoreController {
       if (doc.data() != null) {
         var document = doc.data() as Map<String, dynamic>;
         var t = KirbyTask.fromFirestoreDoc(doc: document, taskId: doc.id);
-        result.add(t);
+        if (t.isCompleted != true) {
+          result.add(t);
+        }
       }
     }
     return result;
@@ -190,7 +207,7 @@ class FirestoreController {
 
     return result;
   }
-  
+
   //============== KIRBY PET ==================
   static Future<KirbyPet> getPet({
     required String userId,
@@ -204,9 +221,9 @@ class FirestoreController {
       return KirbyPet(userId: userId);
     }
     return KirbyPet.fromFirestoreDoc(
-        doc: querySnapshot.docs[0].data() as Map<String, dynamic>,
-        petId: querySnapshot.docs[0].id,
-      );
+      doc: querySnapshot.docs[0].data() as Map<String, dynamic>,
+      petId: querySnapshot.docs[0].id,
+    );
   }
 
   static Future<void> updatePet({
