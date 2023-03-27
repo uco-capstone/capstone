@@ -8,6 +8,17 @@ import 'package:flutter/material.dart';
 
 import '../controller/auth_controller.dart';
 
+enum DurationLabel {
+  none('None', Duration()),
+  daily('Daily', Duration(days: 1)),
+  weekly('Weekly', Duration(days: 7)),
+  monthly('Monthly', Duration(days: 30));
+
+  const DurationLabel(this.label, this.duration);
+  final String label;
+  final Duration duration;
+}
+
 class ToDoScreen extends StatefulWidget {
   static const routeName = '/todoScreen';
 
@@ -88,7 +99,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
               bottom: MediaQuery.of(context).viewInsets.bottom,
             ),
             child: SizedBox(
-              height: 400,
+              height: 430,
               child: addTaskBody(e: e, t: t),
             ),
           ),
@@ -197,32 +208,98 @@ class _ToDoScreenState extends State<ToDoScreen> {
             addTaskTimeInput(e: e, t: t),
           ],
         ),
-        addReoccuringCheckBox(e: e, t: t),
+        addReoccuringInfo(e: e, t: t),
       ],
     );
   }
 
-  Widget addReoccuringCheckBox({e = false, KirbyTask? t}) {
-    return StatefulBuilder(
-      builder: (context, setInnerState) => e
-          ? CheckboxListTile(
-              title: const Text("Reoccuring"),
-              value: t!.isReoccuring,
-              onChanged: (newValue) {
-                setInnerState(() {
-                  t.isReoccuring = newValue;
-                });
-              },
-            )
-          : CheckboxListTile(
-              title: const Text("Reoccuring"),
-              value: screenModel.tempTask.isReoccuring,
-              onChanged: (newValue) {
-                setInnerState(() {
-                  screenModel.tempTask.isReoccuring = newValue;
-                });
-              },
+  Widget addReoccuringInfo({e = false, KirbyTask? t}) {
+    final durationEntries = <DropdownMenuEntry<DurationLabel>>[];
+    for (final DurationLabel duration in DurationLabel.values) {
+      durationEntries.add(
+        DropdownMenuEntry<DurationLabel>(
+          value: duration,
+          label: duration.label,
+          enabled: duration.label != 'None',
+        ),
+      );
+    }
+
+    var durationController = TextEditingController();
+
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
+      child: StatefulBuilder(
+        builder: (context, setInnerState) => Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 15, 20, 0),
+              child: Container(
+                width: 170,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  // ignore: prefer_const_literals_to_create_immutables
+                  boxShadow: [
+                    const BoxShadow(
+                      color: Colors.grey,
+                      offset: Offset(0.0, 0.0),
+                      blurRadius: 5.0,
+                      spreadRadius: 0.0,
+                    ),
+                  ],
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: e
+                    ? CheckboxListTile(
+                        title: const Text("Reoccuring"),
+                        value: t!.isReoccuring,
+                        onChanged: (newValue) {
+                          setInnerState(() {
+                            t.isReoccuring = newValue;
+                          });
+                        },
+                      )
+                    : CheckboxListTile(
+                        title: const Text("Reoccuring"),
+                        value: screenModel.tempTask.isReoccuring,
+                        onChanged: (newValue) {
+                          setInnerState(() {
+                            screenModel.tempTask.isReoccuring = newValue;
+                          });
+                        },
+                      ),
+              ),
             ),
+            Padding(
+              padding: const EdgeInsets.only(top: 15),
+              child: SizedBox(
+                width: 130,
+                child: DropdownMenu(
+                  initialSelection: screenModel.tempTask.isReoccuring!
+                      ? DurationLabel.daily
+                      : DurationLabel.none,
+                  controller: durationController,
+                  enabled: screenModel.tempTask.isReoccuring!,
+                  textStyle: TextStyle(
+                    color: screenModel.tempTask.isReoccuring!
+                        ? Colors.black
+                        : Colors.grey,
+                  ),
+                  dropdownMenuEntries: durationEntries,
+                  label: const Text('Duration'),
+                  onSelected: (DurationLabel? duration) {
+                    setInnerState(() {
+                      con.selectedDuration = duration;
+                    });
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -230,7 +307,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
     return Expanded(
       flex: 1,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+        padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
         child: Container(
           width: 150,
           padding: const EdgeInsets.symmetric(
@@ -289,7 +366,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
     return Expanded(
       flex: 1,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 30, 0, 0),
+        padding: const EdgeInsets.fromLTRB(20, 15, 0, 0),
         child: Container(
           width: 150,
           padding: const EdgeInsets.symmetric(
@@ -463,6 +540,7 @@ class _Controller {
   //Used to edit the text on the textformfields
   var datePickedController = TextEditingController();
   var timePickedController = TextEditingController();
+  DurationLabel? selectedDuration;
 
   Future<void> save({e = false}) async {
     FormState? currentSate = state.formKey.currentState;
@@ -509,6 +587,7 @@ class _Controller {
 
       datePickedController.clear();
       timePickedController.clear();
+      selectedDuration = DurationLabel.none;
       if (!state.mounted) return;
       Navigator.pop(state.context);
       showSnackBar(
