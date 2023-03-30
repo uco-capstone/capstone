@@ -124,76 +124,78 @@ class _HomeScreenState extends State<HomeScreen> {
             ? const Center(
                 child: CircularProgressIndicator(),
               )
-            : Stack(
-                children: [
-                  Container(
-                    //Background, if there is no configured background, then it'll show a default image
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: screenModel.kirbyPet == null
-                              ? const AssetImage(
-                                  'images/backgrounds/default-background.png')
-                              : screenModel.kirbyPet!.background == "" ||
-                                      screenModel.kirbyPet!.background == null
-                                  ? const AssetImage(
-                                      'images/backgrounds/default-background.png')
-                                  : AssetImage(
-                                      screenModel.kirbyPet!.background!)),
-                    ),
-                  ),
-                  Positioned(
-                    top: 210,
-                    left: 55,
-                    //Pet, if there is no configured Kirby Pet, then it'll show a default image
-                    child: SizedBox(
-                        height: 300,
-                        child: screenModel.kirbyPet == null
-                            ? Image.asset('images/skins/default-kirby.png')
-                            : screenModel.kirbyPet!.kirbySkin == "" ||
-                                    screenModel.kirbyPet!.kirbySkin == null
-                                ? Image.asset('images/skins/default-kirby.png')
-                                : Image.asset(
-                                    screenModel.kirbyPet!.kirbySkin!)),
-                  ),
-                  Positioned(
-                    //Hunger gauge border
-                    top: 30,
-                    left: 50,
-                    child: Container(
-                      color: Colors.white,
-                      height: 40,
-                      width: 300,
-                    ),
-                  ),
-                  Positioned(
-                    //Hunger gauge body
-                    top: 32,
-                    left: 52,
-                    child: Container(
-                      //Change color and size based off of percentage
-                      color: screenModel.kirbyPet!.hungerGauge> 7
-                          ? Colors.green
-                          : screenModel.kirbyPet!.hungerGauge> 3
-                              ? Colors.yellow
-                              : Colors.red,
-                      height: 36,
-                      width: (296 * screenModel.kirbyPet!.hungerGauge* .1),
-                    ),
-                  ),
-                  Positioned(
-                      top: 30,
-                      left: 50,
-                      child: SizedBox(
-                        height: 40,
-                        width: 300,
-                        child: Center(
-                            child: Text(
-                                'Hunger Gauge (${screenModel.kirbyPet!.hungerGauge* 10}%)')),
-                      )),
-                ],
-              ),
+            : body(),
       ),
+    );
+  }
+
+  Widget body() {
+    return Stack(
+      children: [
+        Container(
+          //Background, if there is no configured background, then it'll show a default image
+          decoration: BoxDecoration(
+            image: DecorationImage(
+                fit: BoxFit.cover,
+                image: screenModel.kirbyPet == null
+                    ? const AssetImage(
+                        'images/backgrounds/default-background.png')
+                    : screenModel.kirbyPet!.background == "" ||
+                            screenModel.kirbyPet!.background == null
+                        ? const AssetImage(
+                            'images/backgrounds/default-background.png')
+                        : AssetImage(screenModel.kirbyPet!.background!)),
+          ),
+        ),
+        Positioned(
+          top: 210,
+          left: 55,
+          //Pet, if there is no configured Kirby Pet, then it'll show a default image
+          child: SizedBox(
+              height: 300,
+              child: screenModel.kirbyPet == null
+                  ? Image.asset('images/skins/default-kirby.png')
+                  : screenModel.kirbyPet!.kirbySkin == "" ||
+                          screenModel.kirbyPet!.kirbySkin == null
+                      ? Image.asset('images/skins/default-kirby.png')
+                      : Image.asset(screenModel.kirbyPet!.kirbySkin!)),
+        ),
+        Positioned(
+          //Hunger gauge border
+          top: 30,
+          left: 50,
+          child: Container(
+            color: Colors.white,
+            height: 40,
+            width: 300,
+          ),
+        ),
+        Positioned(
+          //Hunger gauge body
+          top: 32,
+          left: 52,
+          child: Container(
+            //Change color and size based off of percentage
+            color: screenModel.kirbyPet!.hungerGauge > 7
+                ? Colors.green
+                : screenModel.kirbyPet!.hungerGauge > 3
+                    ? Colors.yellow
+                    : Colors.red,
+            height: 36,
+            width: (296 * screenModel.kirbyPet!.hungerGauge * .1),
+          ),
+        ),
+        Positioned(
+            top: 30,
+            left: 50,
+            child: SizedBox(
+              height: 40,
+              width: 300,
+              child: Center(
+                  child: Text(
+                      'Hunger Gauge (${screenModel.kirbyPet!.hungerGauge * 10}%)')),
+            )),
+      ],
     );
   }
 }
@@ -329,8 +331,8 @@ class _Controller {
         Map<String, dynamic> updateTask = {};
         updateTask[DocKeyKirbyTask.isPastDue.name] = true;
         Map<String, dynamic> updatePet = {};
-        if (userPet!.hungerGauge> 0) {
-          updatePet[DocKeyPet.hungerGauge.name] = userPet.hungerGauge- 1;
+        if (userPet!.hungerGauge > 0) {
+          updatePet[DocKeyPet.hungerGauge.name] = userPet.hungerGauge - 1;
         }
         //update Firestore
         await FirestoreController.updateKirbyTask(
