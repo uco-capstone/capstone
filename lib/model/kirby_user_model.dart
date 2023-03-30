@@ -110,7 +110,7 @@ class KirbyUser {
   }
 
   static String? validateMealsEaten(String? value) {
-    if (value == null || value == "") return "Age cannot be empty.";
+    if (value == null || value == "") return "Meals eaten cannot be empty.";
     if (notANumber(value)) return "Must enter numbers only.";
     return null;
   }
