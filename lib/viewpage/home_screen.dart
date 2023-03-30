@@ -2,7 +2,6 @@ import 'package:capstone/controller/auth_controller.dart';
 import 'package:capstone/model/home_screen_model.dart';
 import 'package:capstone/model/kirby_pet_model.dart';
 import 'package:capstone/model/kirby_task_model.dart';
-import 'package:capstone/model/kirby_user_model.dart';
 import 'package:capstone/viewpage/achievement_screen.dart';
 import 'package:capstone/viewpage/health_info_screen.dart';
 import 'package:capstone/viewpage/history_screen.dart';
@@ -209,7 +208,7 @@ class _Controller {
     await loadKirbyUser();
     await loadKirbyPet();
     timer =
-        Timer.periodic(Duration(seconds: 10), (Timer t) => checkPastDueTasks());
+        Timer.periodic(const Duration(seconds: 10), (Timer t) => checkPastDueTasks());
     state.screenModel.loading = false;
   }
 

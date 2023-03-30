@@ -79,12 +79,9 @@ flutter:
     - images/backgrounds/cloud-background.png
     - images/backgrounds/city-background.png
     - images/kirby-wand.png
-<<<<<<< HEAD
     - images/selected-stamp.png
     - images/kirby_icon.png
-=======
     - images/crown.png
->>>>>>> 61e15be (access to achievement screen - ui)
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

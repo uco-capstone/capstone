@@ -194,7 +194,7 @@ class FirestoreController {
     required String uid,
     required DateTime day,
   }) async {
-    DateTime nextDay = day.add(Duration(days: 1));
+    DateTime nextDay = day.add(const Duration(days: 1));
 
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection(taskCollection)

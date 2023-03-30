@@ -155,7 +155,7 @@ class _ToDoItemState extends State<ToDoItem> {
       subtitle: widget.task.dueDate != null
           ? Text(
             dueDate(),
-            style: widget.task.isPastDue! ? TextStyle(color: Colors.red) : TextStyle(color: Colors.grey)
+            style: widget.task.isPastDue! ? const TextStyle(color: Colors.red) : const TextStyle(color: Colors.grey)
             )
           : const SizedBox.shrink(),
     );

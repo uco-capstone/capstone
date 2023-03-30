@@ -118,6 +118,7 @@ class TodoScreenModel {
         return task.taskId;
       }
     }
+    return null;
   }
 
   Future<void> updateDrinkTask() async {

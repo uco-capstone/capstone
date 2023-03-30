@@ -56,8 +56,8 @@ class _HistoryState extends State<HistoryScreen> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
-        margin: EdgeInsets.all(16),
-        padding: EdgeInsets.only(bottom: 200, left: 8, right: 8, top: 20),
+        margin: const EdgeInsets.all(16),
+        padding: const EdgeInsets.only(bottom: 200, left: 8, right: 8, top: 20),
         // decoration: BoxDecoration(
         //   shape: BoxShape.rectangle,
         //   borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -74,7 +74,7 @@ class _HistoryState extends State<HistoryScreen> {
           getIcon: con.getIcon,
           barWidth: 38,
           barSeparation: 12,
-          animationDuration: Duration(milliseconds: 1800),
+          animationDuration: const Duration(milliseconds: 1800),
           animationCurve: Curves.easeInOutSine,
           itemRadius: 30,
           iconHeight: 24,
@@ -95,7 +95,7 @@ class _Controller {
   void initScreen() async {
     state.screenModel.loading = true;
     await state.screenModel.setCompletionRatings();
-    state.setState(() {});
+    state.render(() {});
 
     state.screenModel.loading = false;
   }
@@ -121,8 +121,9 @@ class _Controller {
       return Colors.amber.shade300;
     } else if (value < 4) {
       return Colors.amber.shade600;
-    } else
+    } else {
       return Colors.amber.shade900;
+    }
   }
 
   // returns star fill grades
@@ -139,11 +140,12 @@ class _Controller {
         size: 24,
         color: getColor(value),
       );
-    } else
+    } else {
       return Icon(
         Icons.star,
         size: 24,
         color: getColor(value),
       );
+    }
   }
 }
