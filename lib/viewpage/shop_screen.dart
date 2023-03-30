@@ -6,6 +6,7 @@ import 'package:capstone/viewpage/home_screen.dart';
 import 'package:capstone/viewpage/view/view_util.dart';
 import '../controller/firestore_controller.dart';
 import '../model/constants.dart';
+import '../model/customization_model.dart';
 import '../model/kirby_pet_model.dart';
 
 class ShopScreen extends StatefulWidget {
@@ -28,6 +29,7 @@ class _ShopScreen extends State<ShopScreen> {
     super.initState();
     con = _Controller(this);
     screenModel = ShopScreenModel(user: Auth.getUser());
+    con.initScreen();
   }
 
   void render(fn) => setState(fn);
@@ -38,37 +40,20 @@ class _ShopScreen extends State<ShopScreen> {
   Widget _listViewBody(int menuOption) {
     switch (menuOption) {
       case 0: //Skins
-        return ListView.separated(
+        return GridView.builder(
           controller: _homeController,
           itemBuilder: (BuildContext context, int index) {
-            return ListTile(
-              title: Text(
-                skinCustomizations[index],
-              ),
-              onTap: () =>
-                  con.updateSkinCustomization(skinCustomizations[index]),
-            );
+            return _skinsScreen(index);
           },
-          separatorBuilder: (BuildContext context, int index) => const Divider(
-            thickness: 5,
-          ),
-          itemCount: 3,
+          itemCount: skinCustomizations.length, gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
         );
       case 1:  //Backgrounds
-        return ListView.separated(
+        return GridView.builder(
           controller: _homeController,
           itemBuilder: (BuildContext context, int index) {
-            return ListTile(
-              title: Text(
-                backgroundCustomizations[index],
-              ),
-              onTap: () => con.updateBackgroundCustomization(backgroundCustomizations[index]),
-            );
+            return _backgroundsScreen(index);
           },
-          separatorBuilder: (BuildContext context, int index) => const Divider(
-                thickness: 5,
-              ),
-          itemCount: 3,
+          itemCount: backgroundCustomizations.length, gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
         );
       case 2: //Accessories
         return ListView.separated(
@@ -124,6 +109,170 @@ class _ShopScreen extends State<ShopScreen> {
     });
   }
 
+  Widget _skinsScreen(int index) {
+    return Align(
+      child: SizedBox(
+        height: MediaQuery.of(context).size.width * 0.45,
+        width: MediaQuery.of(context).size.width * 0.45,
+        child: Card(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+          child: Stack(
+            children: [
+              ListTile(
+                title: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Center(
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.28,
+                        child: Image(
+                          image: AssetImage(skinCustomizations[index].filepath),
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 10,
+                      child: Text(skinCustomizations[index].label)
+                    ),
+                    Positioned(
+                      right: 0,
+                      top: 5,
+                      child: Container(
+                        width: MediaQuery.of(context).size.width * 0.15,
+                        height: MediaQuery.of(context).size.width * 0.08,
+                        decoration: BoxDecoration(
+                            color: Colors.grey[100],
+                            shape: BoxShape.rectangle,
+                            borderRadius: const BorderRadius.all(Radius.circular(25)),
+                            //border: Border.all(color: Colors.deepPurple, width: 2)
+                          ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            //Sample number of coins
+                            Text('${skinCustomizations[index].price} '),
+                            Icon(
+                              Icons.monetization_on,
+                              color: Colors.orangeAccent,
+                              size: MediaQuery.of(context).size.width * 0.05,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                onTap: () =>
+                    con.updateSkinCustomization(skinCustomizations[index].filepath),
+              ),
+              if (skinCustomizations[index].filepath == screenModel.kirbyPet!.kirbySkin)
+                Container(
+                  height: double.maxFinite,
+                  width: double.maxFinite,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16.0),
+                    color: Colors.black.withOpacity(0.2),
+                  ),
+                  child: const Image(
+                    image: AssetImage('images/selected-stamp.png'),
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _backgroundsScreen(int index) {
+    return Align(
+      child: SizedBox(
+        height: MediaQuery.of(context).size.width * 0.45,
+        width: MediaQuery.of(context).size.width * 0.45,
+        child: Card(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+          child: Stack(
+            children: [
+              Center(
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: AspectRatio(
+                    aspectRatio: 1,
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.all(Radius.circular(12.0)),
+                      child: Image(
+                        image: AssetImage(backgroundCustomizations[index].filepath),
+                        fit: BoxFit.cover
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              ListTile(
+                title: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Positioned(
+                      bottom: 10,
+                      child: Container(
+                        width: MediaQuery.of(context).size.width * 0.2,
+                        height: MediaQuery.of(context).size.width * 0.08,
+                        decoration: BoxDecoration(
+                            color: Colors.grey[100],
+                            shape: BoxShape.rectangle,
+                            borderRadius: const BorderRadius.all(Radius.circular(25)),
+                          ),
+                        child: Center(child: Text(backgroundCustomizations[index].label))
+                      ),
+                    ),
+                    Positioned(
+                      right: 0,
+                      top: 5,
+                      child: Container(
+                        width: MediaQuery.of(context).size.width * 0.15,
+                        height: MediaQuery.of(context).size.width * 0.08,
+                        decoration: BoxDecoration(
+                            color: Colors.grey[100],
+                            shape: BoxShape.rectangle,
+                            borderRadius: const BorderRadius.all(Radius.circular(25)),
+                          ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('${skinCustomizations[index].price} '),
+                            Icon(
+                              Icons.monetization_on,
+                              color: Colors.orangeAccent,
+                              size: MediaQuery.of(context).size.width * 0.05,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                onTap: () =>
+                    con.updateBackgroundCustomization(backgroundCustomizations[index].filepath),
+              ),
+              if (backgroundCustomizations[index].filepath == screenModel.kirbyPet!.background)
+                Container(
+                  height: double.maxFinite,
+                  width: double.maxFinite,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16.0),
+                    color: Colors.black.withOpacity(0.2),
+                  ),
+                  child: const Image(
+                    image: AssetImage('images/selected-stamp.png'),
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -135,9 +284,38 @@ class _ShopScreen extends State<ShopScreen> {
             Navigator.pushNamed(context, HomeScreen.routeName);
           },
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              width: 75,
+              decoration: const BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.rectangle,
+                  borderRadius: BorderRadius.all(Radius.circular(25))),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  //Sample number of coins
+                  Text(
+                    '0',
+                    style: TextStyle(
+                        color: Colors.black, fontWeight: FontWeight.bold),
+                  ),
+                  Icon(
+                    Icons.monetization_on,
+                    color: Colors.orangeAccent,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
       body: Center(
-        child: _listViewBody(_selectedIndex),
+        child: screenModel.loading
+        ? const CircularProgressIndicator()
+        : _listViewBody(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
@@ -198,6 +376,12 @@ class _ShopScreen extends State<ShopScreen> {
 class _Controller {
   _ShopScreen state;
   _Controller(this.state);
+
+  void initScreen() async {
+    state.screenModel.loading = true;
+    await getPet();
+    state.screenModel.loading = false;
+  }
 
   Future<void> getKirbyUser() async {
     try {
@@ -266,6 +450,4 @@ class _Controller {
     // ignore: use_build_context_synchronously
     showSnackBar(context: state.context, message: 'Successfully Customized Background!');
   }
-
-  void skinsList() {}
 }
