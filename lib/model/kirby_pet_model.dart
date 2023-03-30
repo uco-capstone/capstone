@@ -13,14 +13,14 @@ class KirbyPet {
   String userId;
   String? kirbySkin;            //Path for custom skin, ex: "images/sample-kirby.png"
   String? background;           //Path for custom background image
-  int? hungerGauge;
+  int hungerGauge;
 
   KirbyPet({
     this.petId,
     required this.userId,
     this.kirbySkin,
     this.background,
-    this.hungerGauge,
+    this.hungerGauge = 5,
   });
 
   Map<String, dynamic> toFirestoreDoc() {
@@ -41,7 +41,7 @@ class KirbyPet {
       userId: doc[DocKeyPet.userId.name] ??= "",
       kirbySkin: doc[DocKeyPet.kirbySkin.name] ??= skinCustomizations[0].filepath,
       background: doc[DocKeyPet.background.name] ??= backgroundCustomizations[0].filepath,
-      hungerGauge: doc[DocKeyPet.hungerGauge.name] ??= 10,
+      hungerGauge: doc[DocKeyPet.hungerGauge.name] ??= 5,
     );
   }
 }

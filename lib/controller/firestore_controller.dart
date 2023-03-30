@@ -56,7 +56,7 @@ class FirestoreController {
           .collection(kirbyUserCollection)
           .where(DocKeyUser.userId.name, isEqualTo: userId)
           .get();
-      return snapshot.docs.isEmpty;
+      return snapshot.docs.isNotEmpty;
     } catch (e) {
       // ignore: avoid_print
       print(e);

@@ -134,7 +134,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           image: screenModel.kirbyPet == null
                               ? const AssetImage(
                                   'images/backgrounds/default-background.png')
-                              : screenModel.kirbyPet!.background == ""
+                              : screenModel.kirbyPet!.background == "" ||
+                                      screenModel.kirbyPet!.background == null
                                   ? const AssetImage(
                                       'images/backgrounds/default-background.png')
                                   : AssetImage(
@@ -149,7 +150,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         height: 300,
                         child: screenModel.kirbyPet == null
                             ? Image.asset('images/skins/default-kirby.png')
-                            : screenModel.kirbyPet!.kirbySkin == ""
+                            : screenModel.kirbyPet!.kirbySkin == "" ||
+                                    screenModel.kirbyPet!.kirbySkin == null
                                 ? Image.asset('images/skins/default-kirby.png')
                                 : Image.asset(
                                     screenModel.kirbyPet!.kirbySkin!)),
@@ -170,13 +172,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     left: 52,
                     child: Container(
                       //Change color and size based off of percentage
-                      color: screenModel.kirbyPet!.hungerGauge! > 7
+                      color: screenModel.kirbyPet!.hungerGauge> 7
                           ? Colors.green
-                          : screenModel.kirbyPet!.hungerGauge! > 3
+                          : screenModel.kirbyPet!.hungerGauge> 3
                               ? Colors.yellow
                               : Colors.red,
                       height: 36,
-                      width: (296 * screenModel.kirbyPet!.hungerGauge! * .1),
+                      width: (296 * screenModel.kirbyPet!.hungerGauge* .1),
                     ),
                   ),
                   Positioned(
@@ -187,7 +189,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         width: 300,
                         child: Center(
                             child: Text(
-                                'Hunger Gauge (${screenModel.kirbyPet!.hungerGauge! * 10}%)')),
+                                'Hunger Gauge (${screenModel.kirbyPet!.hungerGauge* 10}%)')),
                       )),
                 ],
               ),
@@ -204,28 +206,26 @@ class _Controller {
 
   void initScreen() async {
     state.screenModel.loading = true;
-    await getUID();
+    getUID();
     await loadKirbyUser();
     await loadKirbyPet();
-    timer =
-        Timer.periodic(const Duration(seconds: 10), (Timer t) => checkPastDueTasks());
+    await getTimer();
     state.screenModel.loading = false;
   }
 
-  Future<void> getUID() async {
-    try {
-      currentUserID = Auth.getUser().uid;
-    } catch (e) {
-      // ignore: avoid_print
-      if (Constants.devMode) print("==== couldn't load user");
-      state.render(() => state.screenModel.loadingErrorMessage = "$e");
-    }
+  Future<void> getTimer() async {
+    timer = Timer.periodic(
+        const Duration(seconds: 10), (Timer t) => checkPastDueTasks());
+  }
+
+  void getUID() {
+    currentUserID = state.screenModel.user.uid;
   }
 
   Future<void> loadKirbyUser() async {
     try {
       bool hasKirbyUser = await FirestoreController.hasKirbyUser(currentUserID);
-      if (hasKirbyUser && state.mounted) {
+      if (!hasKirbyUser && state.mounted) {
         Navigator.pushNamed(state.context, HealthInfoScreen.routeName);
       }
       state.screenModel.kirbyUser =
@@ -241,7 +241,7 @@ class _Controller {
   Future<void> loadKirbyPet() async {
     try {
       bool hasPet = await FirestoreController.hasPet(currentUserID);
-      if (hasPet == false) {
+      if (!hasPet) {
         KirbyPet tempPet = KirbyPet(userId: currentUserID);
         state.screenModel.kirbyPet = tempPet;
         await FirestoreController.addPet(kirbyPet: tempPet);
@@ -249,7 +249,6 @@ class _Controller {
         state.screenModel.kirbyPet =
             await FirestoreController.getPet(userId: currentUserID);
       }
-
       state.render(() {});
     } catch (e) {
       // ignore: avoid_print
@@ -318,7 +317,7 @@ class _Controller {
   takes away from the hunger gauge if a task is past due, updates the Firestore,
   and reloads the pet.
   */
-  void checkPastDueTasks() async {
+  Future<void> checkPastDueTasks() async {
     var taskList =
         await FirestoreController.getKirbyTaskList(uid: currentUserID);
     var userPet = state.screenModel.kirbyPet;
@@ -330,8 +329,8 @@ class _Controller {
         Map<String, dynamic> updateTask = {};
         updateTask[DocKeyKirbyTask.isPastDue.name] = true;
         Map<String, dynamic> updatePet = {};
-        if (userPet!.hungerGauge! > 0) {
-          updatePet[DocKeyPet.hungerGauge.name] = userPet.hungerGauge! - 1;
+        if (userPet!.hungerGauge> 0) {
+          updatePet[DocKeyPet.hungerGauge.name] = userPet.hungerGauge- 1;
         }
         //update Firestore
         await FirestoreController.updateKirbyTask(
