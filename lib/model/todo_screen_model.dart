@@ -85,7 +85,7 @@ class TodoScreenModel {
   // half of the user's weight
   String getHalfWeight() {
     if (kirbyUser?.weight != null) {
-      return (kirbyUser!.weight! * 8).round().toString();
+      return (kirbyUser!.weight! / 2).round().toString();
     } else {
       return "100";
     }
