@@ -148,6 +148,7 @@ class FirestoreController {
     return KirbyTask.fromFirestoreDoc(doc: document, taskId: taskId);
   }
 
+// Overwrites the entire doc
   static Future<void> editKirbyTask({
     required String taskId,
     required Map<String, dynamic> update,
@@ -156,6 +157,17 @@ class FirestoreController {
         .collection(taskCollection)
         .doc(taskId)
         .set(update);
+  }
+
+// Overrides specfic fields
+  static Future<void> editKirbyTaskField({
+    required String taskId,
+    required Map<String, dynamic> update,
+  }) async {
+    await FirebaseFirestore.instance
+        .collection(taskCollection)
+        .doc(taskId)
+        .update(update);
   }
 
   static Future<List<KirbyTask>> getKirbyTaskList({
