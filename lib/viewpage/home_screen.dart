@@ -2,6 +2,7 @@ import 'package:capstone/controller/auth_controller.dart';
 import 'package:capstone/model/home_screen_model.dart';
 import 'package:capstone/model/kirby_pet_model.dart';
 import 'package:capstone/viewpage/health_info_screen.dart';
+import 'package:capstone/viewpage/history_screen.dart';
 
 import 'package:capstone/viewpage/settings_screen.dart';
 import 'package:capstone/viewpage/shop_screen.dart';
@@ -94,6 +95,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 onTap: con.shopScreen,
               ),
               ListTile(
+                leading: const Icon(Icons.assessment_outlined),
+                title: const Text('History'),
+                onTap: con.historyScreen,
+              ),
+              ListTile(
                 leading: const Icon(Icons.settings),
                 title: const Text('Settings'),
                 onTap: con.settingsScreen,
@@ -183,8 +189,7 @@ class _Controller {
 
   Future<void> loadKirbyUser() async {
     try {
-      bool hasKirbyUser =
-          await FirestoreController.hasKirbyUser(currentUserID);
+      bool hasKirbyUser = await FirestoreController.hasKirbyUser(currentUserID);
       if (hasKirbyUser && state.mounted) {
         Navigator.pushNamed(state.context, HealthInfoScreen.routeName);
       }
@@ -207,7 +212,7 @@ class _Controller {
         await FirestoreController.addPet(kirbyPet: tempPet);
       } else {
         state.screenModel.kirbyPet =
-            await FirestoreController.getPet(userId: currentUserID); 
+            await FirestoreController.getPet(userId: currentUserID);
       }
 
       state.render(() {});
@@ -225,6 +230,10 @@ class _Controller {
   void shopScreen() {
     Navigator.pushNamed(state.context, ShopScreen.routeName)
         .then((value) => state.render(() {}));
+  }
+
+  void historyScreen() async {
+    await Navigator.pushNamed(state.context, HistoryScreen.routeName);
   }
 
   void settingsScreen() async {

@@ -1,4 +1,5 @@
 import 'package:capstone/viewpage/health_info_screen.dart';
+import 'package:capstone/viewpage/history_screen.dart';
 import 'package:capstone/viewpage/settings_screen.dart';
 import 'package:capstone/viewpage/start_dispatcher.dart';
 import 'package:capstone/viewpage/shop_screen.dart';
@@ -33,6 +34,7 @@ class CapstoneApp extends StatelessWidget {
         CreateAccountScreen.routeName: (context) => const CreateAccountScreen(),
         HealthInfoScreen.routeName: (context) => const HealthInfoScreen(),
         SettingsScreen.routeName: (context) => const SettingsScreen(),
+        HistoryScreen.routeName: (context) => const HistoryScreen(),
       },
       theme: ThemeData(
         primarySwatch: Colors.indigo,

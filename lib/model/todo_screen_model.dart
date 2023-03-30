@@ -97,6 +97,83 @@ class TodoScreenModel {
     }
   }
 
+  String getMeals() {
+    if (kirbyUser?.averageMealsEaten != null) {
+      return kirbyUser!.averageMealsEaten!.toString();
+    } else {
+      return "3";
+    }
+  }
+
+  Future<String?> getDrinkTaskID() async {
+    String target = "Drink";
+    // get all preloaded tasks
+    var allPreloadedTasks =
+        await FirestoreController.getPreloadedTaskList(uid: user.uid);
+
+    // parse tasks to get Drink task
+    for (var task in allPreloadedTasks) {
+      if (task.title!.contains(target)) {
+        // get drink task ID
+        return task.taskId;
+      }
+    }
+  }
+
+  Future<void> updateDrinkTask() async {
+    String title = "Drink ${getHalfWeight()}oz of water";
+    String taskID = await getDrinkTaskID() as String;
+    Map<String, dynamic> update = {DocKeyKirbyTask.title.name: title};
+    await FirestoreController.editKirbyTaskField(
+        taskId: taskID, update: update);
+  }
+
+  Future<String?> getSleepTaskID() async {
+    String target = "Sleep";
+    // get all preloaded tasks
+    var allPreloadedTasks =
+        await FirestoreController.getPreloadedTaskList(uid: user.uid);
+
+    // parse tasks to get Sleep task
+    for (var task in allPreloadedTasks) {
+      if (task.title!.contains(target)) {
+        // get Sleep task ID
+        return task.taskId;
+      }
+    }
+  }
+
+  Future<void> updateSleepTask() async {
+    String title = "Sleep for ${getSleep()} hours";
+    String taskID = await getSleepTaskID() as String;
+    Map<String, dynamic> update = {DocKeyKirbyTask.title.name: title};
+    await FirestoreController.editKirbyTaskField(
+        taskId: taskID, update: update);
+  }
+
+  Future<String?> getMealsTaskID() async {
+    String target = "Eat";
+    // get all preloaded tasks
+    var allPreloadedTasks =
+        await FirestoreController.getPreloadedTaskList(uid: user.uid);
+
+    // parse tasks to get Eat task
+    for (var task in allPreloadedTasks) {
+      if (task.title!.contains(target)) {
+        // get Eat task ID
+        return task.taskId;
+      }
+    }
+  }
+
+  Future<void> updateEatTask() async {
+    String title = "Eat ${getMeals()} meals today";
+    String taskID = await getMealsTaskID() as String;
+    Map<String, dynamic> update = {DocKeyKirbyTask.title.name: title};
+    await FirestoreController.editKirbyTaskField(
+        taskId: taskID, update: update);
+  }
+
   void saveTaskName(String? value) {
     if (value != null) {
       tempTask.title = value;
