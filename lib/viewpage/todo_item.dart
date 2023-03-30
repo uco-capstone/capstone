@@ -1,3 +1,4 @@
+import 'package:achievement_view/achievement_view.dart';
 import 'package:capstone/controller/firestore_controller.dart';
 import 'package:capstone/model/kirby_task_model.dart';
 import 'package:capstone/viewpage/view/view_util.dart';
@@ -54,6 +55,18 @@ class _ToDoItemState extends State<ToDoItem> {
     });
   }
 
+  void showAchievementView(String taskName) {
+    AchievementView(context,
+            title: "Good Job! +1 Hunger +100 Coins",
+            subTitle: "You completed: $taskName!",
+            icon: Padding(
+              padding: const EdgeInsets.all(8),
+              child: Image.asset('images/kirby_icon.png'),
+            ),
+            listener: (status) {})
+        .show();
+  }
+
   @override
   Widget build(BuildContext context) {
     widget.task.isPreloaded ??= false;
@@ -76,6 +89,9 @@ class _ToDoItemState extends State<ToDoItem> {
               DateTime.now().day,
             ),
           );
+          if (!widget.task.isCompleted) {
+            showAchievementView(widget.task.title ?? "a Task");
+          }
 
           render(() {
             widget.task.isCompleted = !widget.task.isCompleted;
