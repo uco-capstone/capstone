@@ -41,6 +41,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.1"
+  chart_components:
+    dependency: "direct main"
+    description:
+      name: chart_components
+      sha256: "06865e68a4f0363d174c025419bd5a290dd05de4cb5b20519070e73ec85bb4ad"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
   clock:
     dependency: transitive
     description:

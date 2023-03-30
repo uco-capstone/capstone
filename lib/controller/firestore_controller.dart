@@ -190,6 +190,33 @@ class FirestoreController {
     return result;
   }
 
+  // get all tasks for a given day
+  static Future<List<KirbyTask>> getDayTasks({
+    required String uid,
+    required DateTime day,
+  }) async {
+    DateTime nextDay = day.add(Duration(days: 1));
+
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(taskCollection)
+        .where(DocKeyKirbyTask.userId.name, isEqualTo: uid)
+        .where(DocKeyKirbyTask.dueDate.name,
+            isGreaterThanOrEqualTo: day) // midnight of day
+        .where(DocKeyKirbyTask.dueDate.name,
+            isLessThan: nextDay) // midnight of next day
+        .get();
+
+    var result = <KirbyTask>[];
+    for (var doc in querySnapshot.docs) {
+      if (doc.data() != null) {
+        var document = doc.data() as Map<String, dynamic>;
+        var t = KirbyTask.fromFirestoreDoc(doc: document, taskId: doc.id);
+        result.add(t);
+      }
+    }
+    return result;
+  }
+
   static Future<List<KirbyTask>> getPreloadedTaskList({
     required String uid,
   }) async {

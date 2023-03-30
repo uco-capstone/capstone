@@ -38,7 +38,9 @@ dependencies:
   cupertino_icons: ^1.0.2
   firebase_core: ^2.6.0
   firebase_auth: ^4.2.7
+  chart_components: ^1.0.1
   achievement_view: ^1.0.0
+
 
 dev_dependencies:
   flutter_test:
