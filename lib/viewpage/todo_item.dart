@@ -7,13 +7,13 @@ import 'package:flutter/material.dart';
 enum TaskActions { delete, edit, cancel }
 
 class ToDoItem extends StatefulWidget {
-  const ToDoItem(
-      {required this.task,
-      required this.taskIndex,
-      required this.deleteFn,
-      required this.editFn,
-      Key? key})
-      : super(key: key);
+  const ToDoItem({
+    required this.task,
+    required this.taskIndex,
+    required this.deleteFn,
+    required this.editFn,
+    Key? key,
+  }) : super(key: key);
 
   final Function deleteFn;
   final Function editFn;
@@ -79,7 +79,7 @@ class _ToDoItemState extends State<ToDoItem> {
       ),
       tileColor: Colors.white,
       leading: IconButton(
-        onPressed: () async {
+        onPressed: widget.task.isCompleted ? null : () async {
           await FirestoreController.updateTaskCompletion(
             taskId: widget.task.taskId!,
             isCompleted: widget.task.isCompleted,

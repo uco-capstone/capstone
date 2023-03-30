@@ -8,6 +8,17 @@ import 'package:flutter/material.dart';
 
 import '../controller/auth_controller.dart';
 
+enum DurationLabel {
+  none('None', 0),
+  daily('Daily', 1),
+  weekly('Weekly', 7),
+  monthly('Monthly', 30);
+
+  const DurationLabel(this.label, this.duration);
+  final String label;
+  final int duration;
+}
+
 class ToDoScreen extends StatefulWidget {
   static const routeName = '/todoScreen';
 
@@ -88,7 +99,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
               bottom: MediaQuery.of(context).viewInsets.bottom,
             ),
             child: SizedBox(
-              height: 400,
+              height: 430,
               child: addTaskBody(e: e, t: t),
             ),
           ),
@@ -127,6 +138,11 @@ class _ToDoScreenState extends State<ToDoScreen> {
                   onPressed: () {
                     con.datePickedController.clear();
                     con.timePickedController.clear();
+                    screenModel.tempTask = KirbyTask(
+                      userId: screenModel.user.uid,
+                      isCompleted: false,
+                      isReoccuring: false,
+                    );
                     Navigator.pop(context);
                   },
                   child: Text(
@@ -192,15 +208,115 @@ class _ToDoScreenState extends State<ToDoScreen> {
             addTaskTimeInput(e: e, t: t),
           ],
         ),
+        addReoccuringInfo(e: e, t: t),
       ],
     );
+  }
+
+  Widget addReoccuringInfo({e = false, KirbyTask? t}) {
+    final durationEntries = <DropdownMenuEntry<DurationLabel>>[];
+    for (final DurationLabel duration in DurationLabel.values) {
+      durationEntries.add(
+        DropdownMenuEntry<DurationLabel>(
+          value: duration,
+          label: duration.label,
+          enabled: duration.label != 'None',
+        ),
+      );
+    }
+    var durationController = TextEditingController();
+
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
+      child: StatefulBuilder(
+        builder: (context, setInnerState) => Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 15, 20, 0),
+              child: Container(
+                width: 170,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  // ignore: prefer_const_literals_to_create_immutables
+                  boxShadow: [
+                    const BoxShadow(
+                      color: Colors.grey,
+                      offset: Offset(0.0, 0.0),
+                      blurRadius: 5.0,
+                      spreadRadius: 0.0,
+                    ),
+                  ],
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: e
+                    ? CheckboxListTile(
+                        title: const Text("Reoccuring"),
+                        value: t!.isReoccuring,
+                        onChanged: (newValue) {
+                          setInnerState(() {
+                            t.isReoccuring = newValue;
+                          });
+                        },
+                      )
+                    : CheckboxListTile(
+                        title: const Text("Reoccuring"),
+                        value: screenModel.tempTask.isReoccuring,
+                        onChanged: (newValue) {
+                          setInnerState(() {
+                            screenModel.tempTask.isReoccuring = newValue;
+                          });
+                        },
+                      ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 15),
+              child: SizedBox(
+                width: 130,
+                child: DropdownMenu<DurationLabel>(
+                  initialSelection: screenModel.tempTask.isReoccuring!
+                      ? getDurationEnum(screenModel.tempTask.reocurringDuration ??= 1)
+                      : DurationLabel.none,
+                  controller: durationController,
+                  enabled: screenModel.tempTask.isReoccuring!,
+                  textStyle: TextStyle(
+                    color: screenModel.tempTask.isReoccuring!
+                        ? Colors.black
+                        : Colors.grey,
+                  ),
+                  dropdownMenuEntries: durationEntries,
+                  label: const Text('Duration'),
+                  onSelected: (DurationLabel? duration) {
+                    setInnerState(() {
+                      screenModel.tempTask.reocurringDuration =
+                          duration!.duration;
+                    });
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  DurationLabel getDurationEnum(int d) {
+    for (DurationLabel durartion in DurationLabel.values) {
+      if (durartion.duration == d) {
+        return durartion;
+      }
+    }
+    return DurationLabel.none;
   }
 
   Widget addTaskDateInput({e = false, KirbyTask? t}) {
     return Expanded(
       flex: 1,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+        padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
         child: Container(
           width: 150,
           padding: const EdgeInsets.symmetric(
@@ -259,7 +375,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
     return Expanded(
       flex: 1,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 30, 0, 0),
+        padding: const EdgeInsets.fromLTRB(20, 15, 0, 0),
         child: Container(
           width: 150,
           padding: const EdgeInsets.symmetric(
@@ -429,7 +545,6 @@ class _ToDoScreenState extends State<ToDoScreen> {
 class _Controller {
   _ToDoScreenState state;
   _Controller(this.state);
-  KirbyTask? edittedTask;
 
   //Used to edit the text on the textformfields
   var datePickedController = TextEditingController();
@@ -455,11 +570,13 @@ class _Controller {
           DocKeyKirbyTask.isReoccuring.name:
               state.screenModel.tempTask.isReoccuring,
           DocKeyKirbyTask.isPastDue.name: state.screenModel.tempTask.isPastDue,
-          // DocKeyKirbyTask.completeDate.name:
-          //     state.screenModel.tempTask.completeDate,
+          DocKeyKirbyTask.completeDate.name:
+              state.screenModel.tempTask.completeDate,
+          DocKeyKirbyTask.reocurringDuration.name:
+              state.screenModel.tempTask.reocurringDuration,
         };
         // state.screenModel.tempTask.dueDate =
-        await FirestoreController.editKirbyTask(
+        await FirestoreController.updateKirbyTask(
           taskId: state.screenModel.tempTask.taskId!,
           update: update,
         );
@@ -475,6 +592,7 @@ class _Controller {
         userId: Auth.getUser().uid,
         isCompleted: false,
         completeDate: null,
+        isReoccuring: false,
       );
 
       datePickedController.clear();

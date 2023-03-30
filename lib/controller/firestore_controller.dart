@@ -1,4 +1,3 @@
-import 'package:capstone/controller/auth_controller.dart';
 import 'package:capstone/model/kirby_task_model.dart';
 import 'package:capstone/model/kirby_user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -92,34 +91,20 @@ class FirestoreController {
         .collection(taskCollection)
         .doc(taskId)
         .update({'isCompleted': !isCompleted, 'completeDate': completeDate});
-
-    // Reward if complete task
-    if (!isCompleted) {
-      // Increase currency
-      updateKirbyUser(
-        userId: Auth.user!.uid,
-        update: {'currency': FieldValue.increment(100)},
+    var task = await getKirbyTask(taskId: taskId);
+    // ignore: avoid_print
+    print("==== reoccuring: ${task.reocurringDuration}");
+    if (task.isCompleted && task.isReoccuring!) {
+      var tempTask = KirbyTask(
+        userId: task.userId,
+        title: task.title,
+        isCompleted: false,
+        dueDate: task.dueDate?.add(Duration(days: task.reocurringDuration!)),
+        isReoccuring: true,
+        isPreloaded: task.isPreloaded,
+        reocurringDuration: task.reocurringDuration,
       );
-
-      // Increase hunger
-      FirebaseFirestore.instance.runTransaction((transaction) async {
-        QuerySnapshot petSnapshot = await FirebaseFirestore.instance
-            .collection(petCollection)
-            .where(DocKeyPet.userId.name, isEqualTo: Auth.user!.uid)
-            .get();
-
-        final snapshot = await transaction.get(petSnapshot.docs[0].reference);
-
-        // Increase if less than 10
-        if (snapshot.get("hungerGauge") < 10) {
-          transaction.update(
-            petSnapshot.docs[0].reference,
-            {
-              'hungerGauge': FieldValue.increment(1),
-            },
-          );
-        }
-      });
+      await addKirbyTask(kirbyTask: tempTask);
     }
   }
 
@@ -147,18 +132,6 @@ class FirestoreController {
     var document = doc.data() as Map<String, dynamic>;
     return KirbyTask.fromFirestoreDoc(doc: document, taskId: taskId);
   }
-
-// Overwrites the entire doc
-  static Future<void> editKirbyTask({
-    required String taskId,
-    required Map<String, dynamic> update,
-  }) async {
-    await FirebaseFirestore.instance
-        .collection(taskCollection)
-        .doc(taskId)
-        .set(update);
-  }
-
   static Future<void> updateKirbyTask({
     required String taskId,
     required Map<String, dynamic> update,
@@ -183,7 +156,9 @@ class FirestoreController {
       if (doc.data() != null) {
         var document = doc.data() as Map<String, dynamic>;
         var t = KirbyTask.fromFirestoreDoc(doc: document, taskId: doc.id);
-        result.add(t);
+        if (t.isCompleted != true) {
+          result.add(t);
+        }
       }
     }
     return result;
