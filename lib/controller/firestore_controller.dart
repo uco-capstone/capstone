@@ -3,6 +3,7 @@ import 'package:capstone/model/kirby_user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../model/kirby_pet_model.dart';
+import 'auth_controller.dart';
 
 class FirestoreController {
   static const taskCollection = 'task_collection';
@@ -91,6 +92,18 @@ class FirestoreController {
         .collection(taskCollection)
         .doc(taskId)
         .update({'isCompleted': !isCompleted, 'completeDate': completeDate});
+    if (!isCompleted) {
+      var pet = await getPet(userId: Auth.user!.uid);
+      if (pet.hungerGauge < 10) {
+        updatePet(
+            userId: Auth.user!.uid,
+            update: {'hungerGauge': FieldValue.increment(1)});
+      }
+      updateKirbyUser(
+        userId: Auth.user!.uid,
+        update: {'currency': FieldValue.increment(100)},
+      );
+    }
     var task = await getKirbyTask(taskId: taskId);
     // ignore: avoid_print
     print("==== reoccuring: ${task.reocurringDuration}");
@@ -132,6 +145,7 @@ class FirestoreController {
     var document = doc.data() as Map<String, dynamic>;
     return KirbyTask.fromFirestoreDoc(doc: document, taskId: taskId);
   }
+
   static Future<void> updateKirbyTask({
     required String taskId,
     required Map<String, dynamic> update,
