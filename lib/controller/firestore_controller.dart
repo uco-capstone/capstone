@@ -122,6 +122,7 @@ class FirestoreController {
         .delete();
   }
 
+  // get a single kirbyTask
   static Future<KirbyTask> getKirbyTask({
     required String taskId,
   }) async {
@@ -132,6 +133,8 @@ class FirestoreController {
     var document = doc.data() as Map<String, dynamic>;
     return KirbyTask.fromFirestoreDoc(doc: document, taskId: taskId);
   }
+
+  // updates fields in a kirbyTask
   static Future<void> updateKirbyTask({
     required String taskId,
     required Map<String, dynamic> update,
@@ -142,6 +145,7 @@ class FirestoreController {
         .update(update);
   }
 
+  // get all kirbyTask from user
   static Future<List<KirbyTask>> getKirbyTaskList({
     required String uid,
   }) async {
@@ -191,6 +195,7 @@ class FirestoreController {
     return result;
   }
 
+  // gets all preloaded tasks from user
   static Future<List<KirbyTask>> getPreloadedTaskList({
     required String uid,
   }) async {
@@ -213,6 +218,7 @@ class FirestoreController {
     return result;
   }
 
+  // gets non-preloaded tasks from user
   static Future<List<KirbyTask>> getNonPreloadedTaskList({
     required String uid,
   }) async {
