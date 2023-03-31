@@ -47,7 +47,15 @@ class _HomeScreenState extends State<HomeScreen> {
       onWillPop: () => Future.value(false),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Kirby!'),
+          title: const Text('~My Kirby~'),
+          titleSpacing: 45,
+          flexibleSpace: Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.pink, Colors.purple],
+              ),
+            ),
+          ),
           actions: [
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -79,6 +87,16 @@ class _HomeScreenState extends State<HomeScreen> {
               icon: const Icon(Icons.checklist_rounded),
             ),
           ],
+// // AppBar: UI customization
+//           centerTitle: true,
+//           automaticallyImplyLeading: false,
+//           flexibleSpace: Container(
+//             decoration: const BoxDecoration(
+//               gradient: LinearGradient(
+//                 colors: [Colors.orange, Colors.red],
+//               ),
+//             ),
+//           ),
         ),
         drawer: Drawer(
           child: ListView(

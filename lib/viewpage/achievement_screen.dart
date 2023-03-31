@@ -2,8 +2,10 @@ import 'package:capstone/viewpage/home_screen.dart';
 import 'package:flutter/material.dart';
 
 class AchievementScreen extends StatefulWidget {
+  // Route Routing
   static const routeName = '/achievementScreen';
 
+  // Creating key: Super key indicating to the parent class
   const AchievementScreen({Key? key}) : super(key: key);
 
   @override
@@ -26,6 +28,7 @@ class _AchievementScreenState extends State<AchievementScreen> {
             Navigator.pushNamed(context, HomeScreen.routeName);
           },
         ),
+        // AppBar: UI customization
         centerTitle: true,
         automaticallyImplyLeading: false,
         flexibleSpace: Container(
@@ -36,24 +39,8 @@ class _AchievementScreenState extends State<AchievementScreen> {
           ),
         ),
       ),
-      body:
-          // Padding(
-          //   padding: const EdgeInsets.all(8.0),
-          //   child: Row(
-          //     mainAxisAlignment: MainAxisAlignment.center,
-          //     children: [
-          //       Container(
-          //         height: 100.0,
-          //         width: 100.0,
-          //         decoration: BoxDecoration(
-          //           shape: BoxShape.circle,
-          //           border: Border.all(color: Colors.red),
-          //           image: const DecorationImage(
-          //             image: AssetImage('images/crown.png'),
-          //           ),
-          //         ),
-          //       ),
-          GridView.count(
+      // Body: Beginning ListTiles for Cards
+      body: GridView.count(
         primary: false,
         padding: const EdgeInsets.all(20),
         crossAxisSpacing: 10,
@@ -63,6 +50,7 @@ class _AchievementScreenState extends State<AchievementScreen> {
           Card(
             child: InkWell(
               splashColor: Colors.blue.withAlpha(30),
+              // Tap-Card: Viewing statistics
               onTap: () {
                 showDialog(
                   context: context,
@@ -71,6 +59,7 @@ class _AchievementScreenState extends State<AchievementScreen> {
                   ),
                 );
               },
+              // Container: Images for Trophies are stored if user has obtained achievement
               child: Container(
                 height: 300,
                 width: double.infinity,
