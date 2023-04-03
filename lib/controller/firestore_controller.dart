@@ -107,6 +107,10 @@ class FirestoreController {
     var task = await getKirbyTask(taskId: taskId);
     // ignore: avoid_print
     print("==== reoccuring: ${task.reocurringDuration}");
+    /*  Eli
+        - if a reoccuring task becomes completed, the interval of recursion is 
+          added to the due date and is added to the task list in the database
+    */
     if (task.isCompleted && task.isReoccuring!) {
       var tempTask = KirbyTask(
         userId: task.userId,

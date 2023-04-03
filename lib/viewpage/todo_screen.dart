@@ -668,6 +668,10 @@ class _Controller {
     }
   }
 
+  /*  Eli
+      - the function takes in the taskId and removes it from the taskList and 
+        from the database
+  */
   void deleteTask(String taskId) async {
     try {
       await FirestoreController.deleteKirbyTask(taskId: taskId);
@@ -689,6 +693,15 @@ class _Controller {
     }
     state.render(() {});
   }
+
+  /*  Eli
+      - the task takes in the task id and retrieves the task information from 
+        the database
+      - it is then passed into the bottomSheet function which edits the 
+        information
+      - then the original task is deleted from the database and the taskList 
+        and the new version added to both 
+  */
 
   void editTask(String taskId) async {
     try {
