@@ -132,6 +132,8 @@ class FirestoreController {
     var document = doc.data() as Map<String, dynamic>;
     return KirbyTask.fromFirestoreDoc(doc: document, taskId: taskId);
   }
+
+  //Updates KirbyTask in FireStore
   static Future<void> updateKirbyTask({
     required String taskId,
     required Map<String, dynamic> update,

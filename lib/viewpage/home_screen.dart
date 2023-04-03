@@ -215,6 +215,7 @@ class _Controller {
     state.screenModel.loading = false;
   }
 
+  //Creates a Timer for 10 seconds
   Future<void> getTimer() async {
     timer = Timer.periodic(
         const Duration(seconds: 10), (Timer t) => checkPastDueTasks());
