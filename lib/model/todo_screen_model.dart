@@ -125,8 +125,7 @@ class TodoScreenModel {
     String title = "Drink ${getHalfWeight()}oz of water";
     String taskID = await getDrinkTaskID() as String;
     Map<String, dynamic> update = {DocKeyKirbyTask.title.name: title};
-    await FirestoreController.updateKirbyTask(
-        taskId: taskID, update: update);
+    await FirestoreController.updateKirbyTask(taskId: taskID, update: update);
   }
 
   Future<String?> getSleepTaskID() async {
@@ -149,8 +148,7 @@ class TodoScreenModel {
     String title = "Sleep for ${getSleep()} hours";
     String taskID = await getSleepTaskID() as String;
     Map<String, dynamic> update = {DocKeyKirbyTask.title.name: title};
-    await FirestoreController.updateKirbyTask(
-        taskId: taskID, update: update);
+    await FirestoreController.updateKirbyTask(taskId: taskID, update: update);
   }
 
   Future<String?> getMealsTaskID() async {
@@ -173,8 +171,7 @@ class TodoScreenModel {
     String title = "Eat ${getMeals()} meals today";
     String taskID = await getMealsTaskID() as String;
     Map<String, dynamic> update = {DocKeyKirbyTask.title.name: title};
-    await FirestoreController.updateKirbyTask(
-        taskId: taskID, update: update);
+    await FirestoreController.updateKirbyTask(taskId: taskID, update: update);
   }
 
   void saveTaskName(String? value) {
@@ -204,6 +201,8 @@ class TodoScreenModel {
           TimeOfDay(hour: int.parse(time[0]), minute: int.parse(time[1]));
       combineDateAndTime();
     } else {
+      _tempTime = TimeOfDay(hour: 23, minute: 59);
+      combineDateAndTime();
       return;
     }
   }
