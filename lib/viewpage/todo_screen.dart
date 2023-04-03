@@ -277,7 +277,8 @@ class _ToDoScreenState extends State<ToDoScreen> {
                 width: 130,
                 child: DropdownMenu<DurationLabel>(
                   initialSelection: screenModel.tempTask.isReoccuring!
-                      ? getDurationEnum(screenModel.tempTask.reocurringDuration ??= 1)
+                      ? getDurationEnum(
+                          screenModel.tempTask.reocurringDuration ??= 1)
                       : DurationLabel.none,
                   controller: durationController,
                   enabled: screenModel.tempTask.isReoccuring!,
@@ -623,6 +624,8 @@ class _Controller {
     state.screenModel.loading = false;
   }
 
+  // gets all tasks from user & creates preloaded tasks if they are enabled & if
+  // they were not already created
   void getTaskList() async {
     if (state.screenModel.kirbyUser!.preloadedTasks!) {
       var results = await FirestoreController.getPreloadedTaskList(

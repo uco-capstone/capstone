@@ -97,6 +97,7 @@ class _Controller {
   _SettingsState state;
   _Controller(this.state);
 
+  // gets the Kirby user
   Future<void> getKirbyUser() async {
     try {
       state.screenModel.loading = true;
@@ -111,6 +112,7 @@ class _Controller {
     state.screenModel.loading = false;
   }
 
+  // enables/disables preloaded tasks
   Future<void> setPreloadedTasksEnabled(value) async {
     var kUser = state.screenModel.kirbyUser;
     kUser!.preloadedTasks = value;
@@ -122,6 +124,7 @@ class _Controller {
     );
   }
 
+  // enables/disbales notifications
   Future<void> setNotificationsEnabled(value) async {
     var kUser = state.screenModel.kirbyUser;
     kUser!.notifications = value;
