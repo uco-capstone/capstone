@@ -255,6 +255,8 @@ class FirestoreController {
   }
 
   //============== KIRBY PET ==================
+
+  //Gets KirbyPet from the firestore according to UserId
   static Future<KirbyPet> getPet({
     required String userId,
   }) async {
@@ -272,6 +274,7 @@ class FirestoreController {
     );
   }
 
+  //Updates corresponding KirbyPet fields
   static Future<void> updatePet({
     required String userId,
     required Map<String, dynamic> update,
@@ -287,6 +290,7 @@ class FirestoreController {
         .update(update);
   }
 
+  //Checks if a user has an instance of KirbyPet in the firestore
   static Future<bool> hasPet(String userId) async {
     try {
       // Get reference to Firestore collection
@@ -302,6 +306,7 @@ class FirestoreController {
     return false;
   }
 
+  ///Adds a KirbyPet to the firestore and returns the ID of the KirbyPet
   static Future<String> addPet({required KirbyPet kirbyPet}) async {
     DocumentReference ref = await FirebaseFirestore.instance
         .collection(petCollection)
