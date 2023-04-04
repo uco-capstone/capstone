@@ -3,6 +3,7 @@ import 'package:capstone/model/kirby_user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../model/kirby_pet_model.dart';
+import 'auth_controller.dart';
 
 class FirestoreController {
   static const taskCollection = 'task_collection';
@@ -91,6 +92,18 @@ class FirestoreController {
         .collection(taskCollection)
         .doc(taskId)
         .update({'isCompleted': !isCompleted, 'completeDate': completeDate});
+    if (!isCompleted) {
+      var pet = await getPet(userId: Auth.user!.uid);
+      if (pet.hungerGauge < 10) {
+        updatePet(
+            userId: Auth.user!.uid,
+            update: {'hungerGauge': FieldValue.increment(1)});
+      }
+      updateKirbyUser(
+        userId: Auth.user!.uid,
+        update: {'currency': FieldValue.increment(100)},
+      );
+    }
     var task = await getKirbyTask(taskId: taskId);
     // ignore: avoid_print
     print("==== reoccuring: ${task.reocurringDuration}");
@@ -122,6 +135,7 @@ class FirestoreController {
         .delete();
   }
 
+  // get a single kirbyTask
   static Future<KirbyTask> getKirbyTask({
     required String taskId,
   }) async {
@@ -144,6 +158,7 @@ class FirestoreController {
         .update(update);
   }
 
+  // get all kirbyTask from user
   static Future<List<KirbyTask>> getKirbyTaskList({
     required String uid,
   }) async {
@@ -193,6 +208,7 @@ class FirestoreController {
     return result;
   }
 
+  // gets all preloaded tasks from user
   static Future<List<KirbyTask>> getPreloadedTaskList({
     required String uid,
   }) async {
@@ -215,6 +231,7 @@ class FirestoreController {
     return result;
   }
 
+  // gets non-preloaded tasks from user
   static Future<List<KirbyTask>> getNonPreloadedTaskList({
     required String uid,
   }) async {
@@ -238,6 +255,8 @@ class FirestoreController {
   }
 
   //============== KIRBY PET ==================
+
+  //Gets KirbyPet from the firestore according to UserId
   static Future<KirbyPet> getPet({
     required String userId,
   }) async {
@@ -255,6 +274,7 @@ class FirestoreController {
     );
   }
 
+  //Updates corresponding KirbyPet fields
   static Future<void> updatePet({
     required String userId,
     required Map<String, dynamic> update,
@@ -270,6 +290,7 @@ class FirestoreController {
         .update(update);
   }
 
+  //Checks if a user has an instance of KirbyPet in the firestore
   static Future<bool> hasPet(String userId) async {
     try {
       // Get reference to Firestore collection
@@ -285,6 +306,7 @@ class FirestoreController {
     return false;
   }
 
+  ///Adds a KirbyPet to the firestore and returns the ID of the KirbyPet
   static Future<String> addPet({required KirbyPet kirbyPet}) async {
     DocumentReference ref = await FirebaseFirestore.instance
         .collection(petCollection)

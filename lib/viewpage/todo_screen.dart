@@ -628,6 +628,8 @@ class _Controller {
     state.screenModel.loading = false;
   }
 
+  // gets all tasks from user & creates preloaded tasks if they are enabled & if
+  // they were not already created
   void getTaskList() async {
     if (state.screenModel.kirbyUser!.preloadedTasks!) {
       var results = await FirestoreController.getPreloadedTaskList(

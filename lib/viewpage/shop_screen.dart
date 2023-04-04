@@ -37,6 +37,7 @@ class _ShopScreen extends State<ShopScreen> {
 
   final ScrollController _homeController = ScrollController();
 
+  //Builds the Grid View bodies according to which bottom navigation bar index is chosen
   Widget _listViewBody(int menuOption) {
     switch (menuOption) {
       case 0: //Skins
@@ -109,6 +110,7 @@ class _ShopScreen extends State<ShopScreen> {
     });
   }
 
+  //Builds the screen body for the skin customization options
   Widget _skinsScreen(int index) {
     return Align(
       child: SizedBox(
@@ -184,6 +186,7 @@ class _ShopScreen extends State<ShopScreen> {
     );
   }
 
+  //Builds the screen body for the background customization options
   Widget _backgroundsScreen(int index) {
     return Align(
       child: SizedBox(
@@ -377,12 +380,14 @@ class _Controller {
   _ShopScreen state;
   _Controller(this.state);
 
+  //Adds a loading screen while it is getting the KirbyPet, to avoid any null values
   void initScreen() async {
     state.screenModel.loading = true;
     await getPet();
     state.screenModel.loading = false;
   }
 
+  //Gets the KirbyUser that corresponds to the logged in user from the firebase
   Future<void> getKirbyUser() async {
     try {
       state.screenModel.kirbyUser =
@@ -395,6 +400,7 @@ class _Controller {
     }
   }
 
+  //Gets the KirbyPet that corresponds with the logged in user from the firebase
   Future<void> getPet() async {
     try {
       state.screenModel.kirbyPet =
@@ -407,6 +413,10 @@ class _Controller {
     }
   }
 
+  /*
+  This function recieves a string of the filepath of the image and 
+  updates the kirbySkin option of the KirbyPet in the firebase
+  */
   void updateSkinCustomization(String customization) async {
     if (state.screenModel.kirbyPet != null) {
       state.screenModel.kirbyPet!.kirbySkin = customization;
@@ -429,6 +439,10 @@ class _Controller {
     showSnackBar(context: state.context, message: 'Successfully Customized Kirby!');
   }
   
+  /*
+  This function recieves a string of the filepath of the image and 
+  updates the background option of the KirbyPet in the firebase
+  */
   void updateBackgroundCustomization(String customization) async {
     if(state.screenModel.kirbyPet != null) {
       state.screenModel.kirbyPet!.background = customization;
