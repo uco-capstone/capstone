@@ -10,6 +10,12 @@ class StartDispatcher extends StatelessWidget {
 
   const StartDispatcher({Key? key}) : super(key: key);
   @override
+
+  /*  Eli 
+      - the function takes in a stream that waits for changes in auth status
+      - when it is changed, if the user is null then it redirects to the login
+        screen; otherwise, it redirects to the home screen
+  */
   Widget build(BuildContext context) {
     return StreamBuilder<User?>(
       stream: FirebaseAuth.instance.authStateChanges(),

@@ -106,6 +106,12 @@ class _Controller {
   _CreateAccountState state;
   _Controller(this.state);
 
+  /*  Eli
+      - the function checks if the state is not null or not valid, and returns 
+        early if those checks fail
+      - other wise it creates a user in the database and will redirect the user 
+        to the healthInfoScreen to in order to ensure a kirbyUser is made
+  */
   Future<void> createAccount() async {
     FormState? currentState = state.formKey.currentState;
     if (currentState == null || !currentState.validate()) return;
@@ -147,6 +153,9 @@ class _Controller {
     }
   }
 
+  /*  Eli
+      - toggles visibility of password
+  */
   void toggleShowPasswords(bool? value) {
     if (value != null) {
       state.render(() => state.screenModel.showPasswords = value);
