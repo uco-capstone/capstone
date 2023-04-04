@@ -87,16 +87,6 @@ class _HomeScreenState extends State<HomeScreen> {
               icon: const Icon(Icons.checklist_rounded),
             ),
           ],
-// // AppBar: UI customization
-//           centerTitle: true,
-//           automaticallyImplyLeading: false,
-//           flexibleSpace: Container(
-//             decoration: const BoxDecoration(
-//               gradient: LinearGradient(
-//                 colors: [Colors.orange, Colors.red],
-//               ),
-//             ),
-//           ),
         ),
         drawer: Drawer(
           child: ListView(
