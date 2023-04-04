@@ -12,6 +12,7 @@ class FirestoreController {
 
   //============== USER INFO ==================
 
+  // updates user health info
   static Future<void> addHealthInfo({required KirbyUser kirbyUser}) async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection(kirbyUserCollection)
@@ -33,6 +34,7 @@ class FirestoreController {
 
   //============== KIRBY USER ==================
 
+  // gets user data
   static Future<KirbyUser> getKirbyUser({
     required String userId,
   }) async {
@@ -50,6 +52,7 @@ class FirestoreController {
     );
   }
 
+  // checks if user exists
   static Future<bool> hasKirbyUser(String userId) async {
     try {
       // Get reference to Firestore collection
@@ -65,6 +68,7 @@ class FirestoreController {
     return false;
   }
 
+  // updates user data
   static Future<void> updateKirbyUser({
     required String userId,
     required Map<String, dynamic> update,
@@ -82,6 +86,7 @@ class FirestoreController {
 
   //============== KIRBY TASK ==================
 
+  // updates the completion status of a task
   static Future<void> updateTaskCompletion({
     required String taskId,
     required bool isCompleted,
@@ -125,6 +130,7 @@ class FirestoreController {
     }
   }
 
+  // adds a task
   static Future<String> addKirbyTask({required KirbyTask kirbyTask}) async {
     DocumentReference ref = await FirebaseFirestore.instance
         .collection(taskCollection)
@@ -132,6 +138,7 @@ class FirestoreController {
     return ref.id;
   }
 
+  // deletes a task
   static Future<void> deleteKirbyTask({required String taskId}) async {
     await FirebaseFirestore.instance
         .collection(taskCollection)
