@@ -211,6 +211,8 @@ class TodoScreenModel {
           TimeOfDay(hour: int.parse(time[0]), minute: int.parse(time[1]));
       combineDateAndTime();
     } else {
+      _tempTime = TimeOfDay(hour: 23, minute: 59);
+      combineDateAndTime();
       return;
     }
   }

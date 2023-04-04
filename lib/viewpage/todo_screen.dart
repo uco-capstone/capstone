@@ -560,6 +560,9 @@ class _Controller {
       currentSate.save();
 
       if (e) {
+        if (state.screenModel.tempTask.dueDate!.compareTo(DateTime.now()) > 0) {
+          state.screenModel.tempTask.isPastDue = false;
+        }
         Map<String, dynamic> update = {
           DocKeyKirbyTask.userId.name: state.screenModel.tempTask.userId,
           DocKeyKirbyTask.title.name: state.screenModel.tempTask.title,
@@ -594,6 +597,7 @@ class _Controller {
         isCompleted: false,
         completeDate: null,
         isReoccuring: false,
+        isPastDue: false,
       );
 
       datePickedController.clear();

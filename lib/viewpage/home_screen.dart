@@ -321,7 +321,9 @@ class _Controller {
     //Goes through the task list and marks past due tasks
     for (var task in taskList) {
       //If a task is past due, hunger gauge goes down
-      if (!task.isPastDue! && task.dueDate!.compareTo(currTime) < 0) {
+      if (task.dueDate == null) {
+        continue;
+      } else if (!task.isPastDue! && task.dueDate!.compareTo(currTime) < 0) {
         Map<String, dynamic> updateTask = {};
         updateTask[DocKeyKirbyTask.isPastDue.name] = true;
         Map<String, dynamic> updatePet = {};
