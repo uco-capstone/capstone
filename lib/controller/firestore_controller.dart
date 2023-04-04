@@ -147,7 +147,7 @@ class FirestoreController {
     return KirbyTask.fromFirestoreDoc(doc: document, taskId: taskId);
   }
 
-  // updates fields in a kirbyTask
+  //Updates KirbyTask in FireStore
   static Future<void> updateKirbyTask({
     required String taskId,
     required Map<String, dynamic> update,
