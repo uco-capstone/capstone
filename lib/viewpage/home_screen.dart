@@ -47,7 +47,15 @@ class _HomeScreenState extends State<HomeScreen> {
       onWillPop: () => Future.value(false),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Kirby!'),
+          title: const Text('~My Kirby~'),
+          titleSpacing: 45,
+          flexibleSpace: Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.pink, Colors.purple],
+              ),
+            ),
+          ),
           actions: [
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -215,6 +223,7 @@ class _Controller {
     state.screenModel.loading = false;
   }
 
+  //Creates a Timer for 10 seconds
   Future<void> getTimer() async {
     timer = Timer.periodic(
         const Duration(seconds: 10), (Timer t) => checkPastDueTasks());
@@ -240,14 +249,20 @@ class _Controller {
     }
   }
 
+  /*
+  This function loads the KirbyPet that corresponds with the userID.
+  If the user doesn't have a KirbyPet, it will create a new one and upload it to the Firebase.
+  */
   Future<void> loadKirbyPet() async {
     try {
+      //Checks if the user has a pet in the firebase
       bool hasPet = await FirestoreController.hasPet(currentUserID);
+      //If there is not a pet, a default pet will be created and uploaded to the firebase
       if (!hasPet) {
         KirbyPet tempPet = KirbyPet(userId: currentUserID);
         state.screenModel.kirbyPet = tempPet;
         await FirestoreController.addPet(kirbyPet: tempPet);
-      } else {
+      } else {  //If there is a pet in the firebase, it will get the pet and store it in the screen model
         state.screenModel.kirbyPet =
             await FirestoreController.getPet(userId: currentUserID);
       }
@@ -294,26 +309,6 @@ class _Controller {
     Navigator.pushNamed(state.context, StartDispatcher.routeName);
   }
 
-  void updateSkinCustomization(String customization) async {
-    if (state.screenModel.kirbyPet != null) {
-      state.screenModel.kirbyPet!.kirbySkin = customization;
-    }
-    try {
-      Map<String, dynamic> update = {};
-      update[DocKeyPet.kirbySkin.name] = customization;
-      await FirestoreController.updateKirbyUser(
-          userId: state.screenModel.kirbyUser!.userId!, update: update);
-    } catch (e) {
-      if (Constants.devMode) {
-        // ignore: avoid_print
-        print('======================= Skin Customization Update Error: $e');
-      }
-      showSnackBar(context: state.context, message: 'Skin Update Error: $e');
-    }
-
-    state.render(() {});
-  }
-
   /*
   This function goes through the task list, marks task that are past due,
   takes away from the hunger gauge if a task is past due, updates the Firestore,
@@ -327,7 +322,9 @@ class _Controller {
     //Goes through the task list and marks past due tasks
     for (var task in taskList) {
       //If a task is past due, hunger gauge goes down
-      if (!task.isPastDue! && task.dueDate!.compareTo(currTime) < 0) {
+      if (task.dueDate == null) {
+        continue;
+      } else if (!task.isPastDue! && task.dueDate!.compareTo(currTime) < 0) {
         Map<String, dynamic> updateTask = {};
         updateTask[DocKeyKirbyTask.isPastDue.name] = true;
         Map<String, dynamic> updatePet = {};
