@@ -16,6 +16,7 @@ import 'package:flutter/material.dart';
 
 import '../controller/firestore_controller.dart';
 import '../model/constants.dart';
+import 'leaderboard_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -114,6 +115,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 leading: const Icon(Icons.stars),
                 title: const Text('Achievements'),
                 onTap: con.achievementScreen,
+              ),
+              ListTile(
+                leading: const Icon(Icons.stars),
+                title: const Text('Leaderboard'),
+                onTap: con.leaderboardScreen,
               ),
               ListTile(
                 leading: const Icon(Icons.settings),
@@ -262,7 +268,8 @@ class _Controller {
         KirbyPet tempPet = KirbyPet(userId: currentUserID);
         state.screenModel.kirbyPet = tempPet;
         await FirestoreController.addPet(kirbyPet: tempPet);
-      } else {  //If there is a pet in the firebase, it will get the pet and store it in the screen model
+      } else {
+        //If there is a pet in the firebase, it will get the pet and store it in the screen model
         state.screenModel.kirbyPet =
             await FirestoreController.getPet(userId: currentUserID);
       }
@@ -290,6 +297,10 @@ class _Controller {
   void achievementScreen() {
     Navigator.pushNamed(state.context, AchievementScreen.routeName)
         .then((value) => state.render(() {}));
+  }
+
+  void leaderboardScreen() {
+    Navigator.pushNamed(state.context, LeaderboardScreen.routeName);
   }
 
   void settingsScreen() async {
