@@ -117,7 +117,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 onTap: con.achievementScreen,
               ),
               ListTile(
-                leading: const Icon(Icons.stars),
+                leading: const Icon(Icons.groups),
                 title: const Text('Leaderboard'),
                 onTap: con.leaderboardScreen,
               ),
