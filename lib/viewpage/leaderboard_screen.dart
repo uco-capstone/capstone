@@ -104,7 +104,8 @@ class _Controller {
 
   void initScreen() async {
     state.screenModel.loading = true;
-    await state.screenModel.setLeaders();
+    await state.screenModel.setupScreen();
+
     state.render(() {});
 
     state.screenModel.loading = false;
