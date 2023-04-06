@@ -26,6 +26,7 @@ class _LeaderboardState extends State<LeaderboardScreen> {
     super.initState();
     con = _Controller(this);
     screenModel = LeaderboardScreenModel(user: Auth.user!);
+    con.initScreen();
     con.getKirbyUser();
   }
 
@@ -55,9 +56,29 @@ class _LeaderboardState extends State<LeaderboardScreen> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
-        margin: const EdgeInsets.all(16),
-        padding: const EdgeInsets.only(bottom: 200, left: 8, right: 8, top: 20),
-      ),
+          margin: const EdgeInsets.all(16),
+          padding:
+              const EdgeInsets.only(bottom: 200, left: 8, right: 8, top: 20),
+          child: ListView(
+            padding: const EdgeInsets.all(8),
+            children: <Widget>[
+              Container(
+                height: 50,
+                color: Colors.amber[600],
+                child: const Center(child: Text('Entry A')),
+              ),
+              Container(
+                height: 50,
+                color: Colors.amber[500],
+                child: const Center(child: Text('Entry B')),
+              ),
+              Container(
+                height: 50,
+                color: Colors.amber[100],
+                child: const Center(child: Text('Entry C')),
+              ),
+            ],
+          )),
     );
   }
 }
@@ -78,6 +99,14 @@ class _Controller {
       if (Constants.devMode) print(" ==== loading error $e");
       state.render(() => state.screenModel.loadingErrorMessage = "$e");
     }
+    state.screenModel.loading = false;
+  }
+
+  void initScreen() async {
+    state.screenModel.loading = true;
+    await state.screenModel.setLeaders();
+    state.render(() {});
+
     state.screenModel.loading = false;
   }
 }

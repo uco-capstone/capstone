@@ -8,6 +8,12 @@ class LeaderboardScreenModel {
   String? loadingErrorMessage;
   KirbyUser? kirbyUser;
   bool loading = false;
+  late List<dynamic> leaders;
 
   LeaderboardScreenModel({required this.user});
+
+  // calculate the streak for a user
+  Future<void> setLeaders() async {
+    leaders = await FirestoreController.getKirbyUserList();
+  }
 }
