@@ -1,5 +1,6 @@
 import 'package:capstone/controller/firestore_controller.dart';
 import 'package:capstone/model/constants.dart';
+import 'package:capstone/viewpage/rank_item.dart';
 import 'package:chart_components/chart_components.dart';
 import 'package:flutter/material.dart';
 
@@ -62,21 +63,21 @@ class _LeaderboardState extends State<LeaderboardScreen> {
           child: ListView(
             padding: const EdgeInsets.all(8),
             children: <Widget>[
-              Container(
-                height: 50,
-                color: Colors.amber[600],
-                child: const Center(child: Text('Entry A')),
-              ),
-              Container(
-                height: 50,
-                color: Colors.amber[500],
-                child: const Center(child: Text('Entry B')),
-              ),
-              Container(
-                height: 50,
-                color: Colors.amber[100],
-                child: const Center(child: Text('Entry C')),
-              ),
+              Column(
+                children: [
+                  for (var r in screenModel.ranks)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: RankItem(
+                        uid: r.uid,
+                        // taskIndex: screenModel.taskList.indexOf(t),
+                        firstName: r.firstName,
+                        streak: r.streak,
+                        rank: r.rank,
+                      ),
+                    ),
+                ],
+              )
             ],
           )),
     );

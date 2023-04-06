@@ -110,4 +110,8 @@ class RankCard {
     this.streak = 0,
     this.rank = 0,
   });
+
+  String getUid() {
+    return uid;
+  }
 }
