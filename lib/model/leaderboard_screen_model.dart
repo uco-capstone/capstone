@@ -47,7 +47,10 @@ class LeaderboardScreenModel {
         if (task.isCompleted) {
           continue;
         } else {
-          return streak;
+          if (day != getTodayDate()) {
+            // there is still time to complete today's task, so don't factor today into the streak
+            return streak;
+          }
         }
       }
       // all tasks were completed, so increment streak
