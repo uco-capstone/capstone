@@ -1,3 +1,4 @@
+import 'package:capstone/model/purchased_item_model.dart';
 import 'package:capstone/model/shop_screen_model.dart';
 import 'package:flutter/material.dart';
 
@@ -140,7 +141,7 @@ class _ShopScreen extends State<ShopScreen> {
                       right: 0,
                       top: 5,
                       child: Container(
-                        width: MediaQuery.of(context).size.width * 0.15,
+                        width: MediaQuery.of(context).size.width * 0.17,
                         height: MediaQuery.of(context).size.width * 0.08,
                         decoration: BoxDecoration(
                             color: Colors.grey[100],
@@ -232,7 +233,7 @@ class _ShopScreen extends State<ShopScreen> {
                       right: 0,
                       top: 5,
                       child: Container(
-                        width: MediaQuery.of(context).size.width * 0.15,
+                        width: MediaQuery.of(context).size.width * 0.17,
                         height: MediaQuery.of(context).size.width * 0.08,
                         decoration: BoxDecoration(
                             color: Colors.grey[100],
@@ -278,7 +279,10 @@ class _ShopScreen extends State<ShopScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    if(screenModel.loading) {
+      return const CircularProgressIndicator();
+    } else {
+      return Scaffold(
       appBar: AppBar(
         title: const Text('Store Screen'),
         leading: IconButton(
@@ -298,14 +302,14 @@ class _ShopScreen extends State<ShopScreen> {
                   borderRadius: BorderRadius.all(Radius.circular(25))),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
+                children: [
                   //Sample number of coins
                   Text(
-                    '0',
-                    style: TextStyle(
+                    '${screenModel.kirbyUser!.currency}',
+                    style: const TextStyle(
                         color: Colors.black, fontWeight: FontWeight.bold),
                   ),
-                  Icon(
+                  const Icon(
                     Icons.monetization_on,
                     color: Colors.orangeAccent,
                   ),
@@ -316,9 +320,7 @@ class _ShopScreen extends State<ShopScreen> {
         ],
       ),
       body: Center(
-        child: screenModel.loading
-        ? const CircularProgressIndicator()
-        : _listViewBody(_selectedIndex),
+        child: _listViewBody(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
@@ -373,6 +375,7 @@ class _ShopScreen extends State<ShopScreen> {
         },
       ),
     );
+    }
   }
 }
 
@@ -384,6 +387,7 @@ class _Controller {
   void initScreen() async {
     state.screenModel.loading = true;
     await getPet();
+    await getKirbyUser();
     state.screenModel.loading = false;
   }
 
@@ -405,6 +409,39 @@ class _Controller {
     try {
       state.screenModel.kirbyPet =
           await FirestoreController.getPet(userId: Auth.getUser().uid);
+      state.render(() {});
+    } catch (e) {
+      // ignore: avoid_print
+      if (Constants.devMode) print(" ==== loading error $e");
+      state.render(() => state.screenModel.loadingErrorMessage = "$e");
+    }
+  }
+
+  //Gets the list of items that have been purchased by the user, if there are no purchased items, add the defaults
+  Future<void> getPurchasedItems() async {
+    try {
+      state.screenModel.purchasedItemsList =
+          await FirestoreController.getPurchasedItemsList(uid: Auth.getUser().uid);
+      
+      if(state.screenModel.purchasedItemsList.isEmpty) {
+        var tempPurchasedItem = PurchasedItem(
+          userId: Auth.getUser().uid, 
+          label: skinCustomizations[0].label, 
+          filepath: skinCustomizations[0].filepath, 
+          price: skinCustomizations[0].price
+        );
+
+        await FirestoreController.addPurchasedItem(purchasedItem: tempPurchasedItem);
+
+        tempPurchasedItem = PurchasedItem(
+          userId: Auth.getUser().uid, 
+          label: backgroundCustomizations[0].label, 
+          filepath: backgroundCustomizations[0].filepath, 
+          price: backgroundCustomizations[0].price
+        );
+
+        await FirestoreController.addPurchasedItem(purchasedItem: tempPurchasedItem);
+      }
       state.render(() {});
     } catch (e) {
       // ignore: avoid_print
