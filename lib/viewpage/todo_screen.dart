@@ -444,9 +444,10 @@ class _ToDoScreenState extends State<ToDoScreen> {
                 color: Colors.grey[300],
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: const TextField(
+              child: TextField(
+                controller: con.searchController,
                 decoration: InputDecoration(
-                  prefixIcon: Padding(
+                  prefixIcon: const Padding(
                     padding: EdgeInsets.symmetric(
                       horizontal: 10,
                       vertical: 10,
@@ -457,20 +458,35 @@ class _ToDoScreenState extends State<ToDoScreen> {
                       color: Colors.deepPurple,
                     ),
                   ),
-                  contentPadding: EdgeInsets.all(25), // padding needed
-                  prefixIconConstraints: BoxConstraints(
+                  suffixIcon: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 10,
+                    ),
+                    child: IconButton(
+                      onPressed: con.clearSearchBox,
+                      icon: const Icon(Icons.close),
+                    ),
+                  ),
+                  contentPadding: const EdgeInsets.all(25), // padding needed
+                  prefixIconConstraints: const BoxConstraints(
                     maxHeight: 50,
                     minWidth: 25,
                   ),
                   border: InputBorder.none,
                   hintText: 'Search Keywords',
-                  hintStyle: TextStyle(
+                  hintStyle: const TextStyle(
                     color: Colors.grey,
                   ),
                 ),
+                onEditingComplete: con.submitSearch,
               ),
             ),
-            screenModel.taskList.isEmpty ? emptyTaskList() : tasks(),
+            screenModel.taskList.isEmpty ||
+                    (screenModel.tempTaskList != null &&
+                        screenModel.tempTaskList!.isEmpty)
+                ? emptyTaskList()
+                : tasks(),
           ],
         ),
       ),
@@ -521,20 +537,36 @@ class _ToDoScreenState extends State<ToDoScreen> {
                   ),
                 ),
               ),
-              Column(
-                children: [
-                  for (var t in screenModel.taskList)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 10),
-                      child: ToDoItem(
-                        task: t,
-                        taskIndex: screenModel.taskList.indexOf(t),
-                        deleteFn: con.deleteTask,
-                        editFn: con.editTask,
-                      ),
-                    ),
-                ],
-              )
+              screenModel.tempTaskList != null &&
+                      screenModel.tempTaskList!.isNotEmpty
+                  ? Column(
+                      children: [
+                        for (var t in screenModel.tempTaskList!)
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 10),
+                            child: ToDoItem(
+                              task: t,
+                              taskIndex: screenModel.tempTaskList!.indexOf(t),
+                              deleteFn: con.deleteTask,
+                              editFn: con.editTask,
+                            ),
+                          ),
+                      ],
+                    )
+                  : Column(
+                      children: [
+                        for (var t in screenModel.taskList)
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 10),
+                            child: ToDoItem(
+                              task: t,
+                              taskIndex: screenModel.taskList.indexOf(t),
+                              deleteFn: con.deleteTask,
+                              editFn: con.editTask,
+                            ),
+                          ),
+                      ],
+                    )
             ],
           ),
         ),
@@ -550,8 +582,12 @@ class _Controller {
   //Used to edit the text on the textformfields
   var datePickedController = TextEditingController();
   var timePickedController = TextEditingController();
+  var searchController = TextEditingController();
 
   Future<void> save({e = false}) async {
+    // added this so the keyboard is retracted
+    FocusManager.instance.primaryFocus?.unfocus();
+
     FormState? currentSate = state.formKey.currentState;
     if (currentSate == null || !currentSate.validate()) {
       return;
@@ -675,11 +711,11 @@ class _Controller {
     }
   }
 
-  /*  Eli
+  void deleteTask(String taskId) async {
+    /*  Eli
       - the function takes in the taskId and removes it from the taskList and 
         from the database
   */
-  void deleteTask(String taskId) async {
     try {
       await FirestoreController.deleteKirbyTask(taskId: taskId);
       if (!state.mounted) return;
@@ -701,7 +737,8 @@ class _Controller {
     state.render(() {});
   }
 
-  /*  Eli
+  void editTask(String taskId) async {
+    /*  Eli
       - the task takes in the task id and retrieves the task information from 
         the database
       - it is then passed into the bottomSheet function which edits the 
@@ -709,8 +746,6 @@ class _Controller {
       - then the original task is deleted from the database and the taskList 
         and the new version added to both 
   */
-
-  void editTask(String taskId) async {
     try {
       state.screenModel.tempTask =
           await FirestoreController.getKirbyTask(taskId: taskId);
@@ -727,6 +762,26 @@ class _Controller {
         message: "Something went wrong...\n Try again!",
       );
     }
+    state.render(() {});
+  }
+
+  void submitSearch() {
+    FocusManager.instance.primaryFocus?.unfocus();
+    state.screenModel.tempTaskList = [];
+    for (var i = 0; i < state.screenModel.taskList.length; i++) {
+      if (state.screenModel.taskList[i].title!
+          .contains(searchController.text)) {
+        var tempTask = state.screenModel.taskList[i];
+        state.screenModel.tempTaskList!.add(tempTask);
+      }
+    }
+    state.render(() {});
+  }
+
+  void clearSearchBox() async {
+    FocusManager.instance.primaryFocus?.unfocus();
+    searchController.text = "";
+    state.screenModel.tempTaskList = null;
     state.render(() {});
   }
 }

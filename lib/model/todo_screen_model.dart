@@ -14,6 +14,7 @@ class TodoScreenModel {
   var taskList = <KirbyTask>[];
   late KirbyTask tempTask;
   late TimeOfDay _tempTime;
+  List<KirbyTask>? tempTaskList;
 
   TodoScreenModel({required this.user}) {
     tempTask = KirbyTask(
@@ -211,7 +212,7 @@ class TodoScreenModel {
           TimeOfDay(hour: int.parse(time[0]), minute: int.parse(time[1]));
       combineDateAndTime();
     } else {
-      _tempTime = TimeOfDay(hour: 23, minute: 59);
+      _tempTime = const TimeOfDay(hour: 23, minute: 59);
       combineDateAndTime();
       return;
     }
