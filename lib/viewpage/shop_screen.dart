@@ -137,6 +137,7 @@ class _ShopScreen extends State<ShopScreen> {
                       bottom: 10,
                       child: Text(skinCustomizations[index].label)
                     ),
+                    if (!screenModel.purchasedItemsList.any((item) => item.filepath == skinCustomizations[index].filepath))
                     Positioned(
                       right: 0,
                       top: 5,
@@ -229,30 +230,31 @@ class _ShopScreen extends State<ShopScreen> {
                         child: Center(child: Text(backgroundCustomizations[index].label))
                       ),
                     ),
-                    Positioned(
-                      right: 0,
-                      top: 5,
-                      child: Container(
-                        width: MediaQuery.of(context).size.width * 0.17,
-                        height: MediaQuery.of(context).size.width * 0.08,
-                        decoration: BoxDecoration(
-                            color: Colors.grey[100],
-                            shape: BoxShape.rectangle,
-                            borderRadius: const BorderRadius.all(Radius.circular(25)),
-                          ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text('${skinCustomizations[index].price} '),
-                            Icon(
-                              Icons.monetization_on,
-                              color: Colors.orangeAccent,
-                              size: MediaQuery.of(context).size.width * 0.05,
+                    if (!screenModel.purchasedItemsList.any((item) => item.filepath == backgroundCustomizations[index].filepath))
+                      Positioned(
+                        right: 0,
+                        top: 5,
+                        child: Container(
+                          width: MediaQuery.of(context).size.width * 0.17,
+                          height: MediaQuery.of(context).size.width * 0.08,
+                          decoration: BoxDecoration(
+                              color: Colors.grey[100],
+                              shape: BoxShape.rectangle,
+                              borderRadius: const BorderRadius.all(Radius.circular(25)),
                             ),
-                          ],
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text('${backgroundCustomizations[index].price} '),
+                              Icon(
+                                Icons.monetization_on,
+                                color: Colors.orangeAccent,
+                                size: MediaQuery.of(context).size.width * 0.05,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
                   ],
                 ),
                 onTap: () =>
@@ -388,6 +390,7 @@ class _Controller {
     state.screenModel.loading = true;
     await getPet();
     await getKirbyUser();
+    await getPurchasedItems();
     state.screenModel.loading = false;
   }
 
@@ -424,6 +427,7 @@ class _Controller {
           await FirestoreController.getPurchasedItemsList(uid: Auth.getUser().uid);
       
       if(state.screenModel.purchasedItemsList.isEmpty) {
+        print('**************** Empty!!!!!!');
         var tempPurchasedItem = PurchasedItem(
           userId: Auth.getUser().uid, 
           label: skinCustomizations[0].label, 
@@ -441,6 +445,10 @@ class _Controller {
         );
 
         await FirestoreController.addPurchasedItem(purchasedItem: tempPurchasedItem);
+      }
+
+      for(var item in state.screenModel.purchasedItemsList) {
+        print(item.filepath);
       }
       state.render(() {});
     } catch (e) {
