@@ -16,8 +16,8 @@ Future<void> createDailyNotification() async {
     schedule: NotificationCalendar(
       allowWhileIdle: true,
       repeats: true,
-      hour: 16,
-      minute: 11,
+      hour: 14,
+      minute: 0,
       second: 0,
       millisecond: 0,
     ),
