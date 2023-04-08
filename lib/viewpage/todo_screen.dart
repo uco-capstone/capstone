@@ -488,11 +488,12 @@ class _ToDoScreenState extends State<ToDoScreen> {
                 },
               ),
             ),
-            screenModel.taskList.isEmpty ||
-                    (screenModel.tempTaskList != null &&
-                        screenModel.tempTaskList!.isEmpty)
-                ? emptyTaskList()
-                : tasks(),
+            screenModel.taskList.isEmpty 
+              ? emptyTaskList()
+              : screenModel.tempTaskList != null &&
+                        screenModel.tempTaskList!.isEmpty
+                ? noSearchResults()
+                : tasks()
           ],
         ),
       ),
@@ -512,6 +513,29 @@ class _ToDoScreenState extends State<ToDoScreen> {
           ),
           const Text(
             'All Tasks Completed!\nGreat Job!',
+            style: TextStyle(
+              fontSize: 30,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget noSearchResults() {
+    return Center(
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 75, bottom: 40),
+            child: SizedBox(
+              height: 200,
+              child: Image.asset('images/disappointed-kirby.png'),
+            ),
+          ),
+          const Text(
+            'No search results!',
             style: TextStyle(
               fontSize: 30,
             ),
@@ -785,9 +809,6 @@ class _Controller {
         var tempTask = state.screenModel.taskList[i];
         state.screenModel.tempTaskList!.add(tempTask);
       }
-    }
-    if (state.screenModel.tempTaskList!.isEmpty) {
-      state.screenModel.tempTaskList = null;
     }
     state.render(() {});
   }
