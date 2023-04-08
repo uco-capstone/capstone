@@ -458,16 +458,19 @@ class _ToDoScreenState extends State<ToDoScreen> {
                       color: Colors.deepPurple,
                     ),
                   ),
-                  suffixIcon: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 10,
-                    ),
-                    child: IconButton(
-                      onPressed: con.clearSearchBox,
-                      icon: const Icon(Icons.close),
-                    ),
-                  ),
+                  suffixIcon: con.searchController.text.isNotEmpty ||
+                          screenModel.tempTaskList != null
+                      ? Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 10,
+                          ),
+                          child: IconButton(
+                            onPressed: con.clearSearchBox,
+                            icon: const Icon(Icons.close),
+                          ),
+                        )
+                      : const SizedBox.shrink(),
                   contentPadding: const EdgeInsets.all(25), // padding needed
                   prefixIconConstraints: const BoxConstraints(
                     maxHeight: 50,
@@ -480,6 +483,9 @@ class _ToDoScreenState extends State<ToDoScreen> {
                   ),
                 ),
                 onEditingComplete: con.submitSearch,
+                onChanged: (hello) {
+                  render(() {});
+                },
               ),
             ),
             screenModel.taskList.isEmpty ||
@@ -767,6 +773,11 @@ class _Controller {
 
   void submitSearch() {
     FocusManager.instance.primaryFocus?.unfocus();
+
+    if (searchController.text.isEmpty) {
+      return clearSearchBox();
+    }
+
     state.screenModel.tempTaskList = [];
     for (var i = 0; i < state.screenModel.taskList.length; i++) {
       if (state.screenModel.taskList[i].title!
@@ -774,6 +785,9 @@ class _Controller {
         var tempTask = state.screenModel.taskList[i];
         state.screenModel.tempTaskList!.add(tempTask);
       }
+    }
+    if (state.screenModel.tempTaskList!.isEmpty) {
+      state.screenModel.tempTaskList = null;
     }
     state.render(() {});
   }
