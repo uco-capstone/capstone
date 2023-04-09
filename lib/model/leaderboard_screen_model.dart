@@ -19,6 +19,7 @@ class LeaderboardScreenModel {
     await setLeaders();
     await setStreaks();
     await setRanks();
+    await orderTies();
   }
 
   // get the current date without hours or minutes
@@ -103,6 +104,43 @@ class LeaderboardScreenModel {
         r.rank = rank;
         tie = 0;
         streak = r.streak;
+      }
+    }
+  }
+
+// alphabetically order a sublist of rank
+  void orderSublist(int i, int ties) {
+    // get the tied sublist
+    int startRange = i - 1 - ties;
+    int endRange = i;
+    List<RankCard> tiedCards = ranks.sublist(startRange, endRange);
+    tiedCards.sort((a, b) => a.firstName.compareTo(b.firstName));
+
+    // replace sublist
+    ranks.replaceRange(startRange, endRange, tiedCards);
+  }
+
+// sort ties alphabetically
+  Future<void> orderTies() async {
+    int tempRank = ranks[0].rank;
+    int ties = 0;
+    for (var i = 1; i < ranks.length; i++) {
+      // find ties
+      if (tempRank == ranks[i].rank) {
+        // same rank as previous rank item
+        ties++;
+      } else if (ties > 0) {
+        // current ranks are not tied
+        // order previous set of ties
+        orderSublist(i, ties);
+
+        ties = 0;
+      }
+      tempRank = ranks[i].rank;
+
+      // if last user is tied
+      if (i == ranks.length - 1 && ties > 0) {
+        orderSublist(i + 1, ties);
       }
     }
   }
