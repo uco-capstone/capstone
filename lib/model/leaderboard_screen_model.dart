@@ -57,7 +57,7 @@ class LeaderboardScreenModel {
       streak++;
 
       // check if all tasks for previous days are completed
-      day = day.add(const Duration(days: 1));
+      day = day.subtract(const Duration(days: 1));
       tasks = await FirestoreController.getDayTasks(uid: uid, day: day);
     }
 
