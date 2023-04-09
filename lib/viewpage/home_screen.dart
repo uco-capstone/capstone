@@ -1,3 +1,4 @@
+import 'package:achievement_view/achievement_view.dart';
 import 'package:capstone/controller/auth_controller.dart';
 import 'package:capstone/model/home_screen_model.dart';
 import 'package:capstone/model/kirby_pet_model.dart';
@@ -220,6 +221,7 @@ class _Controller {
     await loadKirbyUser();
     await loadKirbyPet();
     await getTimer();
+    showWeekAchievementView();
     state.screenModel.loading = false;
   }
 
@@ -262,7 +264,8 @@ class _Controller {
         KirbyPet tempPet = KirbyPet(userId: currentUserID);
         state.screenModel.kirbyPet = tempPet;
         await FirestoreController.addPet(kirbyPet: tempPet);
-      } else {  //If there is a pet in the firebase, it will get the pet and store it in the screen model
+      } else {
+        //If there is a pet in the firebase, it will get the pet and store it in the screen model
         state.screenModel.kirbyPet =
             await FirestoreController.getPet(userId: currentUserID);
       }
@@ -340,5 +343,18 @@ class _Controller {
     }
     //Reload pet
     await loadKirbyPet();
+  }
+
+  // notifies user of weekly reward
+  void showWeekAchievementView() {
+    AchievementView(state.context,
+            title: "Good Job! 500 Coins",
+            subTitle: "You completed all your tasks this week!",
+            icon: Padding(
+              padding: const EdgeInsets.all(8),
+              child: Image.asset('images/kirby_icon.png'),
+            ),
+            listener: (status) {})
+        .show();
   }
 }
