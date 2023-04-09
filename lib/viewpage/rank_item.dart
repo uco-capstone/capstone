@@ -5,10 +5,12 @@ class RankItem extends StatefulWidget {
   String firstName;
   int streak;
   int rank;
+  bool isUser;
 
   RankItem({
     required this.uid,
     required this.firstName,
+    required this.isUser,
     this.streak = 0,
     this.rank = 0,
     Key? key,
@@ -19,6 +21,9 @@ class RankItem extends StatefulWidget {
 }
 
 class _RankItemState extends State<RankItem> {
+  Color nonUserColor = Colors.white;
+  Color userColor = Colors.yellow;
+
   void render(fn) => setState(fn);
 
   @override
@@ -27,7 +32,7 @@ class _RankItemState extends State<RankItem> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
       ),
-      tileColor: Colors.white,
+      tileColor: widget.isUser ? userColor : nonUserColor,
       leading: Text(
         widget.rank.toString(),
         style: const TextStyle(
@@ -38,8 +43,8 @@ class _RankItemState extends State<RankItem> {
       title: Text(
         widget.firstName,
         style: const TextStyle(
-          fontSize: 17,
-          color: Colors.black,
+          fontSize: 20,
+          color: Color.fromARGB(255, 35, 112, 255),
         ),
       ),
       trailing: Text(

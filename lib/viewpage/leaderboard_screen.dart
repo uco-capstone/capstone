@@ -58,17 +58,38 @@ class _LeaderboardState extends State<LeaderboardScreen> {
       padding: const EdgeInsets.all(8.0),
       child: Container(
           margin: const EdgeInsets.all(16),
-          padding:
-              const EdgeInsets.only(bottom: 200, left: 8, right: 8, top: 20),
           child: ListView(
             padding: const EdgeInsets.all(8),
             children: <Widget>[
               Column(
                 children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(children: const [
+                      Expanded(
+                          child: Text(
+                        'Rank',
+                        style: TextStyle(fontSize: 20),
+                      )),
+                      Expanded(
+                          flex: 3,
+                          child: Text(
+                            'Name',
+                            style: TextStyle(fontSize: 20),
+                          )),
+                      Expanded(
+                          child: Text(
+                        'Streak',
+                        style: TextStyle(fontSize: 20),
+                        textAlign: TextAlign.right,
+                      )),
+                    ]),
+                  ),
                   for (var r in screenModel.ranks)
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 10),
+                      padding: const EdgeInsets.only(bottom: 20),
                       child: RankItem(
+                        isUser: r.uid == screenModel.user.uid ? true : false,
                         uid: r.uid,
                         // taskIndex: screenModel.taskList.indexOf(t),
                         firstName: r.firstName,
