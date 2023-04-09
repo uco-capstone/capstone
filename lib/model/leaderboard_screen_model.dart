@@ -36,6 +36,7 @@ class LeaderboardScreenModel {
   // calculate the streak for a user
   Future<int> getStreak(String uid) async {
     int streak = 0;
+    bool completedTodaysTasks = true;
     DateTime day = getTodayDate();
 
     // check if all tasks for today is completed
@@ -44,11 +45,15 @@ class LeaderboardScreenModel {
     // check if all task were completed
     while (tasks.isNotEmpty) {
       for (var task in tasks) {
+        var index = tasks.indexOf(task);
         if (task.isCompleted) {
           continue;
         } else {
-          if (day != getTodayDate()) {
+          if (day == getTodayDate()) {
             // there is still time to complete today's task, so don't factor today into the streak
+            completedTodaysTasks = false;
+          } else {
+            // not today
             return streak;
           }
         }
@@ -60,6 +65,8 @@ class LeaderboardScreenModel {
       day = day.subtract(const Duration(days: 1));
       tasks = await FirestoreController.getDayTasks(uid: uid, day: day);
     }
+
+    if (completedTodaysTasks == false) streak--;
 
     return streak;
   }
