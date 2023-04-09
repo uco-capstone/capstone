@@ -385,7 +385,9 @@ class _Controller {
     Reward reward = await FirestoreController.getReward(userId: currentUserID);
     // check if reward was recieved for this cycle
     DateTime now = DateTime.now();
-    if (reward.receivedDate!.isBefore(now) &&
+    if (reward.receivedDate == null) {
+      return false;
+    } else if (reward.receivedDate!.isBefore(now) &&
         reward.receivedDate!.isAfter(now.subtract(const Duration(days: 7)))) {
       // reward was received during the past week
       return true;
@@ -407,20 +409,20 @@ class _Controller {
       // check if weekly tasks are complete
       if (await isWeeklyTasksComplete()) {
         // ignore: use_build_context_synchronously
-        // AchievementView(context,
-        //         title: "Good Job! 25 Coins",
-        //         subTitle: "You completed all your tasks this week!",
-        //         icon: Padding(
-        //           padding: const EdgeInsets.all(8),
-        //           child: Image.asset('images/kirby_icon.png'),
-        //         ),
-        //         listener: (status) {})
-        //     .show();
+        AchievementView(context,
+                title: "Good Job! 25 Coins",
+                subTitle: "You completed all your tasks this week!",
+                icon: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Image.asset('images/kirby_icon.png'),
+                ),
+                listener: (status) {})
+            .show();
 
-        //     // reward the 25 coins
-        //     int currency = state.screenModel.kirbyUser!.currency! + 25;
-        //     await FirestoreController.updateKirbyUser(
-        //         userId: currentUserID, update: {'currency': currency});
+        // reward the 25 coins
+        int currency = state.screenModel.kirbyUser!.currency! + 25;
+        await FirestoreController.updateKirbyUser(
+            userId: currentUserID, update: {'currency': currency});
 
         //     // mark reward recevied
         //     await FirestoreController.updateReward(
