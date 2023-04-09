@@ -348,36 +348,61 @@ class _Controller {
     await loadKirbyPet();
   }
 
-  // checks if all tasks from last Wed - yesterday were completed
+  // checks if all tasks from (the Thursday prior to latest Wednesday) - latest Wednesday were completed (1 week span)
   Future<bool> isWeeklyTasksComplete() async {
     bool isComplete = false;
     DateTime now = DateTime.now();
     int weekday = now.weekday; // monday = 1; sunday = 7
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////// CHANGE TO CURRENT WEEKDAY WHEN TESTING ////////////////////////////////////////////
-    ///// perform on Wednesdays = 3
-    if (weekday == 7) {
-      //////////////////////////////////////////////////////////////////////////////////////////////////
-      //////////////////////////////////////////////////////////////////////////////////////////////////
+    // get latest wednesday's datetime
+    int subtractDays = 0;
+    switch (weekday) {
+      case 1:
+        subtractDays = 5;
+        break;
+      case 2:
+        subtractDays = 6;
+        break;
+      case 3:
+        subtractDays = 0;
+        break;
+      case 4:
+        subtractDays = 1;
+        break;
+      case 5:
+        subtractDays = 2;
+        break;
+      case 6:
+        subtractDays = 3;
+        break;
+      case 7:
+        subtractDays = 4;
+        break;
+      default:
+    }
+    DateTime wednesday = now.subtract(Duration(days: subtractDays));
+    DateTime date = DateTime(wednesday.year, wednesday.month, wednesday.day);
+    date = date.add(const Duration(days: 1));
 
-      DateTime date = DateTime(now.year, now.month, now.day);
+    // read from Thursday 12am
+    for (int i = 0; i < 7; i++) {
+      date = date.subtract(const Duration(days: 1));
+      List<KirbyTask> dayTasks =
+          await FirestoreController.getDayTasks(uid: currentUserID, day: date);
 
-      for (int i = 1; i <= 7; i++) {
-        date = date.subtract(Duration(days: i));
-        List<KirbyTask> dayTasks = await FirestoreController.getDayTasks(
-            uid: currentUserID, day: date);
-
-        // check if all tasks were completed
-        for (var d in dayTasks) {
-          if (d.isCompleted == false) {
-            isComplete = false;
-            return isComplete;
-          }
+      // check if all tasks were completed
+      if (dayTasks.isEmpty) {
+        return false;
+      }
+      for (var d in dayTasks) {
+        if (d.isCompleted == false) {
+          isComplete = false;
+          return isComplete;
         }
       }
-      isComplete = true;
     }
+
+    isComplete = true;
     return isComplete;
   }
 
