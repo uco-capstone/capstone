@@ -45,7 +45,6 @@ class LeaderboardScreenModel {
     // check if all task were completed
     while (tasks.isNotEmpty) {
       for (var task in tasks) {
-        var index = tasks.indexOf(task);
         if (task.isCompleted) {
           continue;
         } else {
@@ -100,9 +99,10 @@ class LeaderboardScreenModel {
         r.rank = rank;
         tie++;
       } else {
-        rank += tie;
+        tie == 0 ? rank++ : rank += tie;
         r.rank = rank;
         tie = 0;
+        streak = r.streak;
       }
     }
   }
