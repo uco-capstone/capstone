@@ -400,37 +400,36 @@ class _Controller {
   Future<void> showWeekAchievementView(BuildContext context) async {
     // check if reward doc exists
     bool hasRewardDoc = await FirestoreController.hasRewardDoc(currentUserID);
-    if (hasRewardDoc) {
-      // check if weekly reward was already received
-      bool weeklyRewardReceived = await isWeeklyRewardReceived();
-
-      if (weeklyRewardReceived) return;
-
-      // check if weekly tasks are complete
-      if (await isWeeklyTasksComplete()) {
-        // ignore: use_build_context_synchronously
-        AchievementView(context,
-                title: "Good Job! 25 Coins",
-                subTitle: "You completed all your tasks this week!",
-                icon: Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: Image.asset('images/kirby_icon.png'),
-                ),
-                listener: (status) {})
-            .show();
-
-        // reward the 25 coins
-        int currency = state.screenModel.kirbyUser!.currency! + 25;
-        await FirestoreController.updateKirbyUser(
-            userId: currentUserID, update: {'currency': currency});
-
-        //     // mark reward recevied
-        //     await FirestoreController.updateReward(
-        //         userId: currentUserID, update: {'receivedDate': DateTime.now()});
-      }
-    } else {
+    if (hasRewardDoc == false) {
       // make a reward doc
       await FirestoreController.addReward(Reward(uid: currentUserID));
+    }
+    // check if weekly reward was already received
+    bool weeklyRewardReceived = await isWeeklyRewardReceived();
+
+    if (weeklyRewardReceived) return;
+
+    // check if weekly tasks are complete
+    if (await isWeeklyTasksComplete()) {
+      // ignore: use_build_context_synchronously
+      AchievementView(context,
+              title: "Good Job! 25 Coins",
+              subTitle: "You completed all your tasks this week!",
+              icon: Padding(
+                padding: const EdgeInsets.all(8),
+                child: Image.asset('images/kirby_icon.png'),
+              ),
+              listener: (status) {})
+          .show();
+
+      // reward the 25 coins
+      int currency = state.screenModel.kirbyUser!.currency! + 25;
+      await FirestoreController.updateKirbyUser(
+          userId: currentUserID, update: {'currency': currency});
+
+      // mark reward recevied
+      await FirestoreController.updateReward(
+          userId: currentUserID, update: {'receivedDate': DateTime.now()});
     }
   }
 }

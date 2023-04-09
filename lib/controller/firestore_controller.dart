@@ -359,7 +359,7 @@ class FirestoreController {
   }) async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection(rewardCollection)
-        .where(DocKeyUser.userId.name, isEqualTo: userId)
+        .where(DocKeyReward.uid.name, isEqualTo: userId)
         .get();
 
     await FirebaseFirestore.instance

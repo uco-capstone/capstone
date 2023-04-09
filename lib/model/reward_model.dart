@@ -29,7 +29,11 @@ class Reward {
   }) {
     return Reward(
       uid: doc[DocKeyReward.uid.name] ??= "",
-      receivedDate: doc[DocKeyReward.receivedDate.name],
+      receivedDate: doc[DocKeyReward.receivedDate.name] != null
+          ? DateTime.fromMillisecondsSinceEpoch(
+              doc[DocKeyReward.receivedDate.name].millisecondsSinceEpoch,
+            )
+          : null,
       // isReceived: doc[DocKeyReward.isReceived.name] ??= false,
     );
   }
