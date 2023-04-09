@@ -3,12 +3,14 @@ import 'package:capstone/model/kirby_user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../model/kirby_pet_model.dart';
+import '../model/reward_model.dart';
 import 'auth_controller.dart';
 
 class FirestoreController {
   static const taskCollection = 'task_collection';
   static const kirbyUserCollection = 'kirby_user_collection';
   static const petCollection = 'pet_collection';
+  static const rewardCollection = 'reward_collection';
 
   //============== USER INFO ==================
 
@@ -323,5 +325,62 @@ class FirestoreController {
         .collection(petCollection)
         .add(kirbyPet.toFirestoreDoc());
     return ref.id;
+  }
+
+  //============================= Reward =======================================
+
+  // add reward doc to firestore and returns doc id
+  static Future<String> addReward(Reward reward) async {
+    DocumentReference ref = await FirebaseFirestore.instance
+        .collection(rewardCollection)
+        .add(reward.toFirestoreDoc());
+    return ref.id;
+  }
+
+  // get reward from firestore
+  static Future<Reward> getReward({
+    required String userId,
+  }) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(rewardCollection)
+        .where(DocKeyReward.uid.name, isEqualTo: userId)
+        .get();
+
+    return Reward.fromFirestoreDoc(
+      doc: querySnapshot.docs[0].data() as Map<String, dynamic>,
+      uid: querySnapshot.docs[0].id,
+    );
+  }
+
+  // update reward field
+  static Future<void> updateReward({
+    required String userId,
+    required Map<String, dynamic> update,
+  }) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(rewardCollection)
+        .where(DocKeyUser.userId.name, isEqualTo: userId)
+        .get();
+
+    await FirebaseFirestore.instance
+        .collection(rewardCollection)
+        .doc(querySnapshot.docs[0].id)
+        .update(update);
+  }
+
+  // checks if a user has reward doc
+  static Future<bool> hasRewardDoc(String userId) async {
+    try {
+      // Get reference to Firestore collection
+      QuerySnapshot snapshot = await FirebaseFirestore.instance
+          .collection(rewardCollection)
+          .where(DocKeyReward.uid.name, isEqualTo: userId)
+          .get();
+      return snapshot.docs.isNotEmpty;
+    } catch (e) {
+      // ignore: avoid_print
+      print(e);
+    }
+    return false;
   }
 }

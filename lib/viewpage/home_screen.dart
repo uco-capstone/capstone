@@ -3,6 +3,7 @@ import 'package:capstone/controller/auth_controller.dart';
 import 'package:capstone/model/home_screen_model.dart';
 import 'package:capstone/model/kirby_pet_model.dart';
 import 'package:capstone/model/kirby_task_model.dart';
+import 'package:capstone/model/kirby_user_model.dart';
 import 'package:capstone/viewpage/achievement_screen.dart';
 import 'package:capstone/viewpage/health_info_screen.dart';
 import 'package:capstone/viewpage/history_screen.dart';
@@ -17,6 +18,7 @@ import 'package:flutter/material.dart';
 
 import '../controller/firestore_controller.dart';
 import '../model/constants.dart';
+import '../model/reward_model.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -221,7 +223,8 @@ class _Controller {
     await loadKirbyUser();
     await loadKirbyPet();
     await getTimer();
-    showWeekAchievementView();
+    // ignore: use_build_context_synchronously
+    showWeekAchievementView(state.context);
     state.screenModel.loading = false;
   }
 
@@ -345,16 +348,87 @@ class _Controller {
     await loadKirbyPet();
   }
 
+  // checks if all tasks from last Wed - yesterday were completed
+  Future<bool> isWeeklyTasksComplete() async {
+    bool isComplete = false;
+    DateTime now = DateTime.now();
+    int weekday = now.weekday; // monday = 1; sunday = 7
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////// CHANGE TO CURRENT WEEKDAY WHEN TESTING ////////////////////////////////////////////
+    ///// perform on Wednesdays = 3
+    if (weekday == 7) {
+      //////////////////////////////////////////////////////////////////////////////////////////////////
+      //////////////////////////////////////////////////////////////////////////////////////////////////
+
+      DateTime date = DateTime(now.year, now.month, now.day);
+
+      for (int i = 1; i <= 7; i++) {
+        date = date.subtract(Duration(days: i));
+        List<KirbyTask> dayTasks = await FirestoreController.getDayTasks(
+            uid: currentUserID, day: date);
+
+        // check if all tasks were completed
+        for (var d in dayTasks) {
+          if (d.isCompleted == false) {
+            isComplete = false;
+            return isComplete;
+          }
+        }
+      }
+      isComplete = true;
+    }
+    return isComplete;
+  }
+
+  Future<bool> isWeeklyRewardReceived() async {
+    Reward reward = await FirestoreController.getReward(userId: currentUserID);
+    // check if reward was recieved for this cycle
+    DateTime now = DateTime.now();
+    if (reward.receivedDate!.isBefore(now) &&
+        reward.receivedDate!.isAfter(now.subtract(const Duration(days: 7)))) {
+      // reward was received during the past week
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   // notifies user of weekly reward
-  void showWeekAchievementView() {
-    AchievementView(state.context,
-            title: "Good Job! 500 Coins",
-            subTitle: "You completed all your tasks this week!",
-            icon: Padding(
-              padding: const EdgeInsets.all(8),
-              child: Image.asset('images/kirby_icon.png'),
-            ),
-            listener: (status) {})
-        .show();
+  Future<void> showWeekAchievementView(BuildContext context) async {
+    // check if reward doc exists
+    bool hasRewardDoc = await FirestoreController.hasRewardDoc(currentUserID);
+    if (hasRewardDoc) {
+      // check if weekly reward was already received
+      bool weeklyRewardReceived = await isWeeklyRewardReceived();
+
+      if (weeklyRewardReceived) return;
+
+      // check if weekly tasks are complete
+      if (await isWeeklyTasksComplete()) {
+        // ignore: use_build_context_synchronously
+        // AchievementView(context,
+        //         title: "Good Job! 25 Coins",
+        //         subTitle: "You completed all your tasks this week!",
+        //         icon: Padding(
+        //           padding: const EdgeInsets.all(8),
+        //           child: Image.asset('images/kirby_icon.png'),
+        //         ),
+        //         listener: (status) {})
+        //     .show();
+
+        //     // reward the 25 coins
+        //     int currency = state.screenModel.kirbyUser!.currency! + 25;
+        //     await FirestoreController.updateKirbyUser(
+        //         userId: currentUserID, update: {'currency': currency});
+
+        //     // mark reward recevied
+        //     await FirestoreController.updateReward(
+        //         userId: currentUserID, update: {'receivedDate': DateTime.now()});
+      }
+    } else {
+      // make a reward doc
+      await FirestoreController.addReward(Reward(uid: currentUserID));
+    }
   }
 }
