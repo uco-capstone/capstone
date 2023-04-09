@@ -91,7 +91,6 @@ class _LeaderboardState extends State<LeaderboardScreen> {
                       child: RankItem(
                         isUser: r.uid == screenModel.user.uid ? true : false,
                         uid: r.uid,
-                        // taskIndex: screenModel.taskList.indexOf(t),
                         firstName: r.firstName,
                         streak: r.streak,
                         rank: r.rank,
