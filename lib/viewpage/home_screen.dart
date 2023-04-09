@@ -381,6 +381,8 @@ class _Controller {
       default:
     }
     DateTime wednesday = now.subtract(Duration(days: subtractDays));
+
+    // bring time to midnight
     DateTime date = DateTime(wednesday.year, wednesday.month, wednesday.day);
     date = date.add(const Duration(days: 1));
 
