@@ -313,6 +313,7 @@ class _ShopScreen extends State<ShopScreen> {
     );
   }
 
+  //Shows the dialog to ask the user if they do want
   void _purchaseItemDialog(BuildContext context, Customization customization) {
     showDialog(
       context: context,
@@ -321,7 +322,7 @@ class _ShopScreen extends State<ShopScreen> {
         content: Text('Are you sure you want to spend ${customization.price} coins on the ${customization.label}?'),
         actions: <Widget>[
           TextButton(
-            onPressed: () => Navigator.pop(context, 'Yes'),
+            onPressed: () => con.purchaseItem(customization),
             child: const Text('Yes'),
           ),
           TextButton(
@@ -501,9 +502,7 @@ class _Controller {
         await FirestoreController.addPurchasedItem(purchasedItem: tempPurchasedItem);
       }
 
-      for(var item in state.screenModel.purchasedItemsList) {
-        print(item.filepath);
-      }
+      state.screenModel.purchasedItemsList = await FirestoreController.getPurchasedItemsList(uid: Auth.getUser().uid);
       state.render(() {});
     } catch (e) {
       // ignore: avoid_print
@@ -564,7 +563,38 @@ class _Controller {
     showSnackBar(context: state.context, message: 'Successfully Customized Background!');
   }
 
-  void purchaseItem(int index) {
+  //Adds a purchased item to the database
+  void purchaseItem(Customization customization) async {
+    if(customization.price > state.screenModel.kirbyUser!.currency!) {
+      Navigator.of(state.context).pop();
+      showSnackBar(context: state.context, message: "You don't have enough coins to purchase this!");
+      return;
+    } else {
+      var tempItem = PurchasedItem(
+        userId: Auth.getUser().uid, 
+        label: customization.label, 
+        filepath: customization.filepath, 
+        price: customization.price,
+      );
 
+      await FirestoreController.addPurchasedItem(purchasedItem: tempItem);
+
+      //Deduct Coins
+      var userCoins = state.screenModel.kirbyUser!.currency!;
+      userCoins -= customization.price;
+
+      await FirestoreController.updateKirbyUser(
+        userId: Auth.getUser().uid, 
+        update: {'currency': userCoins},
+      );
+
+      //Update Screen
+      Navigator.of(state.context).pop();
+      state.screenModel.purchasedItemsList = await FirestoreController.getPurchasedItemsList(uid: Auth.getUser().uid);
+      state.screenModel.kirbyUser = await FirestoreController.getKirbyUser(userId: Auth.getUser().uid);
+      state.render(() {});
+      // ignore: use_build_context_synchronously
+      showSnackBar(context: state.context, message: "You've purchased the ${customization.label}!");
+    }
   }
 }
