@@ -18,7 +18,6 @@ import 'package:flutter/material.dart';
 
 import '../controller/firestore_controller.dart';
 import '../model/constants.dart';
-import '../model/reward_model.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -409,7 +408,6 @@ class _Controller {
   }
 
   Future<bool> isWeeklyRewardReceived() async {
-    // Reward reward = await FirestoreController.getReward(userId: currentUserID);
     // check if reward was recieved for this cycle
     DateTime now = DateTime.now();
     if (state.screenModel.kirbyUser?.weeklyReward == null) {
@@ -426,12 +424,6 @@ class _Controller {
 
   // notifies user of weekly reward
   Future<void> showWeekAchievementView(BuildContext context) async {
-    // check if reward doc exists
-    // bool hasRewardDoc = await FirestoreController.hasRewardDoc(currentUserID);
-    // if (hasRewardDoc == false) {
-    //   // make a reward doc
-    //   await FirestoreController.addReward(Reward(uid: currentUserID));
-    // }
     // check if weekly reward was already received
     bool weeklyRewardReceived = await isWeeklyRewardReceived();
 
@@ -458,8 +450,6 @@ class _Controller {
           userId: currentUserID, update: {'currency': currency});
 
       // mark reward recevied
-      // await FirestoreController.updateReward(
-      //     userId: currentUserID, update: {'receivedDate': DateTime.now()});
       await FirestoreController.updateKirbyUser(
           userId: currentUserID, update: {'weeklyReward': DateTime.now()});
     }
