@@ -1,3 +1,5 @@
+import 'package:capstone/controller/auth_controller.dart';
+import 'package:capstone/controller/firestore_controller.dart';
 import 'package:capstone/viewpage/home_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -16,6 +18,14 @@ class AchievementScreen extends StatefulWidget {
 
 class _AchievementScreenState extends State<AchievementScreen> {
   late _Controller con;
+
+  @override
+  void initState() {
+    super.initState();
+    con = _Controller(this);
+    // screenModel = ShopScreenModel(user: Auth.getUser());
+    // con.initScreen();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +65,7 @@ class _AchievementScreenState extends State<AchievementScreen> {
                 showDialog(
                   context: context,
                   builder: (context) => const AlertDialog(
-                    title: Text('Statistics'),
+                    title: Text('You have completed this task'),
                   ),
                 );
               },
@@ -78,40 +88,160 @@ class _AchievementScreenState extends State<AchievementScreen> {
               ),
             ),
           ),
-          Container(
-            padding: const EdgeInsets.all(8),
-            color: Colors.orange[200],
-            child: const Text("Complete 5 Task"),
+          Card(
+            child: InkWell(
+              splashColor: Colors.blue.withAlpha(30),
+              // Tap-Card: Viewing statistics
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => const AlertDialog(
+                    title: Text('You have completed this task'),
+                  ),
+                );
+              },
+              // Container: Images for Trophies are stored if user has obtained achievement
+              child: Container(
+                height: 300,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Colors.orange[200],
+                  //borderRadius: BorderRadius.circular(20.0),
+                  image: const DecorationImage(
+                    fit: BoxFit.fill,
+                    image: AssetImage('images/crown.png'),
+                  ),
+                ),
+                child: const Text(
+                  'Complete 3 Task',
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
           ),
-          Container(
-            padding: const EdgeInsets.all(8),
-            color: Colors.orange[500],
-            child: const Text("Complete 10 Task"),
+          Card(
+            child: InkWell(
+              splashColor: Colors.blue.withAlpha(30),
+              // Tap-Card: Viewing statistics
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => const AlertDialog(
+                    title: Text('You have completed this task'),
+                  ),
+                );
+              },
+              // Container: Images for Trophies are stored if user has obtained achievement
+              child: Container(
+                height: 300,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Colors.orange[400],
+                  //borderRadius: BorderRadius.circular(20.0),
+                  image: const DecorationImage(
+                    fit: BoxFit.fill,
+                    image: AssetImage('images/crown.png'),
+                  ),
+                ),
+                child: const Text(
+                  'Complete 6 Task',
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
           ),
-          Container(
-            padding: const EdgeInsets.all(8),
-            color: Colors.orange[500],
-            child: const Text("Complete 20 Task"),
+          Card(
+            child: InkWell(
+              splashColor: Colors.blue.withAlpha(30),
+              // Tap-Card: Viewing statistics
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => const AlertDialog(
+                    title: Text('You have completed this task'),
+                  ),
+                );
+              },
+              // Container: Images for Trophies are stored if user has obtained achievement
+              child: Container(
+                height: 300,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Colors.orange[400],
+                  //borderRadius: BorderRadius.circular(20.0),
+                  image: const DecorationImage(
+                    fit: BoxFit.fill,
+                    image: AssetImage('images/crown.png'),
+                  ),
+                ),
+                child: const Text(
+                  'Complete 9 Task',
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
           ),
-          Container(
-            padding: const EdgeInsets.all(8),
-            color: Colors.orange[600],
-            child: const Text('Drink 4oz of Water'),
+          Card(
+            child: InkWell(
+              splashColor: Colors.blue.withAlpha(30),
+              // Tap-Card: Viewing statistics
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => const AlertDialog(
+                    title: Text('You have completed this task'),
+                  ),
+                );
+              },
+              // Container: Images for Trophies are stored if user has obtained achievement
+              child: Container(
+                height: 300,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Colors.orange[600],
+                  //borderRadius: BorderRadius.circular(20.0),
+                  image: const DecorationImage(
+                    fit: BoxFit.fill,
+                    image: AssetImage('images/crown.png'),
+                  ),
+                ),
+                child: const Text(
+                  'Complete 12 Task',
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
           ),
-          Container(
-            padding: const EdgeInsets.all(8),
-            color: Colors.orange[600],
-            child: const Text('Drank 6oz of Water'),
-          ),
-          Container(
-            padding: const EdgeInsets.all(8),
-            color: Colors.orange[800],
-            child: const Text('Drink 12oz of Water'),
-          ),
-          Container(
-            padding: const EdgeInsets.all(8),
-            color: Colors.orange[800],
-            child: const Text('Drink 32oz of Water'),
+          Card(
+            child: InkWell(
+              splashColor: Colors.blue.withAlpha(30),
+              // Tap-Card: Viewing statistics
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => const AlertDialog(
+                    title: Text('You have completed this task'),
+                  ),
+                );
+              },
+              // Container: Images for Trophies are stored if user has obtained achievement
+              child: Container(
+                height: 300,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Colors.orange[600],
+                  //borderRadius: BorderRadius.circular(20.0),
+                  image: const DecorationImage(
+                    fit: BoxFit.fill,
+                    image: AssetImage('images/crown.png'),
+                  ),
+                ),
+                child: const Text(
+                  'Complete 15 Task',
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
           ),
         ],
       ),
@@ -122,4 +252,13 @@ class _AchievementScreenState extends State<AchievementScreen> {
 class _Controller {
   _AchievementScreenState state;
   _Controller(this.state);
+
+  Future<void> checkUserCompletedTasks() async {
+    var completedTaskList =
+        await FirestoreController.getCompletedTasks(uid: Auth.getUser().uid);
+    completedTaskList.length; // how many compeleted task a user has
+    if (completedTaskList.isNotEmpty) {
+      // reward user
+    }
+  }
 }
