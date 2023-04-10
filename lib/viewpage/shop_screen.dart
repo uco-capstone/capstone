@@ -137,33 +137,6 @@ class _ShopScreen extends State<ShopScreen> {
                       bottom: 10,
                       child: Text(skinCustomizations[index].label)
                     ),
-                    if (!screenModel.purchasedItemsList.any((item) => item.filepath == skinCustomizations[index].filepath))
-                    Positioned(
-                      right: 0,
-                      top: 5,
-                      child: Container(
-                        width: MediaQuery.of(context).size.width * 0.17,
-                        height: MediaQuery.of(context).size.width * 0.08,
-                        decoration: BoxDecoration(
-                            color: Colors.grey[100],
-                            shape: BoxShape.rectangle,
-                            borderRadius: const BorderRadius.all(Radius.circular(25)),
-                            //border: Border.all(color: Colors.deepPurple, width: 2)
-                          ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            //Sample number of coins
-                            Text('${skinCustomizations[index].price} '),
-                            Icon(
-                              Icons.monetization_on,
-                              color: Colors.orangeAccent,
-                              size: MediaQuery.of(context).size.width * 0.05,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
                   ],
                 ),
                 onTap: () =>
@@ -180,6 +153,49 @@ class _ShopScreen extends State<ShopScreen> {
                   child: const Image(
                     image: AssetImage('images/selected-stamp.png'),
                   ),
+                ),
+              if (!screenModel.purchasedItemsList.any((item) => item.filepath == skinCustomizations[index].filepath))
+                Stack(
+                  children: [
+                    Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16.0),
+                        color: Colors.black.withOpacity(0.7),
+                      ),
+                    ),
+                    ListTile(
+                      onTap: () => _purchaseItemDialog(context, skinCustomizations[index]),
+                      title: Center(
+                        child: Container(
+                          width: MediaQuery.of(context).size.width * 0.25,
+                          height: MediaQuery.of(context).size.width * 0.12,
+                          decoration: BoxDecoration(
+                              color: Colors.grey[100],
+                              shape: BoxShape.rectangle,
+                              borderRadius: const BorderRadius.all(Radius.circular(25)),
+                            ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text('${skinCustomizations[index].price} ', 
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                              Icon(
+                                Icons.monetization_on,
+                                color: Colors.orangeAccent,
+                                size: MediaQuery.of(context).size.width * 0.05,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
             ],
           ),
@@ -230,31 +246,6 @@ class _ShopScreen extends State<ShopScreen> {
                         child: Center(child: Text(backgroundCustomizations[index].label))
                       ),
                     ),
-                    if (!screenModel.purchasedItemsList.any((item) => item.filepath == backgroundCustomizations[index].filepath))
-                      Positioned(
-                        right: 0,
-                        top: 5,
-                        child: Container(
-                          width: MediaQuery.of(context).size.width * 0.17,
-                          height: MediaQuery.of(context).size.width * 0.08,
-                          decoration: BoxDecoration(
-                              color: Colors.grey[100],
-                              shape: BoxShape.rectangle,
-                              borderRadius: const BorderRadius.all(Radius.circular(25)),
-                            ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text('${backgroundCustomizations[index].price} '),
-                              Icon(
-                                Icons.monetization_on,
-                                color: Colors.orangeAccent,
-                                size: MediaQuery.of(context).size.width * 0.05,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
                   ],
                 ),
                 onTap: () =>
@@ -272,9 +263,72 @@ class _ShopScreen extends State<ShopScreen> {
                     image: AssetImage('images/selected-stamp.png'),
                   ),
                 ),
+              if (!screenModel.purchasedItemsList.any((item) => item.filepath == backgroundCustomizations[index].filepath))
+                Stack(
+                  children: [
+                    Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16.0),
+                        color: Colors.black.withOpacity(0.7),
+                      ),
+                    ),
+                    ListTile(
+                      onTap: () => _purchaseItemDialog(context, backgroundCustomizations[index]),
+                      title: Center(
+                        child: Container(
+                          width: MediaQuery.of(context).size.width * 0.25,
+                          height: MediaQuery.of(context).size.width * 0.12,
+                          decoration: BoxDecoration(
+                              color: Colors.grey[100],
+                              shape: BoxShape.rectangle,
+                              borderRadius: const BorderRadius.all(Radius.circular(25)),
+                            ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text('${backgroundCustomizations[index].price} ', 
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                              Icon(
+                                Icons.monetization_on,
+                                color: Colors.orangeAccent,
+                                size: MediaQuery.of(context).size.width * 0.05,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  void _purchaseItemDialog(BuildContext context, Customization customization) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Purchase Item?'),
+        content: Text('Are you sure you want to spend ${customization.price} coins on the ${customization.label}?'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context, 'Yes'),
+            child: const Text('Yes'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('No'),
+          ),
+        ]
       ),
     );
   }
@@ -508,5 +562,9 @@ class _Controller {
     state.render(() {});
     // ignore: use_build_context_synchronously
     showSnackBar(context: state.context, message: 'Successfully Customized Background!');
+  }
+
+  void purchaseItem(int index) {
+
   }
 }
