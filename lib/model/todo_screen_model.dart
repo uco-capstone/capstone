@@ -124,7 +124,10 @@ class TodoScreenModel {
   Future<void> updateDrinkTask() async {
     String title = "Drink ${getHalfWeight()}oz of water";
     String taskID = await getDrinkTaskID() as String;
-    Map<String, dynamic> update = {DocKeyKirbyTask.title.name: title};
+    Map<String, dynamic> update = {
+      DocKeyKirbyTask.title.name: title,
+      DocKeyKirbyTask.reocurringDuration.name: 1
+    };
     await FirestoreController.updateKirbyTask(taskId: taskID, update: update);
   }
 
@@ -147,7 +150,10 @@ class TodoScreenModel {
   Future<void> updateSleepTask() async {
     String title = "Sleep for ${getSleep()} hours";
     String taskID = await getSleepTaskID() as String;
-    Map<String, dynamic> update = {DocKeyKirbyTask.title.name: title};
+    Map<String, dynamic> update = {
+      DocKeyKirbyTask.title.name: title,
+      DocKeyKirbyTask.reocurringDuration.name: 1
+    };
     await FirestoreController.updateKirbyTask(taskId: taskID, update: update);
   }
 
@@ -170,7 +176,10 @@ class TodoScreenModel {
   Future<void> updateEatTask() async {
     String title = "Eat ${getMeals()} meals today";
     String taskID = await getMealsTaskID() as String;
-    Map<String, dynamic> update = {DocKeyKirbyTask.title.name: title};
+    Map<String, dynamic> update = {
+      DocKeyKirbyTask.title.name: title,
+      DocKeyKirbyTask.reocurringDuration.name: 1
+    };
     await FirestoreController.updateKirbyTask(taskId: taskID, update: update);
   }
 

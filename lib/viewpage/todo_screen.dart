@@ -656,7 +656,7 @@ class _Controller {
     );
     for (var result in results) {
       result.isPreloaded ??= false;
-      if (!result.isPreloaded!) state.screenModel.taskList.add(result);
+      if (!result.isPreloaded! && !result.isCompleted) state.screenModel.taskList.add(result);
     }
     state.render(() {});
   }

@@ -2,6 +2,7 @@ import 'package:capstone/controller/auth_controller.dart';
 import 'package:capstone/model/home_screen_model.dart';
 import 'package:capstone/model/kirby_pet_model.dart';
 import 'package:capstone/model/kirby_task_model.dart';
+import 'package:capstone/model/kirby_user_model.dart';
 import 'package:capstone/viewpage/achievement_screen.dart';
 import 'package:capstone/viewpage/health_info_screen.dart';
 import 'package:capstone/viewpage/history_screen.dart';
@@ -13,6 +14,7 @@ import 'package:capstone/viewpage/start_dispatcher.dart';
 import 'package:capstone/viewpage/todo_screen.dart';
 import 'package:capstone/viewpage/view/view_util.dart';
 import 'package:flutter/material.dart';
+import 'package:achievement_view/achievement_view.dart';
 
 import '../controller/firestore_controller.dart';
 import '../model/constants.dart';
@@ -321,30 +323,76 @@ class _Controller {
   and reloads the pet.
   */
   Future<void> checkPastDueTasks() async {
+    bool updateFirestore = false;
     var taskList =
         await FirestoreController.getKirbyTaskList(uid: currentUserID);
     var userPet = state.screenModel.kirbyPet;
+    var kirbyUser = state.screenModel.kirbyUser;
     DateTime currTime = DateTime.now();
+    Map<String, dynamic> updatePet = {};
+    Map<String, dynamic> updateCurrency = {};
+
     //Goes through the task list and marks past due tasks
     for (var task in taskList) {
       //If a task is past due, hunger gauge goes down
       if (task.dueDate == null) {
         continue;
-      } else if (!task.isPastDue! && task.dueDate!.compareTo(currTime) < 0) {
-        Map<String, dynamic> updateTask = {};
-        updateTask[DocKeyKirbyTask.isPastDue.name] = true;
-        Map<String, dynamic> updatePet = {};
+      } else if (!task.isPastDue! &&
+          !task.isCompleted &&
+          task.dueDate!.compareTo(currTime) < 0) {
         if (userPet!.hungerGauge > 0) {
-          updatePet[DocKeyPet.hungerGauge.name] = userPet.hungerGauge - 1;
+          userPet.hungerGauge--;
+          updatePet[DocKeyPet.hungerGauge.name] = userPet.hungerGauge;
         }
-        //update Firestore
+        updateFirestore = true;
+        Map<String, dynamic> update = {};
+        update[DocKeyKirbyTask.isPastDue.name] = true;
         await FirestoreController.updateKirbyTask(
-            taskId: task.taskId!, update: updateTask);
-        await FirestoreController.updatePet(
-            userId: currentUserID, update: updatePet);
+            taskId: task.taskId!, update: update);
+      } else if (!task.isPastDue! && task.isCompleted) {
+        //Increament Hunger Gauge for completed tasks
+        updateFirestore = true;
+        kirbyUser!.currency = kirbyUser.currency! + 10;
+        updateCurrency[DocKeyUser.currency.name] = kirbyUser.currency!;
+        if (userPet!.hungerGauge < 10) {
+          userPet.hungerGauge++;
+          updatePet[DocKeyPet.hungerGauge.name] = userPet.hungerGauge;
+        }
+        Map<String, dynamic> update = {};
+        update[DocKeyKirbyTask.isPastDue.name] = true;
+        await FirestoreController.updateKirbyTask(
+            taskId: task.taskId!, update: update);
       }
     }
+
+    if (userPet!.hungerGauge == 0) {
+      updatePet[DocKeyPet.hungerGauge.name] = 10;
+      updateCurrency[DocKeyUser.currency.name] = 0;
+      showZeroHungerNotification();
+      updateFirestore = true;
+    }
+
+    if (updateFirestore) {
+      await FirestoreController.updateKirbyUser(
+          userId: currentUserID, update: updateCurrency);
+      await FirestoreController.updatePet(
+          userId: currentUserID, update: updatePet);
+    }
+
     //Reload pet
     await loadKirbyPet();
+  }
+
+  //Shows Achievment View when hunger Gauge hits zero
+  void showZeroHungerNotification() {
+    AchievementView(state.context,
+            title: "Oh no! Kirby got too hungry!",
+            subTitle: "You lost your coins.",
+            icon: Padding(
+              padding: const EdgeInsets.all(8),
+              child: Image.asset('images/kirby-dead.png'),
+            ),
+            listener: (status) {})
+        .show();
   }
 }

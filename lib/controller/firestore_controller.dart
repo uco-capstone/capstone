@@ -158,9 +158,7 @@ class FirestoreController {
       if (doc.data() != null) {
         var document = doc.data() as Map<String, dynamic>;
         var t = KirbyTask.fromFirestoreDoc(doc: document, taskId: doc.id);
-        if (t.isCompleted != true) {
-          result.add(t);
-        }
+        result.add(t);
       }
     }
     return result;
