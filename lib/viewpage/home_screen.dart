@@ -349,19 +349,6 @@ class _Controller {
         update[DocKeyKirbyTask.isPastDue.name] = true;
         await FirestoreController.updateKirbyTask(
             taskId: task.taskId!, update: update);
-      } else if (!task.isPastDue! && task.isCompleted) {
-        //Increament Hunger Gauge for completed tasks
-        updateFirestore = true;
-        kirbyUser!.currency = kirbyUser.currency! + 10;
-        updateCurrency[DocKeyUser.currency.name] = kirbyUser.currency!;
-        if (userPet!.hungerGauge < 10) {
-          userPet.hungerGauge++;
-          updatePet[DocKeyPet.hungerGauge.name] = userPet.hungerGauge;
-        }
-        Map<String, dynamic> update = {};
-        update[DocKeyKirbyTask.isPastDue.name] = true;
-        await FirestoreController.updateKirbyTask(
-            taskId: task.taskId!, update: update);
       }
     }
 
@@ -387,7 +374,7 @@ class _Controller {
   void showZeroHungerNotification() {
     AchievementView(state.context,
             title: "Oh no! Kirby got too hungry!",
-            subTitle: "You lost your coins.",
+            subTitle: "Kirby ate all your coins!",
             icon: Padding(
               padding: const EdgeInsets.all(8),
               child: Image.asset('images/kirby-dead.png'),
