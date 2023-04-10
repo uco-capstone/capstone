@@ -11,6 +11,7 @@ enum DocKeyUser {
   preloadedTasks,
   notifications,
   currency,
+  weeklyReward,
 }
 
 class KirbyUser {
@@ -26,6 +27,7 @@ class KirbyUser {
   bool? preloadedTasks;
   bool? notifications;
   int? currency;
+  DateTime? weeklyReward;
 
   KirbyUser({
     required this.userId,
@@ -40,6 +42,7 @@ class KirbyUser {
     this.preloadedTasks,
     this.notifications,
     this.currency,
+    this.weeklyReward,
   });
 
   Map<String, dynamic> toFirestoreDoc() {
@@ -56,6 +59,7 @@ class KirbyUser {
       DocKeyUser.preloadedTasks.name: preloadedTasks,
       DocKeyUser.notifications.name: notifications,
       DocKeyUser.currency.name: currency,
+      DocKeyUser.weeklyReward.name: weeklyReward,
     };
   }
 
@@ -76,6 +80,11 @@ class KirbyUser {
       preloadedTasks: doc[DocKeyUser.preloadedTasks.name] ??= false,
       notifications: doc[DocKeyUser.notifications.name] ??= false,
       currency: doc[DocKeyUser.currency.name] ??= 10,
+      weeklyReward: doc[DocKeyUser.weeklyReward.name] != null
+          ? DateTime.fromMillisecondsSinceEpoch(
+              doc[DocKeyUser.weeklyReward.name].millisecondsSinceEpoch,
+            )
+          : null,
     );
   }
 

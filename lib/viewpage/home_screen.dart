@@ -409,13 +409,14 @@ class _Controller {
   }
 
   Future<bool> isWeeklyRewardReceived() async {
-    Reward reward = await FirestoreController.getReward(userId: currentUserID);
+    // Reward reward = await FirestoreController.getReward(userId: currentUserID);
     // check if reward was recieved for this cycle
     DateTime now = DateTime.now();
-    if (reward.receivedDate == null) {
+    if (state.screenModel.kirbyUser?.weeklyReward == null) {
       return false;
-    } else if (reward.receivedDate!.isBefore(now) &&
-        reward.receivedDate!.isAfter(now.subtract(const Duration(days: 7)))) {
+    } else if (state.screenModel.kirbyUser!.weeklyReward!.isBefore(now) &&
+        state.screenModel.kirbyUser!.weeklyReward!
+            .isAfter(now.subtract(const Duration(days: 7)))) {
       // reward was received during the past week
       return true;
     } else {
@@ -426,18 +427,20 @@ class _Controller {
   // notifies user of weekly reward
   Future<void> showWeekAchievementView(BuildContext context) async {
     // check if reward doc exists
-    bool hasRewardDoc = await FirestoreController.hasRewardDoc(currentUserID);
-    if (hasRewardDoc == false) {
-      // make a reward doc
-      await FirestoreController.addReward(Reward(uid: currentUserID));
-    }
+    // bool hasRewardDoc = await FirestoreController.hasRewardDoc(currentUserID);
+    // if (hasRewardDoc == false) {
+    //   // make a reward doc
+    //   await FirestoreController.addReward(Reward(uid: currentUserID));
+    // }
     // check if weekly reward was already received
     bool weeklyRewardReceived = await isWeeklyRewardReceived();
 
     if (weeklyRewardReceived) return;
 
+    bool isWeekComplete = await isWeeklyTasksComplete();
+
     // check if weekly tasks are complete
-    if (await isWeeklyTasksComplete()) {
+    if (isWeekComplete) {
       // ignore: use_build_context_synchronously
       AchievementView(context,
               title: "Good Job! 25 Coins",
@@ -455,8 +458,10 @@ class _Controller {
           userId: currentUserID, update: {'currency': currency});
 
       // mark reward recevied
-      await FirestoreController.updateReward(
-          userId: currentUserID, update: {'receivedDate': DateTime.now()});
+      // await FirestoreController.updateReward(
+      //     userId: currentUserID, update: {'receivedDate': DateTime.now()});
+      await FirestoreController.updateKirbyUser(
+          userId: currentUserID, update: {'weeklyReward': DateTime.now()});
     }
   }
 }
