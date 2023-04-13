@@ -298,6 +298,7 @@ class FirestoreController {
         .collection(petCollection)
         .where(DocKeyPet.userId.name, isEqualTo: userId)
         .get();
+  
 
     if (querySnapshot.docs.length != 1) {
       return KirbyPet(userId: userId);
