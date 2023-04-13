@@ -19,6 +19,8 @@ class AchievementScreen extends StatefulWidget {
 class _AchievementScreenState extends State<AchievementScreen> {
   late _Controller con;
 
+   int _numCompletedTasks = 0;
+
   @override
   void initState() {
     super.initState();
@@ -29,7 +31,7 @@ class _AchievementScreenState extends State<AchievementScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Achievement"),
+        title: const Text("Achievements"),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -47,214 +49,226 @@ class _AchievementScreenState extends State<AchievementScreen> {
           ),
         ),
       ),
-      // Body: Beginning ListTiles for Cards
-      body: GridView.count(
-        primary: false,
-        padding: const EdgeInsets.all(20),
-        crossAxisSpacing: 10,
-        mainAxisSpacing: 10,
-        crossAxisCount: 2,
-        children: <Widget>[
-          Card(
-            child: InkWell(
-              splashColor: Colors.blue.withAlpha(30),
-              // Tap-Card: Viewing statistics
-              onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => const AlertDialog(
-                    title: Text('You have completed this task'),
-                  ),
-                );
-              },
-              // Container: Images for Trophies are stored if user has obtained achievement
-              child: Container(
-                height: 300,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Colors.orange[200],
-                  //borderRadius: BorderRadius.circular(20.0),
-                  image: DecorationImage(
-                    fit: BoxFit.fill,
-                    colorFilter: ColorFilter.mode(
-                        Colors.black.withOpacity(0.2), BlendMode.dstATop),
-                    image: const AssetImage('images/crown.png'),
-                  ),
-                ),
-                child: const Text(
-                  'Complete 1 Task',
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-          ),
-          Card(
-            child: InkWell(
-              splashColor: Colors.blue.withAlpha(30),
-              // Tap-Card: Viewing statistics
-              onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => const AlertDialog(
-                    title: Text('You have completed this task'),
-                  ),
-                );
-              },
-              // Container: Images for Trophies are stored if user has obtained achievement
-              child: Container(
-                height: 300,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Colors.orange[200],
-                  //borderRadius: BorderRadius.circular(20.0),
-                  image: DecorationImage(
-                    fit: BoxFit.fill,
-                    colorFilter: ColorFilter.mode(
-                        Colors.black.withOpacity(0.2), BlendMode.dstATop),
-                    image: const AssetImage('images/crown.png'),
-                  ),
-                ),
-                child: const Text(
-                  'Complete 5 Task',
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-          ),
-          Card(
-            child: InkWell(
-              splashColor: Colors.blue.withAlpha(30),
-              // Tap-Card: Viewing statistics
-              onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => const AlertDialog(
-                    title: Text('You have completed this task'),
-                  ),
-                );
-              },
-              // Container: Images for Trophies are stored if user has obtained achievement
-              child: Container(
-                height: 300,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Colors.orange[400],
-                  //borderRadius: BorderRadius.circular(20.0),
-                  image: DecorationImage(
-                    fit: BoxFit.fill,
-                    colorFilter: ColorFilter.mode(
-                        Colors.black.withOpacity(0.2), BlendMode.dstATop),
-                    image: const AssetImage('images/crown.png'),
-                  ),
-                ),
-                child: const Text(
-                  'Complete 10 Task',
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-          ),
-          Card(
-            child: InkWell(
-              splashColor: Colors.blue.withAlpha(30),
-              // Tap-Card: Viewing statistics
-              onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => const AlertDialog(
-                    title: Text('You have completed this task'),
-                  ),
-                );
-              },
-              // Container: Images for Trophies are stored if user has obtained achievement
-              child: Container(
-                height: 300,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Colors.orange[400],
-                  //borderRadius: BorderRadius.circular(20.0),
-                  image: DecorationImage(
-                    fit: BoxFit.fill,
-                    colorFilter: ColorFilter.mode(
-                        Colors.black.withOpacity(0.2), BlendMode.dstATop),
-                    image: const AssetImage('images/crown.png'),
-                  ),
-                ),
-                child: const Text(
-                  'Complete 15 Task',
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-          ),
-          Card(
-            child: InkWell(
-              splashColor: Colors.blue.withAlpha(30),
-              // Tap-Card: Viewing statistics
-              onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => const AlertDialog(
-                    title: Text('You have completed this task'),
-                  ),
-                );
-              },
-              // Container: Images for Trophies are stored if user has obtained achievement
-              child: Container(
-                height: 300,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Colors.orange[600],
-                  //borderRadius: BorderRadius.circular(20.0),
-                  image: DecorationImage(
-                    fit: BoxFit.fill,
-                    colorFilter: ColorFilter.mode(
-                        Colors.black.withOpacity(0.2), BlendMode.dstATop),
-                    image: const AssetImage('images/crown.png'),
-                  ),
-                ),
-                child: const Text(
-                  'Complete 20 Task',
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-          ),
-          Card(
-            child: InkWell(
-              splashColor: Colors.blue.withAlpha(30),
-              // Tap-Card: Viewing statistics
-              onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => const AlertDialog(
-                    title: Text('You have completed this task'),
-                  ),
-                );
-              },
-              // Container: Images for Trophies are stored if user has obtained achievement
-              child: Container(
-                height: 300,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Colors.orange[600],
-                  //borderRadius: BorderRadius.circular(20.0),
-                  image: DecorationImage(
-                    fit: BoxFit.fill,
-                    colorFilter: ColorFilter.mode(
-                        Colors.black.withOpacity(0.2), BlendMode.dstATop),
-                    image: const AssetImage('images/crown.png'),
-                  ),
-                ),
-                child: const Text(
-                  'Complete 25 Task',
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-          ),
-        ],
+      // // Body: Beginning ListTiles for Cards
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            _buildTrophy('Bronze Trophy', _numCompletedTasks >= 3),
+            _buildTrophy('Silver Trophy', _numCompletedTasks >= 6),
+            _buildTrophy('Gold Trophy', _numCompletedTasks >= 9),
+          ],
+        ),
       ),
+    );
+  }
+      // body: GridView.count(
+      //   primary: false,
+      //   padding: const EdgeInsets.all(20),
+      //   crossAxisSpacing: 10,
+      //   mainAxisSpacing: 10,
+      //   crossAxisCount: 2,
+      //   children: <Widget>[
+      //     Card(
+      //       child: InkWell(
+      //         splashColor: Colors.blue.withAlpha(30),
+      //         // Tap-Card: Viewing statistics
+      //         onTap: () {
+      //           showDialog(
+      //             context: context,
+      //             builder: (context) => const AlertDialog(
+      //               title: Text('You have completed this task'),
+      //             ),
+      //           );
+      //         },
+      //         // Container: Images for Trophies are stored if user has obtained achievement
+      //         child: Container(
+      //           height: 300,
+      //           width: double.infinity,
+      //           decoration: BoxDecoration(
+      //             color: Colors.orange[200],
+      //             //borderRadius: BorderRadius.circular(20.0),
+      //             image: DecorationImage(
+      //               fit: BoxFit.fill,
+      //               colorFilter: ColorFilter.mode(
+      //                   Colors.black.withOpacity(0.2), BlendMode.dstATop),
+      //               image: const AssetImage('images/crown.png'),
+      //             ),
+      //           ),
+      //           child: const Text(
+      //             'Complete 1 Task',
+      //             textAlign: TextAlign.center,
+      //           ),
+      //         ),
+      //       ),
+      //     ),
+      //     Card(
+      //       child: InkWell(
+      //         splashColor: Colors.blue.withAlpha(30),
+      //         // Tap-Card: Viewing statistics
+      //         onTap: () {
+      //           showDialog(
+      //             context: context,
+      //             builder: (context) => const AlertDialog(
+      //               title: Text('You have completed this task'),
+      //             ),
+      //           );
+      //         },
+      //         // Container: Images for Trophies are stored if user has obtained achievement
+      //         child: Container(
+      //           height: 300,
+      //           width: double.infinity,
+      //           decoration: BoxDecoration(
+      //             color: Colors.orange[200],
+      //             //borderRadius: BorderRadius.circular(20.0),
+      //             image: DecorationImage(
+      //               fit: BoxFit.fill,
+      //               colorFilter: ColorFilter.mode(
+      //                   Colors.black.withOpacity(0.2), BlendMode.dstATop),
+      //               image: const AssetImage('images/crown.png'),
+      //             ),
+      //           ),
+      //           child: const Text(
+      //             'Complete 5 Task',
+      //             textAlign: TextAlign.center,
+      //           ),
+      //         ),
+      //       ),
+      //     ),
+      //     Card(
+      //       child: InkWell(
+      //         splashColor: Colors.blue.withAlpha(30),
+      //         // Tap-Card: Viewing statistics
+      //         onTap: () {
+      //           showDialog(
+      //             context: context,
+      //             builder: (context) => const AlertDialog(
+      //               title: Text('You have completed this task'),
+      //             ),
+      //           );
+      //         },
+      //         // Container: Images for Trophies are stored if user has obtained achievement
+      //         child: Container(
+      //           height: 300,
+      //           width: double.infinity,
+      //           decoration: BoxDecoration(
+      //             color: Colors.orange[400],
+      //             //borderRadius: BorderRadius.circular(20.0),
+      //             image: DecorationImage(
+      //               fit: BoxFit.fill,
+      //               colorFilter: ColorFilter.mode(
+      //                   Colors.black.withOpacity(0.2), BlendMode.dstATop),
+      //               image: const AssetImage('images/crown.png'),
+      //             ),
+      //           ),
+      //           child: const Text(
+      //             'Complete 10 Task',
+      //             textAlign: TextAlign.center,
+      //           ),
+      //         ),
+      //       ),
+      //     ),
+      //     Card(
+      //       child: InkWell(
+      //         splashColor: Colors.blue.withAlpha(30),
+      //         // Tap-Card: Viewing statistics
+      //         onTap: () {
+      //           showDialog(
+      //             context: context,
+      //             builder: (context) => const AlertDialog(
+      //               title: Text('You have completed this task'),
+      //             ),
+      //           );
+      //         },
+      //         // Container: Images for Trophies are stored if user has obtained achievement
+      //         child: Container(
+      //           height: 300,
+      //           width: double.infinity,
+      //           decoration: BoxDecoration(
+      //             color: Colors.orange[400],
+      //             //borderRadius: BorderRadius.circular(20.0),
+      //             image: DecorationImage(
+      //               fit: BoxFit.fill,
+      //               colorFilter: ColorFilter.mode(
+      //                   Colors.black.withOpacity(0.2), BlendMode.dstATop),
+      //               image: const AssetImage('images/crown.png'),
+      //             ),
+      //           ),
+      //           child: const Text(
+      //             'Complete 15 Task',
+      //             textAlign: TextAlign.center,
+      //           ),
+      //         ),
+      //       ),
+      //     ),
+      //     Card(
+      //       child: InkWell(
+      //         splashColor: Colors.blue.withAlpha(30),
+      //         // Tap-Card: Viewing statistics
+      //         onTap: () {
+      //           showDialog(
+      //             context: context,
+      //             builder: (context) => const AlertDialog(
+      //               title: Text('You have completed this task'),
+      //             ),
+      //           );
+      //         },
+      //         // Container: Images for Trophies are stored if user has obtained achievement
+      //         child: Container(
+      //           height: 300,
+      //           width: double.infinity,
+      //           decoration: BoxDecoration(
+      //             color: Colors.orange[600],
+      //             //borderRadius: BorderRadius.circular(20.0),
+      //             image: DecorationImage(
+      //               fit: BoxFit.fill,
+      //               colorFilter: ColorFilter.mode(
+      //                   Colors.black.withOpacity(0.2), BlendMode.dstATop),
+      //               image: const AssetImage('images/crown.png'),
+      //             ),
+      //           ),
+      //           child: const Text(
+      //             'Complete 20 Task',
+      //             textAlign: TextAlign.center,
+      //           ),
+      //         ),
+      //       ),
+      //     ),
+      //     Card(
+      //       child: InkWell(
+      //         splashColor: Colors.blue.withAlpha(30),
+      //         // Tap-Card: Viewing statistics
+      //         onTap: () {
+      //           showDialog(
+      //             context: context,
+      //             builder: (context) => const AlertDialog(
+      //               title: Text('You have completed this task'),
+      //             ),
+      //           );
+      //         },
+      //         // Container: Images for Trophies are stored if user has obtained achievement
+      //         child: Container(
+      //           height: 300,
+      //           width: double.infinity,
+      //           decoration: BoxDecoration(
+      //             color: Colors.orange[600],
+      //             //borderRadius: BorderRadius.circular(20.0),
+      //             image: DecorationImage(
+      //               fit: BoxFit.fill,
+      //               colorFilter: ColorFilter.mode(
+      //                   Colors.black.withOpacity(0.2), BlendMode.dstATop),
+      //               image: const AssetImage('images/crown.png'),
+      //             ),
+      //           ),
+      //           child: const Text(
+      //             'Complete 25 Task',
+      //             textAlign: TextAlign.center,
+      //           ),
+      //           ),
+      //         ),
+      //       ),
+      //     ],
+      // ),
     );
   }
 }
