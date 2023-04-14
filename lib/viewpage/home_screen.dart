@@ -18,6 +18,7 @@ import 'package:achievement_view/achievement_view.dart';
 
 import '../controller/firestore_controller.dart';
 import '../model/constants.dart';
+import 'leaderboard_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -49,7 +50,15 @@ class _HomeScreenState extends State<HomeScreen> {
       onWillPop: () => Future.value(false),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Kirby!'),
+          title: const Text('~My Kirby~'),
+          titleSpacing: 45,
+          flexibleSpace: Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.pink, Colors.purple],
+              ),
+            ),
+          ),
           actions: [
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -108,6 +117,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 leading: const Icon(Icons.stars),
                 title: const Text('Achievements'),
                 onTap: con.achievementScreen,
+              ),
+              ListTile(
+                leading: const Icon(Icons.groups),
+                title: const Text('Leaderboard'),
+                onTap: con.leaderboardScreen,
               ),
               ListTile(
                 leading: const Icon(Icons.settings),
@@ -243,14 +257,21 @@ class _Controller {
     }
   }
 
+  /*
+  This function loads the KirbyPet that corresponds with the userID.
+  If the user doesn't have a KirbyPet, it will create a new one and upload it to the Firebase.
+  */
   Future<void> loadKirbyPet() async {
     try {
+      //Checks if the user has a pet in the firebase
       bool hasPet = await FirestoreController.hasPet(currentUserID);
+      //If there is not a pet, a default pet will be created and uploaded to the firebase
       if (!hasPet) {
         KirbyPet tempPet = KirbyPet(userId: currentUserID);
         state.screenModel.kirbyPet = tempPet;
         await FirestoreController.addPet(kirbyPet: tempPet);
       } else {
+        //If there is a pet in the firebase, it will get the pet and store it in the screen model
         state.screenModel.kirbyPet =
             await FirestoreController.getPet(userId: currentUserID);
       }
@@ -280,6 +301,10 @@ class _Controller {
         .then((value) => state.render(() {}));
   }
 
+  void leaderboardScreen() {
+    Navigator.pushNamed(state.context, LeaderboardScreen.routeName);
+  }
+
   void settingsScreen() async {
     await Navigator.pushNamed(state.context, SettingsScreen.routeName);
   }
@@ -295,26 +320,6 @@ class _Controller {
     }
     if (!state.mounted) return;
     Navigator.pushNamed(state.context, StartDispatcher.routeName);
-  }
-
-  void updateSkinCustomization(String customization) async {
-    if (state.screenModel.kirbyPet != null) {
-      state.screenModel.kirbyPet!.kirbySkin = customization;
-    }
-    try {
-      Map<String, dynamic> update = {};
-      update[DocKeyPet.kirbySkin.name] = customization;
-      await FirestoreController.updateKirbyUser(
-          userId: state.screenModel.kirbyUser!.userId!, update: update);
-    } catch (e) {
-      if (Constants.devMode) {
-        // ignore: avoid_print
-        print('======================= Skin Customization Update Error: $e');
-      }
-      showSnackBar(context: state.context, message: 'Skin Update Error: $e');
-    }
-
-    state.render(() {});
   }
 
   /*

@@ -242,8 +242,4 @@ class _Controller {
       tempKirbyUser.averageMealsEaten = int.parse(value);
     }
   }
-
-  // Pull Information
-
-  // Submit Information
 }

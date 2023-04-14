@@ -14,6 +14,7 @@ class TodoScreenModel {
   var taskList = <KirbyTask>[];
   late KirbyTask tempTask;
   late TimeOfDay _tempTime;
+  List<KirbyTask>? tempTaskList;
 
   TodoScreenModel({required this.user}) {
     tempTask = KirbyTask(
@@ -29,6 +30,7 @@ class TodoScreenModel {
     _tempTime = const TimeOfDay(hour: 0, minute: 0);
   }
 
+  // adds the preloaded tasks
   Future<List<KirbyTask>> addPreloadedTasks() async {
     List<KirbyTask> taskList = [];
     DateTime now = DateTime.now();
@@ -81,14 +83,16 @@ class TodoScreenModel {
     return taskList;
   }
 
+  // half of the user's weight
   String getHalfWeight() {
     if (kirbyUser?.weight != null) {
-      return (kirbyUser!.weight! * 8).round().toString();
+      return (kirbyUser!.weight! / 2).round().toString();
     } else {
       return "100";
     }
   }
 
+  // gets hours sleep
   String getSleep() {
     if (kirbyUser?.averageSleep != null) {
       return kirbyUser!.averageSleep!.toString();
@@ -97,6 +101,7 @@ class TodoScreenModel {
     }
   }
 
+  // gets meals eaten
   String getMeals() {
     if (kirbyUser?.averageMealsEaten != null) {
       return kirbyUser!.averageMealsEaten!.toString();
@@ -105,6 +110,7 @@ class TodoScreenModel {
     }
   }
 
+  // gets the Drink x oz of water preloaded task
   Future<String?> getDrinkTaskID() async {
     String target = "Drink";
     // get all preloaded tasks
@@ -121,6 +127,7 @@ class TodoScreenModel {
     return null;
   }
 
+  // updates the Drink x oz of water preloaded task
   Future<void> updateDrinkTask() async {
     String title = "Drink ${getHalfWeight()}oz of water";
     String taskID = await getDrinkTaskID() as String;
@@ -131,6 +138,7 @@ class TodoScreenModel {
     await FirestoreController.updateKirbyTask(taskId: taskID, update: update);
   }
 
+  // gets the Sleep for x hours preloaded task
   Future<String?> getSleepTaskID() async {
     String target = "Sleep";
     // get all preloaded tasks
@@ -147,6 +155,7 @@ class TodoScreenModel {
     return null;
   }
 
+  // updates the Sleep for x hours preloaded task
   Future<void> updateSleepTask() async {
     String title = "Sleep for ${getSleep()} hours";
     String taskID = await getSleepTaskID() as String;
@@ -157,6 +166,7 @@ class TodoScreenModel {
     await FirestoreController.updateKirbyTask(taskId: taskID, update: update);
   }
 
+  // gets the Eat x meals today preloaded task
   Future<String?> getMealsTaskID() async {
     String target = "Eat";
     // get all preloaded tasks
@@ -173,6 +183,7 @@ class TodoScreenModel {
     return null;
   }
 
+  // updates the Eat x meals today preloaded task
   Future<void> updateEatTask() async {
     String title = "Eat ${getMeals()} meals today";
     String taskID = await getMealsTaskID() as String;
@@ -210,7 +221,7 @@ class TodoScreenModel {
           TimeOfDay(hour: int.parse(time[0]), minute: int.parse(time[1]));
       combineDateAndTime();
     } else {
-      _tempTime = TimeOfDay(hour: 23, minute: 59);
+      _tempTime = const TimeOfDay(hour: 23, minute: 59);
       combineDateAndTime();
       return;
     }

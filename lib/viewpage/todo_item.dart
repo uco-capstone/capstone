@@ -92,6 +92,7 @@ class _ToDoItemState extends State<ToDoItem> {
                   ),
                 );
                 if (!widget.task.isCompleted && !widget.task.isPastDue!) {
+                // if (!widget.task.isCompleted) {
                   showAchievementView(widget.task.title ?? "a Task");
                 }
 

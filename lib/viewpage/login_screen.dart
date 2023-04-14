@@ -181,14 +181,21 @@ class _StartState extends State<LoginScreen> {
       ),
     );
   }
-
-  void passShowButton() {}
 }
 
 class _Controller {
   _StartState state;
   _Controller(this.state);
 
+  /*  Eli
+      - the signin function saves the formState and returns if null
+      - if not null, it validates the inputs and returns null if they are not 
+        all valid
+      - otherwise we set the screenModel state to signing in so that we see the 
+        circular loading indicator while things are fetched from the database
+      - after loading the information from the database, the screen is updated
+        to show the users page
+  */
   Future<void> signin() async {
     FormState? currentState = state.formKey.currentState;
     if (currentState == null) return;

@@ -13,15 +13,15 @@ class Customization {
 //Array of all skin customization paths
   var skinCustomizations = [
     Customization(label: 'Pink', filepath: 'images/skins/default-kirby.png', price: 0),
-    Customization(label: 'Blue', filepath: 'images/skins/blue-kirby.png', price: 0),
-    Customization(label: 'Yellow', filepath: 'images/skins/yellow-kirby.png', price: 0),
-    Customization(label: 'Green', filepath: 'images/skins/green-kirby.png', price: 0),
+    Customization(label: 'Blue', filepath: 'images/skins/blue-kirby.png', price: 100),
+    Customization(label: 'Yellow', filepath: 'images/skins/yellow-kirby.png', price: 150),
+    Customization(label: 'Green', filepath: 'images/skins/green-kirby.png', price: 200),
   ];
 
 //Array of all background customization paths
   var backgroundCustomizations = [
     Customization(label: 'Indoors', filepath: 'images/backgrounds/default-background.png', price: 0),
-    Customization(label: 'Park', filepath: 'images/backgrounds/outside-background.png', price: 0),
-    Customization(label: 'City', filepath: 'images/backgrounds/city-background.png', price: 0),
-    Customization(label: 'Clouds', filepath: 'images/backgrounds/cloud-background.png', price: 0),
+    Customization(label: 'Park', filepath: 'images/backgrounds/outside-background.png', price: 200),
+    Customization(label: 'City', filepath: 'images/backgrounds/city-background.png', price: 100),
+    Customization(label: 'Clouds', filepath: 'images/backgrounds/cloud-background.png', price: 300),
   ];
