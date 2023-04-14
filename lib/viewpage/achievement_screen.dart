@@ -116,7 +116,7 @@ class _AchievementScreenState extends State<AchievementScreen> {
                       height: 300,
                       width: double.infinity,
                       decoration: BoxDecoration(
-                        color: con.numberOfCompletedTasks > 0
+                        color: con.numberOfCompletedTasks >= 5
                             ? Colors.transparent
                             : Colors.orange[200],
                         //borderRadius: BorderRadius.circular(20.0),
@@ -124,7 +124,7 @@ class _AchievementScreenState extends State<AchievementScreen> {
                           fit: BoxFit.fill,
                           colorFilter: ColorFilter.mode(
                               Colors.black.withOpacity(
-                                  con.numberOfCompletedTasks > 5 ? 1 : 0.2),
+                                  con.numberOfCompletedTasks >= 5 ? 1 : 0.2),
                               BlendMode.dstATop),
                           image: const AssetImage('images/crown.png'),
                         ),
@@ -154,7 +154,7 @@ class _AchievementScreenState extends State<AchievementScreen> {
                       height: 300,
                       width: double.infinity,
                       decoration: BoxDecoration(
-                        color: con.numberOfCompletedTasks > 0
+                        color: con.numberOfCompletedTasks >= 10
                             ? Colors.transparent
                             : Colors.orange[200],
                         //borderRadius: BorderRadius.circular(20.0),
@@ -162,7 +162,7 @@ class _AchievementScreenState extends State<AchievementScreen> {
                           fit: BoxFit.fill,
                           colorFilter: ColorFilter.mode(
                               Colors.black.withOpacity(
-                                  con.numberOfCompletedTasks > 10 ? 1 : 0.2),
+                                  con.numberOfCompletedTasks >= 10 ? 1 : 0.2),
                               BlendMode.dstATop),
                           image: const AssetImage('images/crown.png'),
                         ),
@@ -192,7 +192,7 @@ class _AchievementScreenState extends State<AchievementScreen> {
                       height: 300,
                       width: double.infinity,
                       decoration: BoxDecoration(
-                        color: con.numberOfCompletedTasks > 0
+                        color: con.numberOfCompletedTasks >= 15
                             ? Colors.transparent
                             : Colors.orange[200],
                         //borderRadius: BorderRadius.circular(20.0),
@@ -200,7 +200,7 @@ class _AchievementScreenState extends State<AchievementScreen> {
                           fit: BoxFit.fill,
                           colorFilter: ColorFilter.mode(
                               Colors.black.withOpacity(
-                                  con.numberOfCompletedTasks > 15 ? 1 : 0.2),
+                                  con.numberOfCompletedTasks >= 15 ? 1 : 0.2),
                               BlendMode.dstATop),
                           image: const AssetImage('images/crown.png'),
                         ),
@@ -230,7 +230,7 @@ class _AchievementScreenState extends State<AchievementScreen> {
                       height: 300,
                       width: double.infinity,
                       decoration: BoxDecoration(
-                        color: con.numberOfCompletedTasks > 0
+                        color: con.numberOfCompletedTasks >= 20
                             ? Colors.transparent
                             : Colors.orange[200],
                         //borderRadius: BorderRadius.circular(20.0),
@@ -238,7 +238,7 @@ class _AchievementScreenState extends State<AchievementScreen> {
                           fit: BoxFit.fill,
                           colorFilter: ColorFilter.mode(
                               Colors.black.withOpacity(
-                                  con.numberOfCompletedTasks > 20 ? 1 : 0.2),
+                                  con.numberOfCompletedTasks >= 20 ? 1 : 0.2),
                               BlendMode.dstATop),
                           image: const AssetImage('images/crown.png'),
                         ),
@@ -268,7 +268,7 @@ class _AchievementScreenState extends State<AchievementScreen> {
                       height: 300,
                       width: double.infinity,
                       decoration: BoxDecoration(
-                        color: con.numberOfCompletedTasks > 0
+                        color: con.numberOfCompletedTasks >= 25
                             ? Colors.transparent
                             : Colors.orange[200],
                         //borderRadius: BorderRadius.circular(20.0),
@@ -276,7 +276,7 @@ class _AchievementScreenState extends State<AchievementScreen> {
                           fit: BoxFit.fill,
                           colorFilter: ColorFilter.mode(
                               Colors.black.withOpacity(
-                                  con.numberOfCompletedTasks > 25 ? 1 : 0.2),
+                                  con.numberOfCompletedTasks >= 25 ? 1 : 0.2),
                               BlendMode.dstATop),
                           image: const AssetImage('images/crown.png'),
                         ),
@@ -306,7 +306,7 @@ class _AchievementScreenState extends State<AchievementScreen> {
                       height: 300,
                       width: double.infinity,
                       decoration: BoxDecoration(
-                        color: con.numberOfCompletedTasks > 0
+                        color: con.numberOfCompletedTasks >= 30
                             ? Colors.transparent
                             : Colors.orange[200],
                         //borderRadius: BorderRadius.circular(20.0),
@@ -314,7 +314,7 @@ class _AchievementScreenState extends State<AchievementScreen> {
                           fit: BoxFit.fill,
                           colorFilter: ColorFilter.mode(
                               Colors.black.withOpacity(
-                                  con.numberOfCompletedTasks > 30 ? 1 : 0.2),
+                                  con.numberOfCompletedTasks >= 30 ? 1 : 0.2),
                               BlendMode.dstATop),
                           image: const AssetImage('images/crown.png'),
                         ),
@@ -344,7 +344,7 @@ class _AchievementScreenState extends State<AchievementScreen> {
                       height: 300,
                       width: double.infinity,
                       decoration: BoxDecoration(
-                        color: con.numberOfCompletedTasks > 0
+                        color: con.numberOfCompletedTasks >= 35
                             ? Colors.transparent
                             : Colors.orange[200],
                         //borderRadius: BorderRadius.circular(20.0),
@@ -352,7 +352,7 @@ class _AchievementScreenState extends State<AchievementScreen> {
                           fit: BoxFit.fill,
                           colorFilter: ColorFilter.mode(
                               Colors.black.withOpacity(
-                                  con.numberOfCompletedTasks > 35 ? 1 : 0.2),
+                                  con.numberOfCompletedTasks >= 35 ? 1 : 0.2),
                               BlendMode.dstATop),
                           image: const AssetImage('images/crown.png'),
                         ),
