@@ -82,6 +82,7 @@ flutter:
     - images/selected-stamp.png
     - images/kirby_icon.png
     - images/crown.png
+    - images/disappointed-kirby.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
