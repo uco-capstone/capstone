@@ -194,6 +194,29 @@ class FirestoreController {
     return result;
   }
 
+  // Obtaining completedTasks for users
+  static Future<List<KirbyTask>> getCompletedTasks({
+    required String uid,
+  }) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(taskCollection)
+        .where(DocKeyKirbyTask.userId.name, isEqualTo: uid)
+        .orderBy(DocKeyKirbyTask.dueDate.name, descending: false)
+        .get();
+
+    var result = <KirbyTask>[];
+    for (var doc in querySnapshot.docs) {
+      if (doc.data() != null) {
+        var document = doc.data() as Map<String, dynamic>;
+        var t = KirbyTask.fromFirestoreDoc(doc: document, taskId: doc.id);
+        if (t.isCompleted == true) {
+          result.add(t);
+        }
+      }
+    }
+    return result;
+  }
+
   // get all tasks for a given day
   static Future<List<KirbyTask>> getDayTasks({
     required String uid,
@@ -277,6 +300,7 @@ class FirestoreController {
         .collection(petCollection)
         .where(DocKeyPet.userId.name, isEqualTo: userId)
         .get();
+  
 
     if (querySnapshot.docs.length != 1) {
       return KirbyPet(userId: userId);
@@ -319,7 +343,7 @@ class FirestoreController {
     return false;
   }
 
-  ///Adds a KirbyPet to the firestore and returns the ID of the KirbyPet
+  // Adds a KirbyPet to the firestore and returns the ID of the KirbyPet
   static Future<String> addPet({required KirbyPet kirbyPet}) async {
     DocumentReference ref = await FirebaseFirestore.instance
         .collection(petCollection)
