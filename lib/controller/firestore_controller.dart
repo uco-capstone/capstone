@@ -86,6 +86,23 @@ class FirestoreController {
         .update(update);
   }
 
+  // get all kirbyusers
+  static Future<List<KirbyUser>> getKirbyUserList() async {
+    QuerySnapshot querySnapshot =
+        await FirebaseFirestore.instance.collection(kirbyUserCollection).get();
+
+    var result = <KirbyUser>[];
+    for (var doc in querySnapshot.docs) {
+      if (doc.data() != null) {
+        var document = doc.data() as Map<String, dynamic>;
+        var u = KirbyUser(
+            userId: document['userId'], firstName: document['firstName']);
+        result.add(u);
+      }
+    }
+    return result;
+  }
+
   //============== KIRBY TASK ==================
 
   // updates the completion status of a task

@@ -79,24 +79,26 @@ class _ToDoItemState extends State<ToDoItem> {
       ),
       tileColor: Colors.white,
       leading: IconButton(
-        onPressed: widget.task.isCompleted ? null : () async {
-          await FirestoreController.updateTaskCompletion(
-            taskId: widget.task.taskId!,
-            isCompleted: widget.task.isCompleted,
-            completeDate: DateTime(
-              DateTime.now().year,
-              DateTime.now().month,
-              DateTime.now().day,
-            ),
-          );
-          if (!widget.task.isCompleted) {
-            showAchievementView(widget.task.title ?? "a Task");
-          }
+        onPressed: widget.task.isCompleted
+            ? null
+            : () async {
+                await FirestoreController.updateTaskCompletion(
+                  taskId: widget.task.taskId!,
+                  isCompleted: widget.task.isCompleted,
+                  completeDate: DateTime(
+                    DateTime.now().year,
+                    DateTime.now().month,
+                    DateTime.now().day,
+                  ),
+                );
+                if (!widget.task.isCompleted) {
+                  showAchievementView(widget.task.title ?? "a Task");
+                }
 
-          render(() {
-            widget.task.isCompleted = !widget.task.isCompleted;
-          });
-        },
+                render(() {
+                  widget.task.isCompleted = !widget.task.isCompleted;
+                });
+              },
         icon: widget.task.isCompleted
             ? const Icon(Icons.check_box)
             : const Icon(Icons.check_box_outline_blank),
@@ -153,10 +155,10 @@ class _ToDoItemState extends State<ToDoItem> {
               ),
       ),
       subtitle: widget.task.dueDate != null
-          ? Text(
-            dueDate(),
-            style: widget.task.isPastDue! ? const TextStyle(color: Colors.red) : const TextStyle(color: Colors.grey)
-            )
+          ? Text(dueDate(),
+              style: widget.task.isPastDue!
+                  ? const TextStyle(color: Colors.red)
+                  : const TextStyle(color: Colors.grey))
           : const SizedBox.shrink(),
     );
   }
