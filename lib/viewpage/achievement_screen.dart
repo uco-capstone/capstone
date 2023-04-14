@@ -116,18 +116,23 @@ class _AchievementScreenState extends State<AchievementScreen> {
                       height: 300,
                       width: double.infinity,
                       decoration: BoxDecoration(
-                        color: Colors.orange[200],
+                        color: con.numberOfCompletedTasks > 0
+                            ? Colors.transparent
+                            : Colors.orange[200],
                         //borderRadius: BorderRadius.circular(20.0),
                         image: DecorationImage(
                           fit: BoxFit.fill,
                           colorFilter: ColorFilter.mode(
-                              Colors.black.withOpacity(0.2), BlendMode.dstATop),
+                              Colors.black.withOpacity(
+                                  con.numberOfCompletedTasks > 5 ? 1 : 0.2),
+                              BlendMode.dstATop),
                           image: const AssetImage('images/crown.png'),
                         ),
                       ),
                       child: const Text(
                         'Complete 5 Task',
                         textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.grey),
                       ),
                     ),
                   ),
@@ -149,18 +154,23 @@ class _AchievementScreenState extends State<AchievementScreen> {
                       height: 300,
                       width: double.infinity,
                       decoration: BoxDecoration(
-                        color: Colors.orange[400],
+                        color: con.numberOfCompletedTasks > 0
+                            ? Colors.transparent
+                            : Colors.orange[200],
                         //borderRadius: BorderRadius.circular(20.0),
                         image: DecorationImage(
                           fit: BoxFit.fill,
                           colorFilter: ColorFilter.mode(
-                              Colors.black.withOpacity(0.2), BlendMode.dstATop),
+                              Colors.black.withOpacity(
+                                  con.numberOfCompletedTasks > 10 ? 1 : 0.2),
+                              BlendMode.dstATop),
                           image: const AssetImage('images/crown.png'),
                         ),
                       ),
                       child: const Text(
                         'Complete 10 Task',
                         textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.grey),
                       ),
                     ),
                   ),
@@ -182,18 +192,23 @@ class _AchievementScreenState extends State<AchievementScreen> {
                       height: 300,
                       width: double.infinity,
                       decoration: BoxDecoration(
-                        color: Colors.orange[400],
+                        color: con.numberOfCompletedTasks > 0
+                            ? Colors.transparent
+                            : Colors.orange[200],
                         //borderRadius: BorderRadius.circular(20.0),
                         image: DecorationImage(
                           fit: BoxFit.fill,
                           colorFilter: ColorFilter.mode(
-                              Colors.black.withOpacity(0.2), BlendMode.dstATop),
+                              Colors.black.withOpacity(
+                                  con.numberOfCompletedTasks > 15 ? 1 : 0.2),
+                              BlendMode.dstATop),
                           image: const AssetImage('images/crown.png'),
                         ),
                       ),
                       child: const Text(
                         'Complete 15 Task',
                         textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.grey),
                       ),
                     ),
                   ),
@@ -215,18 +230,23 @@ class _AchievementScreenState extends State<AchievementScreen> {
                       height: 300,
                       width: double.infinity,
                       decoration: BoxDecoration(
-                        color: Colors.orange[600],
+                        color: con.numberOfCompletedTasks > 0
+                            ? Colors.transparent
+                            : Colors.orange[200],
                         //borderRadius: BorderRadius.circular(20.0),
                         image: DecorationImage(
                           fit: BoxFit.fill,
                           colorFilter: ColorFilter.mode(
-                              Colors.black.withOpacity(0.2), BlendMode.dstATop),
+                              Colors.black.withOpacity(
+                                  con.numberOfCompletedTasks > 20 ? 1 : 0.2),
+                              BlendMode.dstATop),
                           image: const AssetImage('images/crown.png'),
                         ),
                       ),
                       child: const Text(
                         'Complete 20 Task',
                         textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.grey),
                       ),
                     ),
                   ),
@@ -248,18 +268,99 @@ class _AchievementScreenState extends State<AchievementScreen> {
                       height: 300,
                       width: double.infinity,
                       decoration: BoxDecoration(
-                        color: Colors.orange[600],
+                        color: con.numberOfCompletedTasks > 0
+                            ? Colors.transparent
+                            : Colors.orange[200],
                         //borderRadius: BorderRadius.circular(20.0),
                         image: DecorationImage(
                           fit: BoxFit.fill,
                           colorFilter: ColorFilter.mode(
-                              Colors.black.withOpacity(0.2), BlendMode.dstATop),
+                              Colors.black.withOpacity(
+                                  con.numberOfCompletedTasks > 25 ? 1 : 0.2),
+                              BlendMode.dstATop),
                           image: const AssetImage('images/crown.png'),
                         ),
                       ),
                       child: const Text(
                         'Complete 25 Task',
                         textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    ),
+                  ),
+                ),
+                Card(
+                  child: InkWell(
+                    splashColor: Colors.blue.withAlpha(30),
+                    // Tap-Card: Viewing statistics
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => const AlertDialog(
+                          title: Text('You have completed this task'),
+                        ),
+                      );
+                    },
+                    // Container: Images for Trophies are stored if user has obtained achievement
+                    child: Container(
+                      height: 300,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: con.numberOfCompletedTasks > 0
+                            ? Colors.transparent
+                            : Colors.orange[200],
+                        //borderRadius: BorderRadius.circular(20.0),
+                        image: DecorationImage(
+                          fit: BoxFit.fill,
+                          colorFilter: ColorFilter.mode(
+                              Colors.black.withOpacity(
+                                  con.numberOfCompletedTasks > 30 ? 1 : 0.2),
+                              BlendMode.dstATop),
+                          image: const AssetImage('images/crown.png'),
+                        ),
+                      ),
+                      child: const Text(
+                        'Complete 30 Task',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    ),
+                  ),
+                ),
+                Card(
+                  child: InkWell(
+                    splashColor: Colors.blue.withAlpha(30),
+                    // Tap-Card: Viewing statistics
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => const AlertDialog(
+                          title: Text('You have completed this task'),
+                        ),
+                      );
+                    },
+                    // Container: Images for Trophies are stored if user has obtained achievement
+                    child: Container(
+                      height: 300,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: con.numberOfCompletedTasks > 0
+                            ? Colors.transparent
+                            : Colors.orange[200],
+                        //borderRadius: BorderRadius.circular(20.0),
+                        image: DecorationImage(
+                          fit: BoxFit.fill,
+                          colorFilter: ColorFilter.mode(
+                              Colors.black.withOpacity(
+                                  con.numberOfCompletedTasks > 35 ? 1 : 0.2),
+                              BlendMode.dstATop),
+                          image: const AssetImage('images/crown.png'),
+                        ),
+                      ),
+                      child: const Text(
+                        'Complete 35 Task',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.grey),
                       ),
                     ),
                   ),
@@ -285,7 +386,7 @@ class _Controller {
     numberOfCompletedTasks = completedTaskList.length;
 
     // ignore: avoid_print
-    print(completedTaskList.length); // how many completed task a user has
+    print(completedTaskList.length); // # of completed task a user has obtained
     state.render(() {
       loading = false;
     });
