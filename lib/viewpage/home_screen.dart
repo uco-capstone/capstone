@@ -1,3 +1,4 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:capstone/controller/auth_controller.dart';
 import 'package:capstone/model/home_screen_model.dart';
 import 'package:capstone/model/kirby_pet_model.dart';
@@ -17,6 +18,7 @@ import 'package:flutter/material.dart';
 import 'package:achievement_view/achievement_view.dart';
 
 import '../controller/firestore_controller.dart';
+import '../controller/notifications_controller.dart';
 import '../model/constants.dart';
 import 'leaderboard_screen.dart';
 
@@ -42,6 +44,59 @@ class _HomeScreenState extends State<HomeScreen> {
     con = _Controller(this);
     screenModel = HomeScreenModel(user: Auth.user!);
     con.initScreen();
+    AwesomeNotifications().isNotificationAllowed().then(
+      (isAllowed) {
+        if (!isAllowed) {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: const Text('Allow Notifications'),
+              content:
+                  const Text('Our app would like to send you notifications'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text(
+                    'Don\'t Allow',
+                    style: TextStyle(color: Colors.grey, fontSize: 18),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () => AwesomeNotifications()
+                      .requestPermissionToSendNotifications()
+                      .then((_) => Navigator.pop(context)),
+                  child: const Text(
+                    'Allow',
+                    style: TextStyle(
+                      color: Colors.teal,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
+      },
+    );
+    retrieveScheduledNotifications();
+  }
+
+  static Future<void> retrieveScheduledNotifications() async {
+    final AwesomeNotifications awesomeNotifications = AwesomeNotifications();
+    await AwesomeNotifications().cancelAllSchedules();
+    // if (scheduledNotifications.isEmpty) {
+    // print("creating");
+    await createDailyNotification();
+    // print("created");
+    // }
+
+    // List<NotificationModel> scheduledNotifications =
+    //     await awesomeNotifications.listScheduledNotifications();
+    // print(scheduledNotifications[0].schedule);
   }
 
   @override
