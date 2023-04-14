@@ -129,6 +129,19 @@ class FirestoreController {
       );
     }
     var task = await getKirbyTask(taskId: taskId);
+
+    if (!isCompleted) {
+      var pet = await getPet(userId: Auth.user!.uid);
+      if (pet.hungerGauge < 10) {
+        updatePet(
+            userId: Auth.user!.uid,
+            update: {'hungerGauge': FieldValue.increment(1)});
+      }
+      updateKirbyUser(
+        userId: Auth.user!.uid,
+        update: {'currency': FieldValue.increment(100)},
+      );
+    }
     // ignore: avoid_print
     print("==== reoccuring: ${task.reocurringDuration}");
     /*  Eli
@@ -203,9 +216,7 @@ class FirestoreController {
       if (doc.data() != null) {
         var document = doc.data() as Map<String, dynamic>;
         var t = KirbyTask.fromFirestoreDoc(doc: document, taskId: doc.id);
-        if (t.isCompleted != true) {
-          result.add(t);
-        }
+        result.add(t);
       }
     }
     return result;
@@ -271,6 +282,7 @@ class FirestoreController {
         .collection(taskCollection)
         .where(DocKeyKirbyTask.userId.name, isEqualTo: uid)
         .where(DocKeyKirbyTask.isPreloaded.name, isEqualTo: true)
+        .where(DocKeyKirbyTask.isCompleted.name, isEqualTo: false)
         .get();
 
     for (var doc in querySnapshot.docs) {
