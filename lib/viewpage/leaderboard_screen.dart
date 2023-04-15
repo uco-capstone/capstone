@@ -1,6 +1,7 @@
 import 'package:capstone/controller/firestore_controller.dart';
 import 'package:capstone/model/constants.dart';
 import 'package:capstone/viewpage/rank_item.dart';
+import 'package:chart_components/chart_components.dart';
 import 'package:flutter/material.dart';
 
 import '../controller/auth_controller.dart';
@@ -48,11 +49,11 @@ class _LeaderboardState extends State<LeaderboardScreen> {
           ? const Center(
               child: CircularProgressIndicator(),
             )
-          : leaderboardScreenBody(),
+          : LeaderboardScreenBody(),
     );
   }
 
-  Widget leaderboardScreenBody() {
+  Widget LeaderboardScreenBody() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(

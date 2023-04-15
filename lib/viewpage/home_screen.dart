@@ -18,6 +18,7 @@ import 'package:capstone/viewpage/start_dispatcher.dart';
 import 'package:capstone/viewpage/todo_screen.dart';
 import 'package:capstone/viewpage/view/view_util.dart';
 import 'package:flutter/material.dart';
+import 'package:achievement_view/achievement_view.dart';
 
 import '../controller/firestore_controller.dart';
 import '../controller/notifications_controller.dart';
@@ -88,6 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   static Future<void> retrieveScheduledNotifications() async {
+    final AwesomeNotifications awesomeNotifications = AwesomeNotifications();
     await AwesomeNotifications().cancelAllSchedules();
     // if (scheduledNotifications.isEmpty) {
     // print("creating");
@@ -390,6 +392,7 @@ class _Controller {
     var taskList =
         await FirestoreController.getKirbyTaskList(uid: currentUserID);
     var userPet = state.screenModel.kirbyPet;
+    var kirbyUser = state.screenModel.kirbyUser;
     DateTime currTime = DateTime.now();
     Map<String, dynamic> updatePet = {};
     Map<String, dynamic> updateCurrency = {};
