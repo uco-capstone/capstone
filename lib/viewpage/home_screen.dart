@@ -1,4 +1,7 @@
 import 'package:achievement_view/achievement_view.dart';
+
+import 'package:awesome_notifications/awesome_notifications.dart';
+
 import 'package:capstone/controller/auth_controller.dart';
 import 'package:capstone/model/home_screen_model.dart';
 import 'package:capstone/model/kirby_pet_model.dart';
@@ -15,9 +18,12 @@ import 'package:capstone/viewpage/start_dispatcher.dart';
 import 'package:capstone/viewpage/todo_screen.dart';
 import 'package:capstone/viewpage/view/view_util.dart';
 import 'package:flutter/material.dart';
+import 'package:achievement_view/achievement_view.dart';
 
 import '../controller/firestore_controller.dart';
+import '../controller/notifications_controller.dart';
 import '../model/constants.dart';
+import 'leaderboard_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -41,6 +47,59 @@ class _HomeScreenState extends State<HomeScreen> {
     con = _Controller(this);
     screenModel = HomeScreenModel(user: Auth.user!);
     con.initScreen();
+    AwesomeNotifications().isNotificationAllowed().then(
+      (isAllowed) {
+        if (!isAllowed) {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: const Text('Allow Notifications'),
+              content:
+                  const Text('Our app would like to send you notifications'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text(
+                    'Don\'t Allow',
+                    style: TextStyle(color: Colors.grey, fontSize: 18),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () => AwesomeNotifications()
+                      .requestPermissionToSendNotifications()
+                      .then((_) => Navigator.pop(context)),
+                  child: const Text(
+                    'Allow',
+                    style: TextStyle(
+                      color: Colors.teal,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
+      },
+    );
+    retrieveScheduledNotifications();
+  }
+
+  static Future<void> retrieveScheduledNotifications() async {
+    final AwesomeNotifications awesomeNotifications = AwesomeNotifications();
+    await AwesomeNotifications().cancelAllSchedules();
+    // if (scheduledNotifications.isEmpty) {
+    // print("creating");
+    await createDailyNotification();
+    // print("created");
+    // }
+
+    // List<NotificationModel> scheduledNotifications =
+    //     await awesomeNotifications.listScheduledNotifications();
+    // print(scheduledNotifications[0].schedule);
   }
 
   @override
@@ -116,6 +175,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 leading: const Icon(Icons.stars),
                 title: const Text('Achievements'),
                 onTap: con.achievementScreen,
+              ),
+              ListTile(
+                leading: const Icon(Icons.groups),
+                title: const Text('Leaderboard'),
+                onTap: con.leaderboardScreen,
               ),
               ListTile(
                 leading: const Icon(Icons.settings),
@@ -297,6 +361,10 @@ class _Controller {
         .then((value) => state.render(() {}));
   }
 
+  void leaderboardScreen() {
+    Navigator.pushNamed(state.context, LeaderboardScreen.routeName);
+  }
+
   void settingsScreen() async {
     await Navigator.pushNamed(state.context, SettingsScreen.routeName);
   }
@@ -320,29 +388,49 @@ class _Controller {
   and reloads the pet.
   */
   Future<void> checkPastDueTasks() async {
+    bool updateFirestore = false;
     var taskList =
         await FirestoreController.getKirbyTaskList(uid: currentUserID);
     var userPet = state.screenModel.kirbyPet;
+    var kirbyUser = state.screenModel.kirbyUser;
     DateTime currTime = DateTime.now();
+    Map<String, dynamic> updatePet = {};
+    Map<String, dynamic> updateCurrency = {};
+
     //Goes through the task list and marks past due tasks
     for (var task in taskList) {
       //If a task is past due, hunger gauge goes down
       if (task.dueDate == null) {
         continue;
-      } else if (!task.isPastDue! && task.dueDate!.compareTo(currTime) < 0) {
-        Map<String, dynamic> updateTask = {};
-        updateTask[DocKeyKirbyTask.isPastDue.name] = true;
-        Map<String, dynamic> updatePet = {};
+      } else if (!task.isPastDue! &&
+          !task.isCompleted &&
+          task.dueDate!.compareTo(currTime) < 0) {
         if (userPet!.hungerGauge > 0) {
-          updatePet[DocKeyPet.hungerGauge.name] = userPet.hungerGauge - 1;
+          userPet.hungerGauge--;
+          updatePet[DocKeyPet.hungerGauge.name] = userPet.hungerGauge;
         }
-        //update Firestore
+        updateFirestore = true;
+        Map<String, dynamic> update = {};
+        update[DocKeyKirbyTask.isPastDue.name] = true;
         await FirestoreController.updateKirbyTask(
-            taskId: task.taskId!, update: updateTask);
-        await FirestoreController.updatePet(
-            userId: currentUserID, update: updatePet);
+            taskId: task.taskId!, update: update);
       }
     }
+
+    if (userPet!.hungerGauge == 0) {
+      updatePet[DocKeyPet.hungerGauge.name] = 10;
+      updateCurrency[DocKeyUser.currency.name] = 0;
+      showZeroHungerNotification();
+      updateFirestore = true;
+    }
+
+    if (updateFirestore) {
+      await FirestoreController.updateKirbyUser(
+          userId: currentUserID, update: updateCurrency);
+      await FirestoreController.updatePet(
+          userId: currentUserID, update: updatePet);
+    }
+
     //Reload pet
     await loadKirbyPet();
   }
@@ -453,5 +541,17 @@ class _Controller {
       await FirestoreController.updateKirbyUser(
           userId: currentUserID, update: {'weeklyReward': DateTime.now()});
     }
+  }
+  //Shows Achievment View when hunger Gauge hits zero
+  void showZeroHungerNotification() {
+    AchievementView(state.context,
+            title: "Oh no! Kirby got too hungry!",
+            subTitle: "Kirby ate all your coins!",
+            icon: Padding(
+              padding: const EdgeInsets.all(8),
+              child: Image.asset('images/kirby-dead.png'),
+            ),
+            listener: (status) {})
+        .show();
   }
 }

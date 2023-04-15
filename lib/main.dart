@@ -1,3 +1,4 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:capstone/viewpage/achievement_screen.dart';
 import 'package:capstone/viewpage/health_info_screen.dart';
 import 'package:capstone/viewpage/history_screen.dart';
@@ -10,11 +11,23 @@ import 'package:flutter/material.dart';
 import 'package:capstone/viewpage/create_account_screen.dart';
 import 'firebase_options.dart';
 import 'viewpage/home_screen.dart';
+import 'viewpage/leaderboard_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
+  );
+  AwesomeNotifications().initialize(
+    null,
+    [
+      NotificationChannel(
+        channelKey: 'scheduled_channel',
+        channelName: 'Scheduled Notifications',
+        defaultColor: Colors.teal,
+        channelDescription: 'Scheduled Notifications',
+      ),
+    ],
   );
   runApp(const CapstoneApp());
 }
@@ -37,6 +50,7 @@ class CapstoneApp extends StatelessWidget {
         HealthInfoScreen.routeName: (context) => const HealthInfoScreen(),
         SettingsScreen.routeName: (context) => const SettingsScreen(),
         HistoryScreen.routeName: (context) => const HistoryScreen(),
+        LeaderboardScreen.routeName: (context) => const LeaderboardScreen(),
       },
       theme: ThemeData(
         primarySwatch: Colors.indigo,

@@ -3,12 +3,14 @@ import 'package:capstone/model/kirby_user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../model/kirby_pet_model.dart';
+import '../model/purchased_item_model.dart';
 import 'auth_controller.dart';
 
 class FirestoreController {
   static const taskCollection = 'task_collection';
   static const kirbyUserCollection = 'kirby_user_collection';
   static const petCollection = 'pet_collection';
+  static const purchasedCollection = 'purchased_collection';
 
   //============== USER INFO ==================
 
@@ -84,6 +86,23 @@ class FirestoreController {
         .update(update);
   }
 
+  // get all kirbyusers
+  static Future<List<KirbyUser>> getKirbyUserList() async {
+    QuerySnapshot querySnapshot =
+        await FirebaseFirestore.instance.collection(kirbyUserCollection).get();
+
+    var result = <KirbyUser>[];
+    for (var doc in querySnapshot.docs) {
+      if (doc.data() != null) {
+        var document = doc.data() as Map<String, dynamic>;
+        var u = KirbyUser(
+            userId: document['userId'], firstName: document['firstName']);
+        result.add(u);
+      }
+    }
+    return result;
+  }
+
   //============== KIRBY TASK ==================
 
   // updates the completion status of a task
@@ -110,6 +129,19 @@ class FirestoreController {
       );
     }
     var task = await getKirbyTask(taskId: taskId);
+
+    if (!isCompleted) {
+      var pet = await getPet(userId: Auth.user!.uid);
+      if (pet.hungerGauge < 10) {
+        updatePet(
+            userId: Auth.user!.uid,
+            update: {'hungerGauge': FieldValue.increment(1)});
+      }
+      updateKirbyUser(
+        userId: Auth.user!.uid,
+        update: {'currency': FieldValue.increment(100)},
+      );
+    }
     // ignore: avoid_print
     print("==== reoccuring: ${task.reocurringDuration}");
     /*  Eli
@@ -184,7 +216,28 @@ class FirestoreController {
       if (doc.data() != null) {
         var document = doc.data() as Map<String, dynamic>;
         var t = KirbyTask.fromFirestoreDoc(doc: document, taskId: doc.id);
-        if (t.isCompleted != true) {
+        result.add(t);
+      }
+    }
+    return result;
+  }
+
+  // Obtaining completedTasks for users
+  static Future<List<KirbyTask>> getCompletedTasks({
+    required String uid,
+  }) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(taskCollection)
+        .where(DocKeyKirbyTask.userId.name, isEqualTo: uid)
+        .orderBy(DocKeyKirbyTask.dueDate.name, descending: false)
+        .get();
+
+    var result = <KirbyTask>[];
+    for (var doc in querySnapshot.docs) {
+      if (doc.data() != null) {
+        var document = doc.data() as Map<String, dynamic>;
+        var t = KirbyTask.fromFirestoreDoc(doc: document, taskId: doc.id);
+        if (t.isCompleted == true) {
           result.add(t);
         }
       }
@@ -229,6 +282,7 @@ class FirestoreController {
         .collection(taskCollection)
         .where(DocKeyKirbyTask.userId.name, isEqualTo: uid)
         .where(DocKeyKirbyTask.isPreloaded.name, isEqualTo: true)
+        .where(DocKeyKirbyTask.isCompleted.name, isEqualTo: false)
         .get();
 
     for (var doc in querySnapshot.docs) {
@@ -275,6 +329,7 @@ class FirestoreController {
         .collection(petCollection)
         .where(DocKeyPet.userId.name, isEqualTo: userId)
         .get();
+  
 
     if (querySnapshot.docs.length != 1) {
       return KirbyPet(userId: userId);
@@ -317,11 +372,41 @@ class FirestoreController {
     return false;
   }
 
-  ///Adds a KirbyPet to the firestore and returns the ID of the KirbyPet
+  // Adds a KirbyPet to the firestore and returns the ID of the KirbyPet
   static Future<String> addPet({required KirbyPet kirbyPet}) async {
     DocumentReference ref = await FirebaseFirestore.instance
         .collection(petCollection)
         .add(kirbyPet.toFirestoreDoc());
     return ref.id;
+  }
+
+  //============== PURCHASED ITEMS ==================
+
+  ///Adds a purchased item to the firestore and returns the ID of the purchased item
+  static Future<String> addPurchasedItem({required PurchasedItem purchasedItem}) async {
+    DocumentReference ref = await FirebaseFirestore.instance
+        .collection(purchasedCollection)
+        .add(purchasedItem.toFirestoreDoc());
+    return ref.id;
+  }
+
+  //Gets a list of all the purchased items that is linked to a user
+  static Future<List<PurchasedItem>> getPurchasedItemsList({
+    required String uid,
+  }) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(purchasedCollection)
+        .where(DocKeyPurchasedItem.userId.name, isEqualTo: uid)
+        .get();
+
+    var result = <PurchasedItem>[];
+    for (var doc in querySnapshot.docs) {
+      if (doc.data() != null) {
+        var document = doc.data() as Map<String, dynamic>;
+        var p = PurchasedItem.fromFirestoreDoc(doc: document, purchasedItemId: doc.id);
+        result.add(p);
+      }
+    }
+    return result;
   }
 }

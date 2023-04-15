@@ -14,6 +14,7 @@ class TodoScreenModel {
   var taskList = <KirbyTask>[];
   late KirbyTask tempTask;
   late TimeOfDay _tempTime;
+  List<KirbyTask>? tempTaskList;
 
   TodoScreenModel({required this.user}) {
     tempTask = KirbyTask(
@@ -85,7 +86,7 @@ class TodoScreenModel {
   // half of the user's weight
   String getHalfWeight() {
     if (kirbyUser?.weight != null) {
-      return (kirbyUser!.weight! * 8).round().toString();
+      return (kirbyUser!.weight! / 2).round().toString();
     } else {
       return "100";
     }
@@ -130,7 +131,10 @@ class TodoScreenModel {
   Future<void> updateDrinkTask() async {
     String title = "Drink ${getHalfWeight()}oz of water";
     String taskID = await getDrinkTaskID() as String;
-    Map<String, dynamic> update = {DocKeyKirbyTask.title.name: title};
+    Map<String, dynamic> update = {
+      DocKeyKirbyTask.title.name: title,
+      DocKeyKirbyTask.reocurringDuration.name: 1
+    };
     await FirestoreController.updateKirbyTask(taskId: taskID, update: update);
   }
 
@@ -155,7 +159,10 @@ class TodoScreenModel {
   Future<void> updateSleepTask() async {
     String title = "Sleep for ${getSleep()} hours";
     String taskID = await getSleepTaskID() as String;
-    Map<String, dynamic> update = {DocKeyKirbyTask.title.name: title};
+    Map<String, dynamic> update = {
+      DocKeyKirbyTask.title.name: title,
+      DocKeyKirbyTask.reocurringDuration.name: 1
+    };
     await FirestoreController.updateKirbyTask(taskId: taskID, update: update);
   }
 
@@ -180,7 +187,10 @@ class TodoScreenModel {
   Future<void> updateEatTask() async {
     String title = "Eat ${getMeals()} meals today";
     String taskID = await getMealsTaskID() as String;
-    Map<String, dynamic> update = {DocKeyKirbyTask.title.name: title};
+    Map<String, dynamic> update = {
+      DocKeyKirbyTask.title.name: title,
+      DocKeyKirbyTask.reocurringDuration.name: 1
+    };
     await FirestoreController.updateKirbyTask(taskId: taskID, update: update);
   }
 
@@ -211,7 +221,7 @@ class TodoScreenModel {
           TimeOfDay(hour: int.parse(time[0]), minute: int.parse(time[1]));
       combineDateAndTime();
     } else {
-      _tempTime = TimeOfDay(hour: 23, minute: 59);
+      _tempTime = const TimeOfDay(hour: 23, minute: 59);
       combineDateAndTime();
       return;
     }
