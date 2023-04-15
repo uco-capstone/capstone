@@ -482,6 +482,7 @@ class _Controller {
           await FirestoreController.getPurchasedItemsList(uid: Auth.getUser().uid);
       
       if(state.screenModel.purchasedItemsList.isEmpty) {
+        // ignore: avoid_print
         print('**************** Empty!!!!!!');
         var tempPurchasedItem = PurchasedItem(
           userId: Auth.getUser().uid, 
@@ -589,7 +590,7 @@ class _Controller {
       );
 
       //Update Screen
-      Navigator.of(state.context).pop();
+      if (state.mounted) Navigator.of(state.context).pop();
       state.screenModel.purchasedItemsList = await FirestoreController.getPurchasedItemsList(uid: Auth.getUser().uid);
       state.screenModel.kirbyUser = await FirestoreController.getKirbyUser(userId: Auth.getUser().uid);
       state.render(() {});
