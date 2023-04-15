@@ -1,4 +1,7 @@
+import 'package:achievement_view/achievement_view.dart';
+
 import 'package:awesome_notifications/awesome_notifications.dart';
+
 import 'package:capstone/controller/auth_controller.dart';
 import 'package:capstone/model/home_screen_model.dart';
 import 'package:capstone/model/kirby_pet_model.dart';
@@ -283,6 +286,8 @@ class _Controller {
     await loadKirbyUser();
     await loadKirbyPet();
     await getTimer();
+    // ignore: use_build_context_synchronously
+    showWeekAchievementView(state.context);
     state.screenModel.loading = false;
   }
 
@@ -430,6 +435,113 @@ class _Controller {
     await loadKirbyPet();
   }
 
+  // checks if all tasks from (the Thursday prior to latest Wednesday) - latest Wednesday were completed (1 week span)
+  Future<bool> isWeeklyTasksComplete() async {
+    bool isComplete = false;
+    DateTime now = DateTime.now();
+    int weekday = now.weekday; // monday = 1; sunday = 7
+
+    // get latest wednesday's datetime
+    int subtractDays = 0;
+    switch (weekday) {
+      case 1:
+        subtractDays = 5;
+        break;
+      case 2:
+        subtractDays = 6;
+        break;
+      case 3:
+        subtractDays = 0;
+        break;
+      case 4:
+        subtractDays = 1;
+        break;
+      case 5:
+        subtractDays = 2;
+        break;
+      case 6:
+        subtractDays = 3;
+        break;
+      case 7:
+        subtractDays = 4;
+        break;
+      default:
+    }
+    DateTime wednesday = now.subtract(Duration(days: subtractDays));
+
+    // bring time to midnight
+    DateTime date = DateTime(wednesday.year, wednesday.month, wednesday.day);
+    date = date.add(const Duration(days: 1));
+
+    // read from Thursday 12am
+    for (int i = 0; i < 7; i++) {
+      date = date.subtract(const Duration(days: 1));
+      List<KirbyTask> dayTasks =
+          await FirestoreController.getDayTasks(uid: currentUserID, day: date);
+
+      // check if all tasks were completed
+      if (dayTasks.isEmpty) {
+        return false;
+      }
+      for (var d in dayTasks) {
+        if (d.isCompleted == false) {
+          isComplete = false;
+          return isComplete;
+        }
+      }
+    }
+
+    isComplete = true;
+    return isComplete;
+  }
+
+  Future<bool> isWeeklyRewardReceived() async {
+    // check if reward was recieved for this cycle
+    DateTime now = DateTime.now();
+    if (state.screenModel.kirbyUser?.weeklyReward == null) {
+      return false;
+    } else if (state.screenModel.kirbyUser!.weeklyReward!.isBefore(now) &&
+        state.screenModel.kirbyUser!.weeklyReward!
+            .isAfter(now.subtract(const Duration(days: 7)))) {
+      // reward was received during the past week
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  // notifies user of weekly reward
+  Future<void> showWeekAchievementView(BuildContext context) async {
+    // check if weekly reward was already received
+    bool weeklyRewardReceived = await isWeeklyRewardReceived();
+
+    if (weeklyRewardReceived) return;
+
+    bool isWeekComplete = await isWeeklyTasksComplete();
+
+    // check if weekly tasks are complete
+    if (isWeekComplete) {
+      // ignore: use_build_context_synchronously
+      AchievementView(context,
+              title: "Good Job! 25 Coins",
+              subTitle: "You completed all your tasks this week!",
+              icon: Padding(
+                padding: const EdgeInsets.all(8),
+                child: Image.asset('images/kirby_icon.png'),
+              ),
+              listener: (status) {})
+          .show();
+
+      // reward the 25 coins
+      int currency = state.screenModel.kirbyUser!.currency! + 25;
+      await FirestoreController.updateKirbyUser(
+          userId: currentUserID, update: {'currency': currency});
+
+      // mark reward recevied
+      await FirestoreController.updateKirbyUser(
+          userId: currentUserID, update: {'weeklyReward': DateTime.now()});
+    }
+  }
   //Shows Achievment View when hunger Gauge hits zero
   void showZeroHungerNotification() {
     AchievementView(state.context,

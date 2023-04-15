@@ -7,6 +7,7 @@ import 'package:capstone/viewpage/view/view_util.dart';
 import 'package:flutter/material.dart';
 
 import '../controller/auth_controller.dart';
+import 'home_screen.dart';
 
 enum DurationLabel {
   none('None', 0),
@@ -53,6 +54,12 @@ class _ToDoScreenState extends State<ToDoScreen> {
       appBar: AppBar(
         backgroundColor: Colors.purple[300],
         title: const Text('To Do List'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pushNamed(context, HomeScreen.routeName);
+          },
+        ), // override WillPopScope() from home_screen.dart so home_screen can update completed tasks
         actions: [
           IconButton(
             onPressed: () =>
