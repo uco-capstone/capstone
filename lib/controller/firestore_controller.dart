@@ -116,18 +116,6 @@ class FirestoreController {
         .collection(taskCollection)
         .doc(taskId)
         .update({'isCompleted': !isCompleted, 'completeDate': completeDate});
-    if (!isCompleted) {
-      var pet = await getPet(userId: Auth.user!.uid);
-      if (pet.hungerGauge < 10) {
-        updatePet(
-            userId: Auth.user!.uid,
-            update: {'hungerGauge': FieldValue.increment(1)});
-      }
-      updateKirbyUser(
-        userId: Auth.user!.uid,
-        update: {'currency': FieldValue.increment(100)},
-      );
-    }
     var task = await getKirbyTask(taskId: taskId);
 
     if (!isCompleted) {

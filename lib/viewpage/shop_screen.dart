@@ -47,15 +47,19 @@ class _ShopScreen extends State<ShopScreen> {
           itemBuilder: (BuildContext context, int index) {
             return _skinsScreen(index);
           },
-          itemCount: skinCustomizations.length, gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+          itemCount: skinCustomizations.length,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2),
         );
-      case 1:  //Backgrounds
+      case 1: //Backgrounds
         return GridView.builder(
           controller: _homeController,
           itemBuilder: (BuildContext context, int index) {
             return _backgroundsScreen(index);
           },
-          itemCount: backgroundCustomizations.length, gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+          itemCount: backgroundCustomizations.length,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2),
         );
       case 2: //Accessories
         return ListView.separated(
@@ -118,7 +122,8 @@ class _ShopScreen extends State<ShopScreen> {
         height: MediaQuery.of(context).size.width * 0.45,
         width: MediaQuery.of(context).size.width * 0.45,
         child: Card(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
           child: Stack(
             children: [
               ListTile(
@@ -134,15 +139,15 @@ class _ShopScreen extends State<ShopScreen> {
                       ),
                     ),
                     Positioned(
-                      bottom: 10,
-                      child: Text(skinCustomizations[index].label)
-                    ),
+                        bottom: 10,
+                        child: Text(skinCustomizations[index].label)),
                   ],
                 ),
-                onTap: () =>
-                    con.updateSkinCustomization(skinCustomizations[index].filepath),
+                onTap: () => con.updateSkinCustomization(
+                    skinCustomizations[index].filepath),
               ),
-              if (skinCustomizations[index].filepath == screenModel.kirbyPet!.kirbySkin)
+              if (skinCustomizations[index].filepath ==
+                  screenModel.kirbyPet!.kirbySkin)
                 Container(
                   height: double.maxFinite,
                   width: double.maxFinite,
@@ -154,7 +159,8 @@ class _ShopScreen extends State<ShopScreen> {
                     image: AssetImage('images/selected-stamp.png'),
                   ),
                 ),
-              if (!screenModel.purchasedItemsList.any((item) => item.filepath == skinCustomizations[index].filepath))
+              if (!screenModel.purchasedItemsList.any((item) =>
+                  item.filepath == skinCustomizations[index].filepath))
                 Stack(
                   children: [
                     Container(
@@ -166,25 +172,28 @@ class _ShopScreen extends State<ShopScreen> {
                       ),
                     ),
                     ListTile(
-                      onTap: () => _purchaseItemDialog(context, skinCustomizations[index]),
+                      onTap: () => _purchaseItemDialog(
+                          context, skinCustomizations[index]),
                       title: Center(
                         child: Container(
                           width: MediaQuery.of(context).size.width * 0.25,
                           height: MediaQuery.of(context).size.width * 0.12,
                           decoration: BoxDecoration(
-                              color: Colors.grey[100],
-                              shape: BoxShape.rectangle,
-                              borderRadius: const BorderRadius.all(Radius.circular(25)),
-                            ),
+                            color: Colors.grey[100],
+                            shape: BoxShape.rectangle,
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(25)),
+                          ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text('${skinCustomizations[index].price} ', 
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18,
-                                    ),
-                                  ),
+                              Text(
+                                '${skinCustomizations[index].price} ',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                ),
+                              ),
                               Icon(
                                 Icons.monetization_on,
                                 color: Colors.orangeAccent,
@@ -211,7 +220,8 @@ class _ShopScreen extends State<ShopScreen> {
         height: MediaQuery.of(context).size.width * 0.45,
         width: MediaQuery.of(context).size.width * 0.45,
         child: Card(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
           child: Stack(
             children: [
               Center(
@@ -220,11 +230,12 @@ class _ShopScreen extends State<ShopScreen> {
                   child: AspectRatio(
                     aspectRatio: 1,
                     child: ClipRRect(
-                      borderRadius: const BorderRadius.all(Radius.circular(12.0)),
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(12.0)),
                       child: Image(
-                        image: AssetImage(backgroundCustomizations[index].filepath),
-                        fit: BoxFit.cover
-                      ),
+                          image: AssetImage(
+                              backgroundCustomizations[index].filepath),
+                          fit: BoxFit.cover),
                     ),
                   ),
                 ),
@@ -236,22 +247,25 @@ class _ShopScreen extends State<ShopScreen> {
                     Positioned(
                       bottom: 10,
                       child: Container(
-                        width: MediaQuery.of(context).size.width * 0.2,
-                        height: MediaQuery.of(context).size.width * 0.08,
-                        decoration: BoxDecoration(
+                          width: MediaQuery.of(context).size.width * 0.2,
+                          height: MediaQuery.of(context).size.width * 0.08,
+                          decoration: BoxDecoration(
                             color: Colors.grey[100],
                             shape: BoxShape.rectangle,
-                            borderRadius: const BorderRadius.all(Radius.circular(25)),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(25)),
                           ),
-                        child: Center(child: Text(backgroundCustomizations[index].label))
-                      ),
+                          child: Center(
+                              child:
+                                  Text(backgroundCustomizations[index].label))),
                     ),
                   ],
                 ),
-                onTap: () =>
-                    con.updateBackgroundCustomization(backgroundCustomizations[index].filepath),
+                onTap: () => con.updateBackgroundCustomization(
+                    backgroundCustomizations[index].filepath),
               ),
-              if (backgroundCustomizations[index].filepath == screenModel.kirbyPet!.background)
+              if (backgroundCustomizations[index].filepath ==
+                  screenModel.kirbyPet!.background)
                 Container(
                   height: double.maxFinite,
                   width: double.maxFinite,
@@ -263,7 +277,8 @@ class _ShopScreen extends State<ShopScreen> {
                     image: AssetImage('images/selected-stamp.png'),
                   ),
                 ),
-              if (!screenModel.purchasedItemsList.any((item) => item.filepath == backgroundCustomizations[index].filepath))
+              if (!screenModel.purchasedItemsList.any((item) =>
+                  item.filepath == backgroundCustomizations[index].filepath))
                 Stack(
                   children: [
                     Container(
@@ -275,25 +290,28 @@ class _ShopScreen extends State<ShopScreen> {
                       ),
                     ),
                     ListTile(
-                      onTap: () => _purchaseItemDialog(context, backgroundCustomizations[index]),
+                      onTap: () => _purchaseItemDialog(
+                          context, backgroundCustomizations[index]),
                       title: Center(
                         child: Container(
                           width: MediaQuery.of(context).size.width * 0.25,
                           height: MediaQuery.of(context).size.width * 0.12,
                           decoration: BoxDecoration(
-                              color: Colors.grey[100],
-                              shape: BoxShape.rectangle,
-                              borderRadius: const BorderRadius.all(Radius.circular(25)),
-                            ),
+                            color: Colors.grey[100],
+                            shape: BoxShape.rectangle,
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(25)),
+                          ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text('${backgroundCustomizations[index].price} ', 
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18,
-                                    ),
-                                  ),
+                              Text(
+                                '${backgroundCustomizations[index].price} ',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                ),
+                              ),
                               Icon(
                                 Icons.monetization_on,
                                 color: Colors.orangeAccent,
@@ -318,120 +336,120 @@ class _ShopScreen extends State<ShopScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Purchase Item?'),
-        content: Text('Are you sure you want to spend ${customization.price} coins on the ${customization.label}?'),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () => con.purchaseItem(customization),
-            child: const Text('Yes'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('No'),
-          ),
-        ]
-      ),
+          title: const Text('Purchase Item?'),
+          content: Text(
+              'Are you sure you want to spend ${customization.price} coins on the ${customization.label}?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => con.purchaseItem(customization),
+              child: const Text('Yes'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('No'),
+            ),
+          ]),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    if(screenModel.loading) {
+    if (screenModel.loading) {
       return const CircularProgressIndicator();
     } else {
       return Scaffold(
-      appBar: AppBar(
-        title: const Text('Store Screen'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pushNamed(context, HomeScreen.routeName);
-          },
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              width: 75,
-              decoration: const BoxDecoration(
-                  color: Colors.white,
-                  shape: BoxShape.rectangle,
-                  borderRadius: BorderRadius.all(Radius.circular(25))),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  //Sample number of coins
-                  Text(
-                    '${screenModel.kirbyUser!.currency}',
-                    style: const TextStyle(
-                        color: Colors.black, fontWeight: FontWeight.bold),
-                  ),
-                  const Icon(
-                    Icons.monetization_on,
-                    color: Colors.orangeAccent,
-                  ),
-                ],
+        appBar: AppBar(
+          title: const Text('Store Screen'),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pushNamed(context, HomeScreen.routeName);
+            },
+          ),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                width: 75,
+                decoration: const BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.rectangle,
+                    borderRadius: BorderRadius.all(Radius.circular(25))),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    //Sample number of coins
+                    Text(
+                      '${screenModel.kirbyUser!.currency}',
+                      style: const TextStyle(
+                          color: Colors.black, fontWeight: FontWeight.bold),
+                    ),
+                    const Icon(
+                      Icons.monetization_on,
+                      color: Colors.orangeAccent,
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
-      ),
-      body: Center(
-        child: _listViewBody(_selectedIndex),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.accessibility_new_rounded),
-            label: 'Skins',
-            backgroundColor: Colors.pink,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.area_chart_rounded),
-            label: 'Background',
-            backgroundColor: Colors.green,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.beach_access),
-            label: 'Accessories',
-            backgroundColor: Colors.blue,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.emoji_symbols_rounded),
-            label: 'Misc',
-            backgroundColor: Colors.pink,
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.black,
-        onTap: (int index) {
-          switch (index) {
-            case 0:
-              // only scroll to top when current index is selected.
-              if (_selectedIndex == index) {
-                _homeController.animateTo(
-                  0.0,
-                  duration: const Duration(milliseconds: 500),
-                  curve: Curves.easeOut,
-                );
-              } else {
+          ],
+        ),
+        body: Center(
+          child: _listViewBody(_selectedIndex),
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.accessibility_new_rounded),
+              label: 'Skins',
+              backgroundColor: Colors.pink,
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.area_chart_rounded),
+              label: 'Background',
+              backgroundColor: Colors.green,
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.beach_access),
+              label: 'Accessories',
+              backgroundColor: Colors.blue,
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.emoji_symbols_rounded),
+              label: 'Misc',
+              backgroundColor: Colors.pink,
+            ),
+          ],
+          currentIndex: _selectedIndex,
+          selectedItemColor: Colors.black,
+          onTap: (int index) {
+            switch (index) {
+              case 0:
+                // only scroll to top when current index is selected.
+                if (_selectedIndex == index) {
+                  _homeController.animateTo(
+                    0.0,
+                    duration: const Duration(milliseconds: 500),
+                    curve: Curves.easeOut,
+                  );
+                } else {
+                  _onItemTapped(index);
+                }
+                break;
+              case 1:
                 _onItemTapped(index);
-              }
-              break;
-            case 1:
-              _onItemTapped(index);
-              break;
-            case 2:
-              _onItemTapped(index);
-              break;
-            case 3:
-              _onItemTapped(index);
-              break;
-            // bug-fix on how to select back to 'skins'
-          }
-        },
-      ),
-    );
+                break;
+              case 2:
+                _onItemTapped(index);
+                break;
+              case 3:
+                _onItemTapped(index);
+                break;
+              // bug-fix on how to select back to 'skins'
+            }
+          },
+        ),
+      );
     }
   }
 }
@@ -479,30 +497,34 @@ class _Controller {
   Future<void> getPurchasedItems() async {
     try {
       state.screenModel.purchasedItemsList =
-          await FirestoreController.getPurchasedItemsList(uid: Auth.getUser().uid);
-      
-      if(state.screenModel.purchasedItemsList.isEmpty) {
+          await FirestoreController.getPurchasedItemsList(
+              uid: Auth.getUser().uid);
+
+      if (state.screenModel.purchasedItemsList.isEmpty) {
+        // ignore: avoid_print
         print('**************** Empty!!!!!!');
         var tempPurchasedItem = PurchasedItem(
-          userId: Auth.getUser().uid, 
-          label: skinCustomizations[0].label, 
-          filepath: skinCustomizations[0].filepath, 
-          price: skinCustomizations[0].price
-        );
+            userId: Auth.getUser().uid,
+            label: skinCustomizations[0].label,
+            filepath: skinCustomizations[0].filepath,
+            price: skinCustomizations[0].price);
 
-        await FirestoreController.addPurchasedItem(purchasedItem: tempPurchasedItem);
+        await FirestoreController.addPurchasedItem(
+            purchasedItem: tempPurchasedItem);
 
         tempPurchasedItem = PurchasedItem(
-          userId: Auth.getUser().uid, 
-          label: backgroundCustomizations[0].label, 
-          filepath: backgroundCustomizations[0].filepath, 
-          price: backgroundCustomizations[0].price
-        );
+            userId: Auth.getUser().uid,
+            label: backgroundCustomizations[0].label,
+            filepath: backgroundCustomizations[0].filepath,
+            price: backgroundCustomizations[0].price);
 
-        await FirestoreController.addPurchasedItem(purchasedItem: tempPurchasedItem);
+        await FirestoreController.addPurchasedItem(
+            purchasedItem: tempPurchasedItem);
       }
 
-      state.screenModel.purchasedItemsList = await FirestoreController.getPurchasedItemsList(uid: Auth.getUser().uid);
+      state.screenModel.purchasedItemsList =
+          await FirestoreController.getPurchasedItemsList(
+              uid: Auth.getUser().uid);
       state.render(() {});
     } catch (e) {
       // ignore: avoid_print
@@ -534,15 +556,16 @@ class _Controller {
 
     state.render(() {});
     // ignore: use_build_context_synchronously
-    showSnackBar(context: state.context, message: 'Successfully Customized Kirby!');
+    showSnackBar(
+        context: state.context, message: 'Successfully Customized Kirby!');
   }
-  
+
   /*
   This function recieves a string of the filepath of the image and 
   updates the background option of the KirbyPet in the firebase
   */
   void updateBackgroundCustomization(String customization) async {
-    if(state.screenModel.kirbyPet != null) {
+    if (state.screenModel.kirbyPet != null) {
       state.screenModel.kirbyPet!.background = customization;
     }
     try {
@@ -553,27 +576,32 @@ class _Controller {
     } catch (e) {
       if (Constants.devMode) {
         // ignore: avoid_print
-        print('======================= Background Customization Update Error: $e');
+        print(
+            '======================= Background Customization Update Error: $e');
       }
-      showSnackBar(context: state.context, message: 'Background Update Error: $e');
+      showSnackBar(
+          context: state.context, message: 'Background Update Error: $e');
     }
-  
+
     state.render(() {});
     // ignore: use_build_context_synchronously
-    showSnackBar(context: state.context, message: 'Successfully Customized Background!');
+    showSnackBar(
+        context: state.context, message: 'Successfully Customized Background!');
   }
 
   //Adds a purchased item to the database
   void purchaseItem(Customization customization) async {
-    if(customization.price > state.screenModel.kirbyUser!.currency!) {
+    if (customization.price > state.screenModel.kirbyUser!.currency!) {
       Navigator.of(state.context).pop();
-      showSnackBar(context: state.context, message: "You don't have enough coins to purchase this!");
+      showSnackBar(
+          context: state.context,
+          message: "You don't have enough coins to purchase this!");
       return;
     } else {
       var tempItem = PurchasedItem(
-        userId: Auth.getUser().uid, 
-        label: customization.label, 
-        filepath: customization.filepath, 
+        userId: Auth.getUser().uid,
+        label: customization.label,
+        filepath: customization.filepath,
         price: customization.price,
       );
 
@@ -584,17 +612,26 @@ class _Controller {
       userCoins -= customization.price;
 
       await FirestoreController.updateKirbyUser(
-        userId: Auth.getUser().uid, 
+        userId: Auth.getUser().uid,
         update: {'currency': userCoins},
       );
 
       //Update Screen
-      Navigator.of(state.context).pop();
-      state.screenModel.purchasedItemsList = await FirestoreController.getPurchasedItemsList(uid: Auth.getUser().uid);
-      state.screenModel.kirbyUser = await FirestoreController.getKirbyUser(userId: Auth.getUser().uid);
+      if (state.mounted) {
+        Navigator.of(state.context).pop();
+      } else {
+        return;
+      }
+      state.screenModel.purchasedItemsList =
+          await FirestoreController.getPurchasedItemsList(
+              uid: Auth.getUser().uid);
+      state.screenModel.kirbyUser =
+          await FirestoreController.getKirbyUser(userId: Auth.getUser().uid);
       state.render(() {});
       // ignore: use_build_context_synchronously
-      showSnackBar(context: state.context, message: "You've purchased the ${customization.label}!");
+      showSnackBar(
+          context: state.context,
+          message: "You've purchased the ${customization.label}!");
     }
   }
 }
