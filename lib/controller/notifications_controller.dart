@@ -1,4 +1,13 @@
+import 'dart:math';
 import 'package:awesome_notifications/awesome_notifications.dart';
+
+List<String> messages = [
+  'Complete your tasks or I will eat your money! 👿',
+  'Don\'t forget your tasks!',
+  'It\'s getting lonely here... Don\'t forget your tasks!',
+  'Wow so much to do still!',
+  'Do your tasks you lazy bum!',
+];
 
 int createUniqueId() {
   return DateTime.now().millisecondsSinceEpoch.remainder(100000);
@@ -10,7 +19,7 @@ Future<void> createDailyNotification() async {
       id: createUniqueId(),
       channelKey: 'scheduled_channel',
       title: 'Kirby Says',
-      body: 'Remember to do your task!!! I\'m getting hungry :(',
+      body: messages[Random().nextInt(messages.length)],
       notificationLayout: NotificationLayout.Default,
     ),
     schedule: NotificationCalendar(
