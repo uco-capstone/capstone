@@ -16,6 +16,7 @@ import 'package:capstone/viewpage/settings_screen.dart';
 import 'package:capstone/viewpage/shop_screen.dart';
 import 'package:capstone/viewpage/start_dispatcher.dart';
 import 'package:capstone/viewpage/todo_screen.dart';
+import 'package:capstone/viewpage/view/kirby_loading.dart';
 import 'package:capstone/viewpage/view/view_util.dart';
 import 'package:flutter/material.dart';
 
@@ -158,7 +159,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   Icons.person,
                   size: 70,
                 ),
-                accountName: const Text("Some Dude"),
+                accountName: 
+                screenModel.loading ? const KirbyLoading() :
+                Text(
+                    // ignore: unnecessary_string_interpolations
+                    "${screenModel.kirbyUser!.firstName}"),
                 accountEmail: Text("${screenModel.user.email}"),
               ),
               ListTile(
@@ -196,7 +201,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         body: screenModel.loading
             ? const Center(
-                child: CircularProgressIndicator(),
+                child: KirbyLoading(),
               )
             : body(),
       ),
@@ -543,6 +548,7 @@ class _Controller {
           userId: currentUserID, update: {'weeklyReward': DateTime.now()});
     }
   }
+
   //Shows Achievment View when hunger Gauge hits zero
   void showZeroHungerNotification() {
     AchievementView(state.context,
