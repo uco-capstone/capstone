@@ -57,7 +57,7 @@ class _ToDoItemState extends State<ToDoItem> {
 
   void showAchievementView(String taskName) {
     AchievementView(context,
-            title: "Good Job! +1 Hunger +10 Coins",
+            title: "Good Job! +1 Hunger +100 Coins",
             subTitle: "You completed: $taskName!",
             icon: Padding(
               padding: const EdgeInsets.all(8),

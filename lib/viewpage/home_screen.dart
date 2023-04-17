@@ -9,7 +9,6 @@ import 'package:capstone/model/kirby_task_model.dart';
 import 'package:capstone/model/kirby_user_model.dart';
 import 'package:capstone/viewpage/achievement_screen.dart';
 import 'package:capstone/viewpage/health_info_screen.dart';
-import 'package:capstone/viewpage/history_screen.dart';
 import 'dart:async';
 
 import 'package:capstone/viewpage/settings_screen.dart';
@@ -165,11 +164,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 leading: const Icon(Icons.store),
                 title: const Text('Shop'),
                 onTap: con.shopScreen,
-              ),
-              ListTile(
-                leading: const Icon(Icons.assessment_outlined),
-                title: const Text('History'),
-                onTap: con.historyScreen,
               ),
               ListTile(
                 leading: const Icon(Icons.stars),
@@ -350,10 +344,6 @@ class _Controller {
   void shopScreen() {
     Navigator.pushNamed(state.context, ShopScreen.routeName)
         .then((value) => state.render(() {}));
-  }
-
-  void historyScreen() async {
-    await Navigator.pushNamed(state.context, HistoryScreen.routeName);
   }
 
   void achievementScreen() {
