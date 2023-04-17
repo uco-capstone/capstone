@@ -155,7 +155,7 @@ class _ToDoItemState extends State<ToDoItem> {
                 onPressed: deleteTask,
               ),
       ),
-      subtitle: widget.task.dueDate != null
+      subtitle: widget.task.dueDate != null && widget.task.isPastDue != null
           ? Text(dueDate(),
               style: widget.task.isPastDue!
                   ? const TextStyle(color: Colors.red)
