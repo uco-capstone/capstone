@@ -197,7 +197,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         Positioned(
-          bottom: MediaQuery.of(context).size.height * 0.15,
+          bottom: MediaQuery.of(context).size.height * 0.2,
           //Pet, if there is no configured Kirby Pet, then it'll show a default image
           child: SizedBox(
               height: 300,
