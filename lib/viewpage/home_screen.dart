@@ -127,12 +127,10 @@ class _HomeScreenState extends State<HomeScreen> {
           child: ListView(
             children: [
               UserAccountsDrawerHeader(
-                //Default Profile, will add in actual user profile info later
-                currentAccountPicture: const Icon(
-                  Icons.person,
-                  size: 70,
-                ),
-                accountName: const Text("Some Dude"),
+                //Default Profile Picture
+                currentAccountPicture: SizedBox(height: 70, child: Image.asset('images/kirby-ball.png')),
+                accountName: screenModel.kirbyUser != null ? Text('${screenModel.kirbyUser!.firstName} ${screenModel.kirbyUser!.lastName}')
+                : const Text('No Name'),
                 accountEmail: Text("${screenModel.user.email}"),
               ),
               ListTile(
