@@ -108,7 +108,9 @@ class _HomeScreenState extends State<HomeScreen> {
       onWillPop: () => Future.value(false),
       child: Scaffold(
         appBar: AppBar(
-          title: const Center(child: Text("~My Kirby~"),),
+          title: const Center(
+            child: Text("~My Kirby~"),
+          ),
           flexibleSpace: Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
@@ -297,7 +299,7 @@ class _Controller {
       //Checks if the user has a pet in the firebase
       bool hasPet = await FirestoreController.hasPet(currentUserID);
       //If there is not a pet, a default pet will be created and uploaded to the firebase
-      if (!hasPet) {
+      if (!hasPet && state.screenModel.kirbyPet == null) {
         KirbyPet tempPet = KirbyPet(userId: currentUserID);
         state.screenModel.kirbyPet = tempPet;
         await FirestoreController.addPet(kirbyPet: tempPet);
@@ -514,6 +516,7 @@ class _Controller {
           userId: currentUserID, update: {'weeklyReward': DateTime.now()});
     }
   }
+
   //Shows Achievment View when hunger Gauge hits zero
   void showZeroHungerNotification() {
     AchievementView(state.context,
