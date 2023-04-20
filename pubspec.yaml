@@ -82,9 +82,18 @@ flutter:
     - images/kirby-wand.png
     - images/selected-stamp.png
     - images/kirby_icon.png
-    - images/crown.png
     - images/kirby-dead.png
     - images/disappointed-kirby.png
+    - images/trophies/crown.png
+    - images/trophies/trophy-1.webp
+    - images/trophies/trophy-2.png
+    - images/trophies/trophy-3.webp
+    - images/trophies/trophy-4.webp
+    - images/trophies/trophy-5.webp
+    - images/trophies/trophy-6.webp
+    - images/trophies/trophy-7.webp
+    - images/trophies/trophy-8.webp
+    - images/trophies/trophy-9.webp
     - images/kirby-loading.png
     - images/bongo-kirby.png
 
