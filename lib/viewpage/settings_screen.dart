@@ -63,7 +63,7 @@ class _SettingsState extends State<SettingsScreen> {
             title: const Text('Preloaded Tasks'),
             value: screenModel.kirbyUser!.preloadedTasks!,
             onChanged: (value) {
-              setState(() {
+              render(() {
                 con.setPreloadedTasksEnabled(value);
               });
             },
@@ -76,7 +76,7 @@ class _SettingsState extends State<SettingsScreen> {
               if (value) {
                 await createDailyNotification();
               }
-              setState(() {
+              render(() {
                 con.setNotificationsEnabled(value);
               });
             },
