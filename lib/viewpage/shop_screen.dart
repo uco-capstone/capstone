@@ -370,6 +370,7 @@ class _ShopScreen extends State<ShopScreen> {
               child: _listViewBody(_selectedIndex),
             ),
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.shifting,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.accessibility_new_rounded),
@@ -380,16 +381,6 @@ class _ShopScreen extends State<ShopScreen> {
             icon: Icon(Icons.area_chart_rounded),
             label: 'Background',
             backgroundColor: Colors.green,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.beach_access),
-            label: 'Accessories',
-            backgroundColor: Colors.blue,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.emoji_symbols_rounded),
-            label: 'Misc',
-            backgroundColor: Colors.pink,
           ),
         ],
         currentIndex: _selectedIndex,
@@ -409,12 +400,6 @@ class _ShopScreen extends State<ShopScreen> {
               }
               break;
             case 1:
-              _onItemTapped(index);
-              break;
-            case 2:
-              _onItemTapped(index);
-              break;
-            case 3:
               _onItemTapped(index);
               break;
             // bug-fix on how to select back to 'skins'
