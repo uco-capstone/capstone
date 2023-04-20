@@ -6,9 +6,29 @@ void showSnackBar({
   int? seconds,
 }) {
   final snackBar = SnackBar(
-    content: Text(message),
+    content: Column(
+      children: [
+        SizedBox(
+          height: 40,
+          child: Image.asset('images/bongo-kirby.png')
+        ),
+        Container(
+          height: 40,
+          decoration: BoxDecoration(
+            color: Colors.indigo[300],
+            border: Border.all(color: Colors.black, width: 2),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Center(
+            child: Text(message)
+          )
+        ),
+      ],
+    ),
     duration: Duration(seconds: seconds ?? 3), //3-sec default
-    action: SnackBarAction(label: 'OK', onPressed: () {}),
+    backgroundColor: Colors.transparent,
+    elevation: 0,
+    dismissDirection: DismissDirection.down,
   );
   ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }

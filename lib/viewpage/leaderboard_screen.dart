@@ -33,14 +33,6 @@ class _LeaderboardState extends State<LeaderboardScreen> {
 
   void render(fn) => setState(fn);
 
-  void showSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

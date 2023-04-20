@@ -2,6 +2,7 @@ import 'package:capstone/controller/firestore_controller.dart';
 import 'package:capstone/model/health_info_screen_model.dart';
 import 'package:capstone/model/kirby_user_model.dart';
 import 'package:capstone/viewpage/start_dispatcher.dart';
+import 'package:capstone/viewpage/view/view_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -23,7 +24,8 @@ class _HealthInfoState extends State<HealthInfoScreen> {
   late HealthInfoScreenModel screenModel;
   var formKey = GlobalKey<FormState>();
   String title = "Health Form";
-  final TextEditingController nameController = TextEditingController();
+  final TextEditingController firstNameController = TextEditingController();
+  final TextEditingController lastNameController = TextEditingController();
   final TextEditingController ageController = TextEditingController();
   final TextEditingController weightController = TextEditingController();
   final TextEditingController heightController = TextEditingController();
@@ -40,20 +42,19 @@ class _HealthInfoState extends State<HealthInfoScreen> {
     con.findKirbyUser();
   }
 
-  void showSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: const Text("Health Information"),
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.blue, Colors.green],
+            ),
+          ),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),
@@ -64,14 +65,25 @@ class _HealthInfoState extends State<HealthInfoScreen> {
               children: [
                 TextFormField(
                   decoration: const InputDecoration(
-                    hintText: "Enter your Name",
-                    labelText: "Name",
+                    hintText: "Enter your First Name",
+                    labelText: "First Name",
                   ),
                   autocorrect: false,
                   keyboardType: TextInputType.name,
-                  validator: KirbyUser.validateName,
-                  onSaved: con.saveName,
-                  controller: nameController,
+                  validator: KirbyUser.validateFirstName,
+                  onSaved: con.saveFirstName,
+                  controller: firstNameController,
+                ),
+                TextFormField(
+                  decoration: const InputDecoration(
+                    hintText: "Enter your Last Name",
+                    labelText: "Last Name",
+                  ),
+                  autocorrect: false,
+                  keyboardType: TextInputType.name,
+                  validator: KirbyUser.validateLastName,
+                  onSaved: con.saveLastName,
+                  controller: lastNameController,
                 ),
                 TextFormField(
                   decoration: const InputDecoration(
@@ -86,8 +98,8 @@ class _HealthInfoState extends State<HealthInfoScreen> {
                 ),
                 TextFormField(
                   decoration: const InputDecoration(
-                    hintText: "Enter your Weight in Pounds",
-                    labelText: "Weight (Pounds)",
+                    hintText: "Enter your Weight in pounds",
+                    labelText: "Weight (lbs)",
                   ),
                   autocorrect: true,
                   keyboardType:
@@ -118,8 +130,9 @@ class _HealthInfoState extends State<HealthInfoScreen> {
                 ),
                 TextFormField(
                   decoration: const InputDecoration(
-                    hintText: "Enter the amount of hours you sleep a night",
-                    labelText: "Hours of Sleep",
+                    hintText:
+                        "Enter the average amount of hours you sleep a night",
+                    labelText: "Average Hours of Sleep a Night",
                   ),
                   autocorrect: true,
                   keyboardType: TextInputType.number,
@@ -129,8 +142,9 @@ class _HealthInfoState extends State<HealthInfoScreen> {
                 ),
                 TextFormField(
                   decoration: const InputDecoration(
-                    hintText: "Enter the amount of meals taken a day",
-                    labelText: "Meals Taken a Day",
+                    hintText:
+                        "Enter the average amount of meals you eat in a day",
+                    labelText: "Average Meals Eaten a Day",
                   ),
                   autocorrect: true,
                   keyboardType: TextInputType.number,
@@ -141,7 +155,12 @@ class _HealthInfoState extends State<HealthInfoScreen> {
                 const SizedBox(
                   height: 10,
                 ),
-                ElevatedButton(onPressed: con.save, child: const Text("Save"))
+                ElevatedButton(
+                    onPressed: con.save,
+                    style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(Colors.blue)),
+                    child: const Text("Save"))
               ],
             ),
           ),
@@ -164,10 +183,14 @@ class _Controller {
     KirbyUser pulledUser =
         await FirestoreController.getKirbyUser(userId: Auth.getUser().uid);
     tempKirbyUser = pulledUser;
-    state.nameController.text =
+    state.firstNameController.text =
         state.con.tempKirbyUser.firstName.toString() == "null"
             ? ""
             : state.con.tempKirbyUser.firstName.toString();
+    state.lastNameController.text =
+        state.con.tempKirbyUser.lastName.toString() == "null"
+            ? ""
+            : state.con.tempKirbyUser.lastName.toString();
     state.ageController.text = state.con.tempKirbyUser.age.toString() == "null"
         ? ""
         : state.con.tempKirbyUser.age.toString();
@@ -198,18 +221,25 @@ class _Controller {
 
     try {
       await FirestoreController.addHealthInfo(kirbyUser: tempKirbyUser);
-      state.showSnackBar("Success!");
+      // ignore: use_build_context_synchronously
+      showSnackBar(context: state.context, message: 'Success!');
       if (state.mounted) {
         Navigator.pushNamed(state.context, StartDispatcher.routeName);
       }
     } catch (e) {
-      state.showSnackBar("Error: $e");
+      showSnackBar(context: state.context, message: "Error: $e");
     }
   }
 
-  void saveName(String? value) {
+  void saveFirstName(String? value) {
     if (value != null) {
       tempKirbyUser.firstName = value;
+    }
+  }
+
+  void saveLastName(String? value) {
+    if (value != null) {
+      tempKirbyUser.lastName = value;
     }
   }
 

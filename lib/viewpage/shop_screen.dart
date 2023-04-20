@@ -62,51 +62,16 @@ class _ShopScreen extends State<ShopScreen> {
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2),
         );
-      case 2: //Accessories
-        return ListView.separated(
-            controller: _homeController,
-            itemBuilder: (BuildContext context, int index) {
-              return Center(
-                child: Text(
-                  'Item $index',
-                ),
-              );
-            },
-            separatorBuilder: (BuildContext context, int index) =>
-                const Divider(
-                  thickness: 5,
-                ),
-            itemCount: 26);
-      case 3: //Misc
-        return ListView.separated(
-            controller: _homeController,
-            itemBuilder: (BuildContext context, int index) {
-              return Center(
-                child: Text(
-                  'Item $index',
-                ),
-              );
-            },
-            separatorBuilder: (BuildContext context, int index) =>
-                const Divider(
-                  thickness: 5,
-                ),
-            itemCount: 26);
-      default:
-        return ListView.separated(
-            controller: _homeController,
-            itemBuilder: (BuildContext context, int index) {
-              return Center(
-                child: Text(
-                  'Item $index',
-                ),
-              );
-            },
-            separatorBuilder: (BuildContext context, int index) =>
-                const Divider(
-                  thickness: 5,
-                ),
-            itemCount: 26);
+      default:  //Default is skins screen
+        return GridView.builder(
+          controller: _homeController,
+          itemBuilder: (BuildContext context, int index) {
+            return _skinsScreen(index);
+          },
+          itemCount: skinCustomizations.length,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2),
+        );
     }
   }
 
