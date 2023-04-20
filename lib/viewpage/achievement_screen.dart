@@ -135,18 +135,18 @@ class _AchievementScreenState extends State<AchievementScreen> {
                   child: InkWell(
                     splashColor: Colors.blue.withAlpha(30),
                     // Enable onTap() based on task completion #1
-                    onTap: con.numberOfCompletedTasks > 1 ? _onTap : null,
+                    onTap: con.numberOfCompletedTasks > 0 ? _onTap : null,
                     // Container for Card 1
                     child: Container(
                       decoration: BoxDecoration(
-                        color: con.numberOfCompletedTasks > 1
+                        color: con.numberOfCompletedTasks > 0
                             ? Colors.transparent
                             : Colors.orange[200],
                         image: DecorationImage(
                           scale: 1.8,
                           colorFilter: ColorFilter.mode(
                               Colors.white.withOpacity(
-                                  con.numberOfCompletedTasks > 1 ? 1 : 0.2),
+                                  con.numberOfCompletedTasks > 0 ? 1 : 0.2),
                               BlendMode.dstATop),
                           image: const AssetImage(
                             'images/trophies/trophy-9.webp',
@@ -166,7 +166,7 @@ class _AchievementScreenState extends State<AchievementScreen> {
                   child: InkWell(
                     splashColor: Colors.blue.withAlpha(30),
                     // Enable onTap() based on task completion #2
-                    onTap: con.numberOfCompletedTasks > 3 ? _onTap : null,
+                    onTap: con.numberOfCompletedTasks > 2 ? _onTap : null,
                     // Container for Card 2
                     child: Container(
                       decoration: BoxDecoration(
