@@ -1,11 +1,14 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:capstone/controller/firestore_controller.dart';
 import 'package:capstone/model/constants.dart';
 import 'package:capstone/model/kirby_user_model.dart';
 import 'package:capstone/model/settings_screen_model.dart';
 import 'package:capstone/viewpage/health_info_screen.dart';
+import 'package:capstone/viewpage/view/kirby_loading.dart';
 import 'package:flutter/material.dart';
 
 import '../controller/auth_controller.dart';
+import '../controller/notifications_controller.dart';
 
 class SettingsScreen extends StatefulWidget {
   static const routeName = "/settings";
@@ -32,21 +35,22 @@ class _SettingsState extends State<SettingsScreen> {
 
   void render(fn) => setState(fn);
 
-  void showSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Settings")),
+      appBar: AppBar(
+        title: const Text("Settings"),
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.blue, Colors.green],
+            ),
+          ),
+        ),
+      ),
       body: screenModel.loading
           ? const Center(
-              child: CircularProgressIndicator(),
+              child: KirbyLoading(),
             )
           : settingsScreenBody(),
     );
@@ -61,7 +65,7 @@ class _SettingsState extends State<SettingsScreen> {
             title: const Text('Preloaded Tasks'),
             value: screenModel.kirbyUser!.preloadedTasks!,
             onChanged: (value) {
-              setState(() {
+              render(() {
                 con.setPreloadedTasksEnabled(value);
               });
             },
@@ -69,8 +73,12 @@ class _SettingsState extends State<SettingsScreen> {
           SwitchListTile(
             title: const Text('Notifications'),
             value: screenModel.kirbyUser!.notifications!,
-            onChanged: (value) {
-              setState(() {
+            onChanged: (value) async {
+              await AwesomeNotifications().cancelAllSchedules();
+              if (value) {
+                await createDailyNotification();
+              }
+              render(() {
                 con.setNotificationsEnabled(value);
               });
             },

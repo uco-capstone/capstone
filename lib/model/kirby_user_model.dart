@@ -88,8 +88,12 @@ class KirbyUser {
     );
   }
 
-  static String? validateName(String? value) {
-    return (value == null || value == "") ? "Name cannot be empty." : null;
+  static String? validateFirstName(String? value) {
+    return (value == null || value == "") ? "First Name cannot be empty." : null;
+  }
+
+  static String? validateLastName(String? value) {
+    return (value == null || value == "") ? "Last Name cannot be empty." : null;
   }
 
   static String? validateAge(String? value) {

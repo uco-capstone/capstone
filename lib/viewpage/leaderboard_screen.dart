@@ -1,6 +1,7 @@
 import 'package:capstone/controller/firestore_controller.dart';
 import 'package:capstone/model/constants.dart';
 import 'package:capstone/viewpage/rank_item.dart';
+import 'package:capstone/viewpage/view/kirby_loading.dart';
 import 'package:flutter/material.dart';
 
 import '../controller/auth_controller.dart';
@@ -32,21 +33,13 @@ class _LeaderboardState extends State<LeaderboardScreen> {
 
   void render(fn) => setState(fn);
 
-  void showSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Leaderboard")),
       body: screenModel.loading
           ? const Center(
-              child: CircularProgressIndicator(),
+              child: KirbyLoading(),
             )
           : leaderboardScreenBody(),
     );

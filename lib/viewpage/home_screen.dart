@@ -9,13 +9,13 @@ import 'package:capstone/model/kirby_task_model.dart';
 import 'package:capstone/model/kirby_user_model.dart';
 import 'package:capstone/viewpage/achievement_screen.dart';
 import 'package:capstone/viewpage/health_info_screen.dart';
-import 'package:capstone/viewpage/history_screen.dart';
 import 'dart:async';
 
 import 'package:capstone/viewpage/settings_screen.dart';
 import 'package:capstone/viewpage/shop_screen.dart';
 import 'package:capstone/viewpage/start_dispatcher.dart';
 import 'package:capstone/viewpage/todo_screen.dart';
+import 'package:capstone/viewpage/view/kirby_loading.dart';
 import 'package:capstone/viewpage/view/view_util.dart';
 import 'package:flutter/material.dart';
 
@@ -87,19 +87,13 @@ class _HomeScreenState extends State<HomeScreen> {
     retrieveScheduledNotifications();
   }
 
-  static Future<void> retrieveScheduledNotifications() async {
-    // ignore: unused_local_variable
-    final AwesomeNotifications awesomeNotifications = AwesomeNotifications();
+  Future<void> retrieveScheduledNotifications() async {
     await AwesomeNotifications().cancelAllSchedules();
-    // if (scheduledNotifications.isEmpty) {
-    // print("creating");
-    await createDailyNotification();
-    // print("created");
-    // }
+    await con.loadKirbyUser();
 
-    // List<NotificationModel> scheduledNotifications =
-    //     await awesomeNotifications.listScheduledNotifications();
-    // print(scheduledNotifications[0].schedule);
+    if (screenModel.kirbyUser?.notifications == true) {
+      await createDailyNotification();
+    }
   }
 
   @override
@@ -108,7 +102,9 @@ class _HomeScreenState extends State<HomeScreen> {
       onWillPop: () => Future.value(false),
       child: Scaffold(
         appBar: AppBar(
-          title: const Center(child: Text("~My Kirby~"),),
+          title: const Center(
+            child: Text("~My Kirby~"),
+          ),
           flexibleSpace: Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
@@ -139,11 +135,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 onTap: con.shopScreen,
               ),
               ListTile(
-                leading: const Icon(Icons.assessment_outlined),
-                title: const Text('History'),
-                onTap: con.historyScreen,
-              ),
-              ListTile(
                 leading: const Icon(Icons.stars),
                 title: const Text('Achievements'),
                 onTap: con.achievementScreen,
@@ -168,7 +159,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         body: screenModel.loading
             ? const Center(
-                child: CircularProgressIndicator(),
+                child: KirbyLoading(),
               )
             : body(),
       ),
@@ -331,7 +322,7 @@ class _Controller {
       //Checks if the user has a pet in the firebase
       bool hasPet = await FirestoreController.hasPet(currentUserID);
       //If there is not a pet, a default pet will be created and uploaded to the firebase
-      if (!hasPet) {
+      if (!hasPet && state.screenModel.kirbyPet == null) {
         KirbyPet tempPet = KirbyPet(userId: currentUserID);
         state.screenModel.kirbyPet = tempPet;
         await FirestoreController.addPet(kirbyPet: tempPet);
@@ -355,10 +346,6 @@ class _Controller {
   void shopScreen() {
     Navigator.pushNamed(state.context, ShopScreen.routeName)
         .then((value) => state.render(() {}));
-  }
-
-  void historyScreen() async {
-    await Navigator.pushNamed(state.context, HistoryScreen.routeName);
   }
 
   void achievementScreen() {
@@ -548,6 +535,7 @@ class _Controller {
           userId: currentUserID, update: {'weeklyReward': DateTime.now()});
     }
   }
+
   //Shows Achievment View when hunger Gauge hits zero
   void showZeroHungerNotification() {
     AchievementView(state.context,
