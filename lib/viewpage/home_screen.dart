@@ -87,19 +87,13 @@ class _HomeScreenState extends State<HomeScreen> {
     retrieveScheduledNotifications();
   }
 
-  static Future<void> retrieveScheduledNotifications() async {
-    // ignore: unused_local_variable
-    final AwesomeNotifications awesomeNotifications = AwesomeNotifications();
+  Future<void> retrieveScheduledNotifications() async {
     await AwesomeNotifications().cancelAllSchedules();
-    // if (scheduledNotifications.isEmpty) {
-    // print("creating");
-    await createDailyNotification();
-    // print("created");
-    // }
+    await con.loadKirbyUser();
 
-    // List<NotificationModel> scheduledNotifications =
-    //     await awesomeNotifications.listScheduledNotifications();
-    // print(scheduledNotifications[0].schedule);
+    if (screenModel.kirbyUser?.notifications == true) {
+      await createDailyNotification();
+    }
   }
 
   @override
@@ -543,6 +537,7 @@ class _Controller {
           userId: currentUserID, update: {'weeklyReward': DateTime.now()});
     }
   }
+
   //Shows Achievment View when hunger Gauge hits zero
   void showZeroHungerNotification() {
     AchievementView(state.context,
