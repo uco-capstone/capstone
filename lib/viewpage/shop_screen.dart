@@ -62,7 +62,7 @@ class _ShopScreen extends State<ShopScreen> {
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2),
         );
-      default:  //Default is skins screen
+      default: //Default is skins screen
         return GridView.builder(
           controller: _homeController,
           itemBuilder: (BuildContext context, int index) {
@@ -320,19 +320,21 @@ class _ShopScreen extends State<ShopScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // if (screenModel.loading) {
-    //   return const Center(
-    //     child: KirbyLoading(),
-    //   );
-    // } else {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Store Screen'),
+        title: const Text('Shop!'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pushNamed(context, HomeScreen.routeName);
           },
+        ),
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.pink, Colors.green],
+            ),
+          ),
         ),
         actions: [
           Padding(

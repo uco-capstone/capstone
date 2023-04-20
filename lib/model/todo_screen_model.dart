@@ -27,14 +27,15 @@ class TodoScreenModel {
       isPastDue: false,
       completeDate: null,
     );
-    _tempTime = const TimeOfDay(hour: 0, minute: 0);
+    _tempTime = const TimeOfDay(hour: 23, minute: 59);
   }
 
   // adds the preloaded tasks
   Future<List<KirbyTask>> addPreloadedTasks() async {
     List<KirbyTask> taskList = [];
     DateTime now = DateTime.now();
-    DateTime today = DateTime(now.year, now.month, now.day);
+    DateTime today = DateTime(now.year, now.month, now.day, 23, 59);
+
     String meals = kirbyUser?.averageMealsEaten.toString() == ""
         ? "4"
         : kirbyUser!.averageMealsEaten.toString();
