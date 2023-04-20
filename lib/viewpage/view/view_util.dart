@@ -25,7 +25,7 @@ void showSnackBar({
         ),
       ],
     ),
-    duration: Duration(seconds: seconds ?? 3), //3-sec default
+    duration: const Duration(seconds: 2), //3-sec default
     backgroundColor: Colors.transparent,
     elevation: 0,
     dismissDirection: DismissDirection.down,
