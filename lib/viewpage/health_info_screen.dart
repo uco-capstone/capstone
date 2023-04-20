@@ -2,6 +2,7 @@ import 'package:capstone/controller/firestore_controller.dart';
 import 'package:capstone/model/health_info_screen_model.dart';
 import 'package:capstone/model/kirby_user_model.dart';
 import 'package:capstone/viewpage/start_dispatcher.dart';
+import 'package:capstone/viewpage/view/view_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -38,14 +39,6 @@ class _HealthInfoState extends State<HealthInfoScreen> {
     con = _Controller(this);
     screenModel = HealthInfoScreenModel(user: Auth.user!);
     con.findKirbyUser();
-  }
-
-  void showSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-      ),
-    );
   }
 
   @override
@@ -198,12 +191,13 @@ class _Controller {
 
     try {
       await FirestoreController.addHealthInfo(kirbyUser: tempKirbyUser);
-      state.showSnackBar("Success!");
+      // ignore: use_build_context_synchronously
+      showSnackBar(context: state.context, message: 'Success!');
       if (state.mounted) {
         Navigator.pushNamed(state.context, StartDispatcher.routeName);
       }
     } catch (e) {
-      state.showSnackBar("Error: $e");
+      showSnackBar(context: state.context, message: "Error: $e");
     }
   }
 
