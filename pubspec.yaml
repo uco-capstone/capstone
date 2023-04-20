@@ -84,6 +84,9 @@ flutter:
     - images/kirby_icon.png
     - images/kirby-dead.png
     - images/disappointed-kirby.png
+    - images/kirby-ball.png
+    - images/hunger-cake.png
+    - images/hunger-cake-empty.png
     - images/trophies/crown.png
     - images/trophies/trophy-1.webp
     - images/trophies/trophy-2.png
@@ -96,7 +99,6 @@ flutter:
     - images/trophies/trophy-9.webp
     - images/kirby-loading.png
     - images/bongo-kirby.png
-
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

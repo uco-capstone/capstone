@@ -123,16 +123,10 @@ class _HomeScreenState extends State<HomeScreen> {
           child: ListView(
             children: [
               UserAccountsDrawerHeader(
-                //Default Profile, will add in actual user profile info later
-                currentAccountPicture: const Icon(
-                  Icons.person,
-                  size: 70,
-                ),
-                accountName: 
-                screenModel.loading ? const KirbyLoading() :
-                Text(
-                    // ignore: unnecessary_string_interpolations
-                    "${screenModel.kirbyUser!.firstName}"),
+                //Default Profile Picture
+                currentAccountPicture: SizedBox(height: 70, child: Image.asset('images/kirby-ball.png')),
+                accountName: screenModel.kirbyUser != null ? Text('${screenModel.kirbyUser!.firstName} ${screenModel.kirbyUser!.lastName}')
+                : const Text('No Name'),
                 accountEmail: Text("${screenModel.user.email}"),
               ),
               ListTile(
@@ -192,7 +186,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         Positioned(
-          bottom: MediaQuery.of(context).size.height * 0.15,
+          bottom: MediaQuery.of(context).size.height * 0.2,
           //Pet, if there is no configured Kirby Pet, then it'll show a default image
           child: SizedBox(
               height: 300,
@@ -204,37 +198,73 @@ class _HomeScreenState extends State<HomeScreen> {
                       : Image.asset(screenModel.kirbyPet!.kirbySkin!)),
         ),
         Positioned(
-          //Hunger gauge border
-          top: 30,
-          child: Container(
-            color: Colors.white,
-            height: 40,
-            width: 300,
-          ),
-        ),
-        Positioned(
           //Hunger gauge body
-          top: 32,
+          top: MediaQuery.of(context).size.height * 0.05,
+          child: _hungerGauge(),
+        ),
+      ],
+    );
+  }
+
+  Widget _hungerGauge() {
+    return Column(
+      children: [
+        Stack(
+          children: <Widget>[
+            Text(
+              'Hunger Gauge',
+              style: TextStyle(
+                fontSize: 15,
+                foreground: Paint()
+                  ..style = PaintingStyle.stroke
+                  ..strokeWidth = 3
+                  ..color = Colors.black,
+              ),
+            ),
+            // Solid text as fill.
+            const Text(
+              'Hunger Gauge',
+              style: TextStyle(
+                fontSize: 15,
+                color: Colors.white,
+              ),
+            ),
+          ],
+        ),
+        Padding(
+          padding: const EdgeInsets.all(3.0),
           child: Container(
-            //Change color and size based off of percentage
-            color: screenModel.kirbyPet!.hungerGauge > 7
-                ? Colors.green
-                : screenModel.kirbyPet!.hungerGauge > 3
-                    ? Colors.yellow
-                    : Colors.red,
-            height: 36,
-            width: (296 * screenModel.kirbyPet!.hungerGauge * .1),
+            width: MediaQuery.of(context).size.width * 0.9,
+            decoration: BoxDecoration(
+              color: const Color.fromARGB(129, 187, 187, 187),
+              // color: Color.fromARGB(157, 239, 154, 154),
+              border: Border.all(
+                color: Colors.black,
+                width: 2
+              ),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  for(int i = 0; i < screenModel.kirbyPet!.hungerGauge; i++)
+                    SizedBox(
+                      height: 30,
+                      child: Image.asset('images/hunger-cake.png')
+                    ),
+                  if(screenModel.kirbyPet!.hungerGauge != 10)
+                    for(int j = 0; j < 10 - screenModel.kirbyPet!.hungerGauge; j++)
+                      SizedBox(
+                        height: 30,
+                        child: Image.asset('images/hunger-cake-empty.png')
+                      ),
+                ],
+              ),
+            ),
           ),
         ),
-        Positioned(
-            top: 30,
-            child: SizedBox(
-              height: 40,
-              width: 300,
-              child: Center(
-                  child: Text(
-                      'Hunger Gauge (${screenModel.kirbyPet!.hungerGauge * 10}%)')),
-            )),
       ],
     );
   }
