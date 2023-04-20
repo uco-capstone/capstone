@@ -37,6 +37,7 @@ class _StartState extends State<LoginScreen> {
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
         appBar: AppBar(
           title: const Text("Login Page"),
@@ -185,9 +186,12 @@ class _StartState extends State<LoginScreen> {
   Widget _createAccount() {
     return Column(
       children: [
-        const Text(
-          'Don\'t have an account yet?',
-          style: TextStyle(color: Colors.blueGrey, fontSize: 12),
+        const Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Text(
+            'Don\'t have an account yet?',
+            style: TextStyle(color: Colors.blueGrey, fontSize: 12),
+          ),
         ),
         OutlinedButton(
           style: OutlinedButton.styleFrom(
