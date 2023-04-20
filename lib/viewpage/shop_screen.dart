@@ -1,5 +1,6 @@
 import 'package:capstone/model/purchased_item_model.dart';
 import 'package:capstone/model/shop_screen_model.dart';
+import 'package:capstone/viewpage/view/kirby_loading.dart';
 import 'package:flutter/material.dart';
 
 import '../controller/auth_controller.dart';
@@ -319,96 +320,110 @@ class _ShopScreen extends State<ShopScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if(screenModel.loading) {
-      return const Center(child: CircularProgressIndicator()); 
-    } else {
-        return Scaffold(
-        appBar: AppBar(
-          title: const Text('Shop!'),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.pushNamed(context, HomeScreen.routeName);
-            },
-          ),
-          flexibleSpace: Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Colors.pink, Colors.green],
-              ),
-            ),
-          ),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                width: 75,
-                decoration: const BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.rectangle,
-                    borderRadius: BorderRadius.all(Radius.circular(25))),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    //Sample number of coins
-                    Text(
-                      '${screenModel.kirbyUser!.currency}',
-                      style: const TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.bold),
-                    ),
-                    const Icon(
-                      Icons.monetization_on,
-                      color: Colors.orangeAccent,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-        body: Center(
-          child: _listViewBody(_selectedIndex),
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType.shifting,
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.accessibility_new_rounded),
-              label: 'Skins',
-              backgroundColor: Colors.pink,
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.area_chart_rounded),
-              label: 'Background',
-              backgroundColor: Colors.green,
-            ),
-          ],
-          currentIndex: _selectedIndex,
-          selectedItemColor: Colors.black,
-          onTap: (int index) {
-            switch (index) {
-              case 0:
-                // only scroll to top when current index is selected.
-                if (_selectedIndex == index) {
-                  _homeController.animateTo(
-                    0.0,
-                    duration: const Duration(milliseconds: 500),
-                    curve: Curves.easeOut,
-                  );
-                } else {
-                  _onItemTapped(index);
-                }
-                break;
-              case 1:
-                _onItemTapped(index);
-                break;
-              // bug-fix on how to select back to 'skins'
-            }
+    // if (screenModel.loading) {
+    //   return const Center(
+    //     child: KirbyLoading(),
+    //   );
+    // } else {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Store Screen'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pushNamed(context, HomeScreen.routeName);
           },
         ),
-      );
-    }
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              width: 75,
+              decoration: const BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.rectangle,
+                  borderRadius: BorderRadius.all(Radius.circular(25))),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  //Sample number of coins
+                  screenModel.loading
+                      ? const KirbyLoading()
+                      : Text(
+                          '${screenModel.kirbyUser!.currency}',
+                          style: const TextStyle(
+                              color: Colors.black, fontWeight: FontWeight.bold),
+                        ),
+                  const Icon(
+                    Icons.monetization_on,
+                    color: Colors.orangeAccent,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+      body: screenModel.loading
+          ? const KirbyLoading()
+          : Center(
+              child: _listViewBody(_selectedIndex),
+            ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.accessibility_new_rounded),
+            label: 'Skins',
+            backgroundColor: Colors.pink,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.area_chart_rounded),
+            label: 'Background',
+            backgroundColor: Colors.green,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.beach_access),
+            label: 'Accessories',
+            backgroundColor: Colors.blue,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.emoji_symbols_rounded),
+            label: 'Misc',
+            backgroundColor: Colors.pink,
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.black,
+        onTap: (int index) {
+          switch (index) {
+            case 0:
+              // only scroll to top when current index is selected.
+              if (_selectedIndex == index) {
+                _homeController.animateTo(
+                  0.0,
+                  duration: const Duration(milliseconds: 500),
+                  curve: Curves.easeOut,
+                );
+              } else {
+                _onItemTapped(index);
+              }
+              break;
+            case 1:
+              _onItemTapped(index);
+              break;
+            case 2:
+              _onItemTapped(index);
+              break;
+            case 3:
+              _onItemTapped(index);
+              break;
+            // bug-fix on how to select back to 'skins'
+          }
+        },
+      ),
+    );
   }
+  // }
 }
 
 class _Controller {

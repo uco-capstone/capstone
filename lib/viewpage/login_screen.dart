@@ -1,3 +1,4 @@
+import 'package:capstone/viewpage/view/kirby_loading.dart';
 import 'package:capstone/viewpage/view/view_util.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -53,7 +54,7 @@ class _StartState extends State<LoginScreen> {
         ),
         body: screenModel.isSignInUnderway
             ? const Center(
-                child: CircularProgressIndicator(),
+                child: KirbyLoading(),
               )
             : loginForm(),
       ),

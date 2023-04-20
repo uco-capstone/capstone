@@ -1,5 +1,6 @@
 import 'package:capstone/controller/firestore_controller.dart';
 import 'package:capstone/model/constants.dart';
+import 'package:capstone/viewpage/view/kirby_loading.dart';
 import 'package:chart_components/chart_components.dart';
 import 'package:flutter/material.dart';
 
@@ -47,7 +48,7 @@ class _HistoryState extends State<HistoryScreen> {
       ),
       body: screenModel.loading
           ? const Center(
-              child: CircularProgressIndicator(),
+              child: KirbyLoading(),
             )
           : historyScreenBody(),
     );

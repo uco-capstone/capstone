@@ -3,6 +3,7 @@ import 'package:capstone/model/constants.dart';
 import 'package:capstone/model/kirby_task_model.dart';
 import 'package:capstone/model/todo_screen_model.dart';
 import 'package:capstone/viewpage/todo_item.dart';
+import 'package:capstone/viewpage/view/kirby_loading.dart';
 import 'package:capstone/viewpage/view/view_util.dart';
 import 'package:flutter/material.dart';
 
@@ -79,7 +80,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
       floatingActionButton: addTaskButton(),
       body: screenModel.loading
           ? const Center(
-              child: CircularProgressIndicator(),
+              child: KirbyLoading(),
             )
           : body(),
     );
