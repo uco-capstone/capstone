@@ -206,30 +206,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       ? Image.asset('images/skins/default-kirby.png')
                       : Image.asset(screenModel.kirbyPet!.kirbySkin!)),
         ),
-        // Positioned(
-        //   //Hunger gauge border
-        //   top: 30,
-        //   child: Container(
-        //     color: Colors.white,
-        //     height: 40,
-        //     width: 300,
-        //   ),
-        // ),
         Positioned(
           //Hunger gauge body
           top: MediaQuery.of(context).size.height * 0.05,
           child: _hungerGauge(),
         ),
-        // Positioned(
-        //   top: 30,
-        //   child: SizedBox(
-        //     height: 40,
-        //     width: 300,
-        //     child: Center(
-        //         child: Text(
-        //             'Hunger Gauge (${screenModel.kirbyPet!.hungerGauge * 10}%)')),
-        //   )
-        // ),
       ],
     );
   }
