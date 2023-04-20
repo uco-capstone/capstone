@@ -35,17 +35,17 @@ class _CreateAccountState extends State<CreateAccountScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text("Sign Up"),
-          centerTitle: true,
-          automaticallyImplyLeading: false,
-          flexibleSpace: Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Colors.purple, Color.fromARGB(255, 18, 18, 208)],
-              ),
+        title: const Text("Sign Up"),
+        centerTitle: true,
+        automaticallyImplyLeading: false,
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.purple, Color.fromARGB(255, 18, 18, 208)],
             ),
           ),
         ),
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -95,15 +95,33 @@ class _CreateAccountState extends State<CreateAccountScreen> {
                     const Text("Show password"),
                   ],
                 ),
-                ElevatedButton(
-                  onPressed: con.createAccount,
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(const Color.fromARGB(255, 18, 18, 208)),
-                  ),
-                  child: const Text(
-                    "Create",
-                    style: TextStyle(color: Colors.white),
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: con.createAccount,
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            const Color.fromARGB(255, 18, 18, 208)),
+                      ),
+                      child: const Text(
+                        "Create",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                    const SizedBox(width: 20,),
+                    ElevatedButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            const Color.fromARGB(255, 205, 205, 205)),
+                      ),
+                      child: const Text(
+                        "Cancel",
+                        style: TextStyle(color: Colors.purple),
+                      ),
+                    )
+                  ],
                 ),
               ],
             ),
