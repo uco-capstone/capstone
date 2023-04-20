@@ -137,7 +137,8 @@ class _HealthInfoState extends State<HealthInfoScreen> {
                 ),
                 TextFormField(
                   decoration: const InputDecoration(
-                    hintText: "Enter the average amount of hours you sleep a night",
+                    hintText:
+                        "Enter the average amount of hours you sleep a night",
                     labelText: "Average Hours of Sleep a Night",
                   ),
                   autocorrect: true,
@@ -148,7 +149,8 @@ class _HealthInfoState extends State<HealthInfoScreen> {
                 ),
                 TextFormField(
                   decoration: const InputDecoration(
-                    hintText: "Enter the average amount of meals you eat in a day",
+                    hintText:
+                        "Enter the average amount of meals you eat in a day",
                     labelText: "Average Meals Eaten a Day",
                   ),
                   autocorrect: true,
@@ -160,7 +162,12 @@ class _HealthInfoState extends State<HealthInfoScreen> {
                 const SizedBox(
                   height: 10,
                 ),
-                ElevatedButton(onPressed: con.save, child: const Text("Save"))
+                ElevatedButton(
+                    onPressed: con.save,
+                    style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(Colors.blue)),
+                    child: const Text("Save"))
               ],
             ),
           ),
