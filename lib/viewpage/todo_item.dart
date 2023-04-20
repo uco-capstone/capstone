@@ -177,7 +177,7 @@ class _ToDoItemState extends State<ToDoItem> {
       dueDate = "Due Today";
     }
 
-    if (!(hour == 0 && minute == 0)) {
+    if (!(hour == 23 && minute == 59)) {
       dueDate += ' at ';
       if (widget.task.dueDate!.hour < 10) {
         dueDate += '0$hour:';
