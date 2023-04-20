@@ -324,7 +324,7 @@ class _ShopScreen extends State<ShopScreen> {
     } else {
         return Scaffold(
         appBar: AppBar(
-          title: const Text('Store Screen'),
+          title: const Text('Shop!'),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
