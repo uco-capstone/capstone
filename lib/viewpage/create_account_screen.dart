@@ -35,8 +35,17 @@ class _CreateAccountState extends State<CreateAccountScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Create new Account"),
-      ),
+          title: const Text("Sign Up"),
+          centerTitle: true,
+          automaticallyImplyLeading: false,
+          flexibleSpace: Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.purple, Color.fromARGB(255, 18, 18, 208)],
+              ),
+            ),
+          ),
+        ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -88,9 +97,12 @@ class _CreateAccountState extends State<CreateAccountScreen> {
                 ),
                 ElevatedButton(
                   onPressed: con.createAccount,
-                  child: Text(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(const Color.fromARGB(255, 18, 18, 208)),
+                  ),
+                  child: const Text(
                     "Create",
-                    style: Theme.of(context).textTheme.labelLarge,
+                    style: TextStyle(color: Colors.white),
                   ),
                 ),
               ],
