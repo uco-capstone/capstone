@@ -3,6 +3,7 @@ import 'package:capstone/model/constants.dart';
 import 'package:capstone/model/kirby_user_model.dart';
 import 'package:capstone/model/settings_screen_model.dart';
 import 'package:capstone/viewpage/health_info_screen.dart';
+import 'package:capstone/viewpage/view/kirby_loading.dart';
 import 'package:flutter/material.dart';
 
 import '../controller/auth_controller.dart';
@@ -46,7 +47,7 @@ class _SettingsState extends State<SettingsScreen> {
       appBar: AppBar(title: const Text("Settings")),
       body: screenModel.loading
           ? const Center(
-              child: CircularProgressIndicator(),
+              child: KirbyLoading(),
             )
           : settingsScreenBody(),
     );
