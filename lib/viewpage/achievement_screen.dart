@@ -36,36 +36,13 @@ class _AchievementScreenState extends State<AchievementScreen> {
   void _onTap() {
     if (taskCompleted) {
       // Perform the onTap() action here
+      // ignore: avoid_print
       print(
           '\nYou have already completed this task\nClear the Firestore if you want to reset task');
     } else {
       _showAlertDialog();
     }
   }
-  //   if (checkUserCompletedTasks()) {
-  //     // Perform the onTap() action here
-  //     print('onTap() enabled');
-  //   } else {
-  //     // Show a message indicating that tasks are not completed
-  //     showDialog(
-  //       context: context,
-  //       builder: (BuildContext context) {
-  //         return AlertDialog(
-  //           title: Text('Alert'),
-  //           content: Text('Please complete all tasks.'),
-  //           actions: [
-  //             TextButton(
-  //               child: Text('OK'),
-  //               onPressed: () {
-  //                 Navigator.of(context).pop();
-  //               },
-  //             ),
-  //           ],
-  //         );
-  //       },
-  //     );
-  //   }
-  // }
 
   void _showAlertDialog() {
     showDialog(
@@ -391,9 +368,6 @@ class _Controller {
 
   int numberOfCompletedTasks = 0;
   bool loading = false;
-
-  // // Checks the taskCompleted flag, and if it's true, it performs the onTap() action
-  // bool taskCompleted = false;
 
   Future<void> checkUserCompletedTasks() async {
     loading = true;
