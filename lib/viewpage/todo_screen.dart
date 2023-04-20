@@ -3,10 +3,12 @@ import 'package:capstone/model/constants.dart';
 import 'package:capstone/model/kirby_task_model.dart';
 import 'package:capstone/model/todo_screen_model.dart';
 import 'package:capstone/viewpage/todo_item.dart';
+import 'package:capstone/viewpage/view/kirby_loading.dart';
 import 'package:capstone/viewpage/view/view_util.dart';
 import 'package:flutter/material.dart';
 
 import '../controller/auth_controller.dart';
+import 'history_screen.dart';
 import 'home_screen.dart';
 
 enum DurationLabel {
@@ -62,16 +64,23 @@ class _ToDoScreenState extends State<ToDoScreen> {
         ), // override WillPopScope() from home_screen.dart so home_screen can update completed tasks
         actions: [
           IconButton(
-            onPressed: () =>
-                showSnackBar(context: context, message: 'Button Pressed'),
-            icon: const Icon(Icons.menu),
+            onPressed: con.historyScreen,
+            icon: const Icon(Icons.assessment_outlined),
+            tooltip: 'Weekly Stats',
           ),
         ],
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.indigo, Colors.purple[200]!],
+            ),
+          ),
+        ),
       ),
       floatingActionButton: addTaskButton(),
       body: screenModel.loading
           ? const Center(
-              child: CircularProgressIndicator(),
+              child: KirbyLoading(),
             )
           : body(),
     );
@@ -825,5 +834,9 @@ class _Controller {
     searchController.text = "";
     state.screenModel.tempTaskList = null;
     state.render(() {});
+  }
+
+    void historyScreen() async {
+    await Navigator.pushNamed(state.context, HistoryScreen.routeName);
   }
 }

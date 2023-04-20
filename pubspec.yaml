@@ -94,6 +94,8 @@ flutter:
     - images/trophies/trophy-7.webp
     - images/trophies/trophy-8.webp
     - images/trophies/trophy-9.webp
+    - images/kirby-loading.png
+    - images/bongo-kirby.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

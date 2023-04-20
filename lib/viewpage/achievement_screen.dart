@@ -1,6 +1,7 @@
 import 'package:capstone/controller/auth_controller.dart';
 import 'package:capstone/controller/firestore_controller.dart';
 import 'package:capstone/viewpage/home_screen.dart';
+import 'package:capstone/viewpage/view/kirby_loading.dart';
 import 'package:flutter/material.dart';
 
 class AchievementScreen extends StatefulWidget {
@@ -121,7 +122,7 @@ class _AchievementScreenState extends State<AchievementScreen> {
       // Body: Beginning ListTiles for Card Containers
       body: con.loading
           ? const Center(
-              child: CircularProgressIndicator(),
+              child: KirbyLoading(),
             )
           : GridView.count(
               primary: false,

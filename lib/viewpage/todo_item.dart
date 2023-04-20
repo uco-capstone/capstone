@@ -57,7 +57,7 @@ class _ToDoItemState extends State<ToDoItem> {
 
   void showAchievementView(String taskName) {
     AchievementView(context,
-            title: "Good Job! +1 Hunger +10 Coins",
+            title: "Good Job! +1 Hunger +100 Coins",
             subTitle: "You completed: $taskName!",
             icon: Padding(
               padding: const EdgeInsets.all(8),
@@ -155,7 +155,7 @@ class _ToDoItemState extends State<ToDoItem> {
                 onPressed: deleteTask,
               ),
       ),
-      subtitle: widget.task.dueDate != null
+      subtitle: widget.task.dueDate != null && widget.task.isPastDue != null
           ? Text(dueDate(),
               style: widget.task.isPastDue!
                   ? const TextStyle(color: Colors.red)
@@ -177,7 +177,7 @@ class _ToDoItemState extends State<ToDoItem> {
       dueDate = "Due Today";
     }
 
-    if (!(hour == 0 && minute == 0)) {
+    if (!(hour == 23 && minute == 59)) {
       dueDate += ' at ';
       if (widget.task.dueDate!.hour < 10) {
         dueDate += '0$hour:';
