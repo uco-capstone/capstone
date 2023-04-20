@@ -43,7 +43,16 @@ class _HistoryState extends State<HistoryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("History")),
+      appBar: AppBar(
+        title: const Text("Weekly Stats"),
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.blue[700]!, Colors.deepOrange],
+            ),
+          ),
+        ),
+      ),
       body: screenModel.loading
           ? const Center(
               child: CircularProgressIndicator(),
@@ -55,33 +64,34 @@ class _HistoryState extends State<HistoryScreen> {
   Widget historyScreenBody() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Container(
-        margin: const EdgeInsets.all(16),
-        padding: const EdgeInsets.only(bottom: 200, left: 8, right: 8, top: 20),
-        // decoration: BoxDecoration(
-        //   shape: BoxShape.rectangle,
-        //   borderRadius: BorderRadius.all(Radius.circular(10)),
-        //   border: Border.all(color: Theme.of(context).primaryColor),
-        // ),
-        child: BarChart(
-          data: screenModel.completionRatings,
-          labels: screenModel.getDays(),
-          displayValue: true,
-          // labelStyle: TextStyle(fontSize: 18),
-          // valueStyle: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-          reverse: true,
-          getColor: con.getColor,
-          getIcon: con.getIcon,
-          barWidth: 38,
-          barSeparation: 12,
-          animationDuration: const Duration(milliseconds: 1800),
-          animationCurve: Curves.easeInOutSine,
-          itemRadius: 30,
-          iconHeight: 24,
-          footerHeight: 24,
-          headerValueHeight: 16,
-          roundValuesOnText: false,
-          lineGridColor: Colors.lightBlue,
+      child: Center(
+        child: Column(
+          children: [
+            Container(
+              height: MediaQuery.of(context).size.height * 0.55,
+              margin: const EdgeInsets.all(16),
+              padding: const EdgeInsets.only(bottom: 20, left: 8, right: 8, top: 20),
+              child: BarChart(
+                data: screenModel.completionRatings,
+                labels: screenModel.getDays(),
+                displayValue: true,
+                reverse: true,
+                getColor: con.getColor,
+                getIcon: con.getIcon,
+                barWidth: 38,
+                barSeparation: 12,
+                animationDuration: const Duration(milliseconds: 1800),
+                animationCurve: Curves.easeInOutSine,
+                itemRadius: 30,
+                iconHeight: 24,
+                footerHeight: 24,
+                headerValueHeight: 16,
+                roundValuesOnText: false,
+                lineGridColor: Colors.lightBlue,
+              ),
+            ),
+            const Text('Percentage of tasks completed in the last 7 days.'),
+          ],
         ),
       ),
     );
