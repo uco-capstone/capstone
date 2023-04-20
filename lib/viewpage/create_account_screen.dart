@@ -35,7 +35,7 @@ class _CreateAccountState extends State<CreateAccountScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text("Create New Account"),
+          title: const Text("Sign Up"),
           centerTitle: true,
           automaticallyImplyLeading: false,
           flexibleSpace: Container(
