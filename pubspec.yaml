@@ -50,9 +50,10 @@ dev_dependencies:
   flutter_launcher_icons: "^0.13.1"
   
 flutter_icons:
-  android: true
+  android: "launcher_icon"
   ios: true
   image_path: "images/kirby-app-icon.png"
+  adaptive_icon_background: "#ffffff"
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

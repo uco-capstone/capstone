@@ -38,7 +38,7 @@ class CapstoneApp extends StatelessWidget {
   Widget build(BuildContext context) {
     //return const MaterialApp(
     return MaterialApp(
-      title: 'Pet Planner',
+      title: 'Kirbyz Plan-et!',
       initialRoute: StartDispatcher.routeName,
       routes: {
         HomeScreen.routeName: (context) => const HomeScreen(),
