@@ -87,7 +87,7 @@ class _StartState extends State<LoginScreen> {
                         child: Stack(
                           children: <Widget>[
                             Text(
-                              'Kirbyz, Plan-et!',
+                              'Kirbyz Plan-et!',
                               style: TextStyle(
                                 fontSize: 40,
                                 foreground: Paint()
@@ -98,7 +98,7 @@ class _StartState extends State<LoginScreen> {
                             ),
                             // Solid text as fill.
                             Text(
-                              'Kirbyz, Plan-et!',
+                              'Kirbyz Plan-et!',
                               style: TextStyle(
                                 fontSize: 40,
                                 color: Colors.grey[300],
