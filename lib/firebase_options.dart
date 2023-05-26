@@ -50,20 +50,20 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDlNEVJqWOX9nwP4bWs5-rJThs_08rVKg4',
-    appId: '1:1050240643949:android:a3a9b7adcc2b48b50fa064',
-    messagingSenderId: '1050240643949',
-    projectId: 'capstone-petplanner',
-    storageBucket: 'capstone-petplanner.appspot.com',
+    apiKey: '',
+    appId: '',
+    messagingSenderId: '',
+    projectId: '',
+    storageBucket: '',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyC_P0JXzJuR98De_XSxm7L-aOKkc6MS6ko',
-    appId: '1:1050240643949:ios:24ea5da6a4ced1650fa064',
-    messagingSenderId: '1050240643949',
-    projectId: 'capstone-petplanner',
-    storageBucket: 'capstone-petplanner.appspot.com',
-    iosClientId: '1050240643949-f41kev4mll83h7nf9ggaa9r056pje4jf.apps.googleusercontent.com',
-    iosBundleId: 'edu.uco.spring2023.capstone',
+    apiKey: '',
+    appId: '',
+    messagingSenderId: '',
+    projectId: '',
+    storageBucket: '',
+    iosClientId: '',
+    iosBundleId: '',
   );
 }
